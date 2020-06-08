@@ -1,0 +1,257 @@
+html {
+	height: 100%;
+}
+body {
+	background-image: url(/assets/lab.png);
+	background-repeat: repeat;
+	background-size: 100px 100px;
+
+	margin: 0;
+	height: 100%;
+
+	font-family: 'Do Hyeon', sans-serif;
+	font-size: 16px;
+	/* word-break: break-all; */
+}
+h1 {
+	font-size: 30px;
+	font-weight: normal;
+	margin: 0;
+}
+h2 {
+	font-size: 25px;
+	font-weight: normal;
+	margin: 0;
+}
+h3 {
+	font-size: 17px;
+	font-weight: normal;
+	margin: 0;
+}
+h4 {
+	font-size: 13px;
+	font-weight: normal;
+	margin: 0;
+}
+a, a:link, a:visited {
+	color: black;
+	text-decoration: none;
+}
+
+header#main_header {
+	background-color: white;
+	text-align: center;
+	font-size: 50px;
+	padding: 15px;
+	box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
+}
+header#main_header div#pages {
+	font-size: 20px;
+}
+header#main_header div#info {
+	font-size: 17px;
+	padding: 15px;
+}
+header#main_header div#info img {
+	margin: 0 10px;
+}
+header#main_header div#info div#description {
+	padding: 15px;
+}
+img#lab_bottle_big {
+	height:200px;
+	position: absolute;
+	top: -25px;
+	left: -75px;
+	transform: rotate(20deg);
+	filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.3));
+	z-index: 1;
+}
+div#wrapper {
+	width: 750px;
+	margin: 0 auto;
+	box-sizing: border-box;
+	position: relative;
+}
+footer {
+	background-color: white;
+	box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
+	text-align: center;
+	font-size: 15px;
+	padding: 15px;
+	z-index: 2;
+	position: relative;
+}
+.box {
+	background-color: rgba(255, 255, 255, 0.92);
+	box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.2);
+	padding: 15px;
+	margin: 5px auto;
+	position: relative;
+	z-index: 2;
+}
+.box-component {
+	margin: 5px 0;
+}
+article .title {
+	font-size: 25px;
+	font-weight: normal;
+}
+article .date {
+	font-size: 12px;
+	font-weight: normal;
+	float: left;
+}
+article .category {
+	font-size: 12px;
+	font-weight: normal;
+	float: right;
+}
+article .tags {
+	clear: both;
+}
+article .tag {
+	float: left;
+
+	background-color: #00000055;
+	border-radius: 2px;
+	padding: 1px 3px;
+	margin-right: 5px;
+}
+article .tag, article .tag a:visited, article .tag a:link {
+	color: #ffffffee;
+	font-size: 12px;
+	display: inline;
+}
+article header::after {
+	content: "";
+	clear: both;
+	display: block;
+}
+article section {
+	padding-top: 5px;
+	font-family: 'Noto Sans KR', sans-serif;
+	overflow-x: auto;
+}
+article section iframe, article section img {
+	max-width: 100%;
+	margin: 16px 0;
+	border-radius: 2px;
+}
+section a, section a:link, section a:visited {
+	color: #4545ff;
+}
+.article-content h1,
+.article-content h2 {
+	margin: 0 0 16px 0;
+	font-weight: bold;
+}
+.article-content h2 {
+	color: #444444;
+}
+a.article-more, a.article-more:link, a.article-more:visited {
+	color: black;
+}
+div.prev_next::after {
+	content: "";
+	display: block;
+	clear: both;
+}
+div.prev {
+	float: left;
+}
+div.next {
+	float: right;
+}
+div.comment .name, div.comment .date, div.comment .message {
+	margin: 5px;
+}
+div.comment .name {
+	font-size: 16px;
+}
+div.comment .date {
+	font-size: 12px;
+}
+div.comment .message {
+	font-family: 'Noto Sans KR', sans-serif;
+}
+div#leave_comment form {
+	padding: 5px;
+	/*box-sizing: border-box;*/
+}
+div#leave_comment form::after {
+	content: "";
+	display: block;
+	clear: both;
+}
+div#leave_comment button {
+	font-family: 'Do Hyeon', sans-serif;
+	background: rgba(0, 0, 0, 0.15);
+	border: 0;
+	padding: 5px 10px;
+	margin: 5px 0;
+	cursor: pointer;
+	float: right;
+	border-radius: 2px;
+}
+div#leave_comment button:hover {
+	background: rgba(0, 0, 0, 0.5);
+}
+div#leave_comment textarea, div#leave_comment input, div#leave_comment label {
+	padding: 5px;
+	margin: 5px 0;
+	min-width: 100%;
+	max-width: 100%;
+	display: block;
+	box-sizing: border-box;
+}
+div#leave_comment .red {
+	color: red;
+}
+div#leave_comment textarea, div#leave_comment input {
+	border-radius: 2px;
+	border: 0;
+	background: rgba(0, 0, 0, 0.15);
+}
+code {
+	/* font-family: "Nanum Gothic Coding", monospace; */
+	font-family: "Consolas", monospace;
+	font-weight: 600;
+}
+.highlighter-rouge {
+	background: rgba(0, 0, 0, 0.15);
+	border-radius: 2px;
+
+	padding: 2px 5px;
+}
+div.highlighter-rouge {
+	margin: 16px 0;
+	padding: 10px;
+	overflow-x: auto;
+}
+.highlighter-rouge * {
+	margin: 0;
+}
+blockquote {
+	margin-left: 0;
+	margin-right: 0;
+	padding-left: 15px;
+	border-left: 5px solid rgba(0, 0, 0, 0.15);
+	border-radius: 2px;
+	color: #999999;
+}
+hr {
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-radius: 2px;
+}
+@media (max-width:767px) {/* mobile */
+	div#wrapper {
+		width: auto;
+		margin: 0px;
+	}
+}
+@media print {/* rules for printers */
+	img#lab_bottle_big {
+		display: none;
+	}
+}
