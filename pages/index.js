@@ -2,6 +2,8 @@ import Head from 'next/head'
 import Link from 'next/link'
 import matter from 'gray-matter'
 
+import Layout from '../components/Layout'
+
 export default function Home({ posts }) {
   posts = posts.map(post => {
     return {
@@ -12,14 +14,13 @@ export default function Home({ posts }) {
   })
 
   return (
-    <div>
+    <Layout>
       <Head>
         <title>RedLaboratory</title>
-        <link rel="icon" href="/favicon.ico"></link>
       </Head>
 
       <div className="top">
-        <div className="header">
+        <div className="header fixed-width">
           <div className="date">2020-06-07</div>
           <div className="title">
             Untitled
@@ -33,23 +34,23 @@ export default function Home({ posts }) {
       </div>
 
       <main className="content-wrapper">
-        <div className="content">
+        <div className="content fixed-width">
           <h1>Title</h1>
           <p>Test</p>
           <h2>Title</h2>
           <p>Test</p>
-          { posts.map(post => {
-              return (
-                <div key={post.slug}>
-                  <Link href='/blog/[...slug]' as={`/blog/${post.slug.join('/')}`}>
-                    <a>
-                      { post.slug.join('/') }
-                      { post.frontmatter.title || 'untitled' }
-                    </a>
-                  </Link>
-                </div>
-              )
-          }) }
+          {posts.map(post => {
+            return (
+              <div key={post.slug}>
+                <Link href='/blog/[...slug]' as={`${process.env.baseUrl}/blog/${post.slug.join('/')}`}>
+                  <a>
+                    {post.slug.join('/')}
+                    {post.frontmatter.title || 'untitled'}
+                  </a>
+                </Link>
+              </div>
+            )
+          })}
         </div>
       </main>
 
@@ -57,49 +58,39 @@ export default function Home({ posts }) {
       .top {
         margin: 0;
         background-color: #ff6565;
-        box-shadow: 0 0 5pt black;
+        box-shadow: 0 0 5px black;
 
         color: white;
       }
-      .header {
-        width: 600pt;
-        padding: 40pt 0;
+      .fixed-width {
+        max-width: 600px;
+        padding: 0 20px;
         margin: 0 auto;
       }
+      .header {
+        padding-top: 40px;
+        padding-bottom: 40px;
+      }
       .header .title {
-        font-size: 50pt;
+        font-size: 50px;
         font-weight: bold;
       }
       .header .subtitle {
         font-weight: bold;
       }
       .tag {
-        padding: 2pt 4pt;
-        font-size: 9pt;
-        border-radius: 3pt;
+        padding: 2px 4px;
+        font-size: 9px;
+        border-radius: 3px;
         background-color: #0000007a;
       }
       .content-wrapper {
-        margin: 40pt 0;
+        margin: 40px 0;
       }
-
       .content {
-        width: 600pt;
-        margin: 0 auto;
       }
       `}</style>
-
-      <style jsx global>{`
-      @import url(https://fonts.googleapis.com/earlyaccess/notosanskr.css); font-family: 'Noto Sans KR', sans-serif;
-
-      html, body {
-        margin: 0;
-        padding: 0;
-
-        font-family: 'Noto Sans KR', sans-serif;
-      }
-      `}</style>
-    </div>
+    </Layout>
   )
 }
 
@@ -107,7 +98,7 @@ export default function Home({ posts }) {
 // Returned props will be used to pre-render the page.
 export async function getStaticProps(context) {
   var postHelper = require('../helper/post-helper')
-  console.log(postHelper.getPostSlugs())
+  console.log(postHelper.getPosts())
 
   const posts = (context => {
     const keys = context.keys()
@@ -115,7 +106,7 @@ export async function getStaticProps(context) {
 
     const data = keys.map((key, index) => {
       const slug = key
-        .replace(/ /, '-')
+        .replace(/ /g, '-')
         .slice(0, -3)
         .trim()
         .split('/')
@@ -129,7 +120,7 @@ export async function getStaticProps(context) {
         slug
       }
     })
-    
+
     return data
   })(require.context('../posts', true, /\.md$/))
 
