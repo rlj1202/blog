@@ -1,11 +1,14 @@
 import matter from 'gray-matter'
-import glob from 'glob'
 
 var posts;
 
 /**
  * getPosts
- * @return {Map}
+ * @return {Map} Key is string like 'dir/dir/postname' and value is an object
+ *               like { slug, frontmatter, markdownBody, markdownExcerpt }.
+ *               frontmatter is returned stringified. Because if the frontmatter
+ *               contains non-literal data, it will be failed to be passed
+ *               as props.
  */
 export function getPosts() {
     if (!posts) {
@@ -27,10 +30,11 @@ export function getPosts() {
                     excerpt_separator: '<!-- more -->'
                 })
 
-                data.set(slug, {
+                data.set(slug.join('/'), {
                     frontmatter: JSON.stringify(document.data),
                     markdownBody: document.content,
-                    markdownExcerpt: document.excerpt
+                    markdownExcerpt: document.excerpt,
+                    slug
                 });
             });
 
@@ -39,18 +43,4 @@ export function getPosts() {
     }
 
     return posts;
-}
-
-export function getPostSlugs() {
-    const posts = glob.sync('posts/**/*.md')
-    const postSlugs = posts.map(post => post
-        .replace(/ /g, '-') // Replace all blanks into dash.
-        .slice(0, -3) // Drop last three letter, '.md'.
-        .trim()
-        .split('/')
-        .slice(1) // Drop first directory path 'posts'.
-        .join('/')
-    )
-
-    return postSlugs
 }

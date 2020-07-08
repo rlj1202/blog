@@ -1,134 +1,99 @@
 import Head from 'next/head'
-import Link from 'next/link'
-import matter from 'gray-matter'
 
-import Layout from '../components/Layout'
+import ReactMarkdown from 'react-markdown'
+import SyntaxHighlighter from 'react-syntax-highlighter'
+
+import DefaultLayout from '../components/DefaultLayout'
+import PostLink from '../components/PostLink'
+
+function PostCard({ post }) {
+    return (
+        <div className="container">
+            <PostLink slug={post.slug}>
+                <a>
+                    <h1>{post.frontmatter.title || 'untitled'}</h1>
+                </a>
+            </PostLink>
+
+            <div>
+                <ReactMarkdown
+                    source={post.markdownExcerpt}
+                    skipHtml={true}
+                    renderers={{
+                        code: function ({ language, value }) {
+                            return (
+                                <SyntaxHighlighter language={language}>
+                                    {value}
+                                </SyntaxHighlighter>
+                            )
+                        }
+                    }} />
+            </div>
+
+            <style jsx>{`
+            .container {
+                margin: 20pt 0;
+            }
+            h1 {
+                font-size: 20pt;
+            }
+            `}</style>
+        </div>
+    )
+}
 
 export default function Home({ posts }) {
-  posts = posts.map(post => {
-    return {
-      slug: post.slug,
-      frontmatter: JSON.parse(post.frontmatter),
-      markdownbody: post.markdownbody
-    }
-  })
+    posts = posts.map(post => {
+        return {
+            slug: post.slug,
+            frontmatter: JSON.parse(post.frontmatter),
+            markdownBody: post.markdownBody,
+            markdownExcerpt: post.markdownExcerpt
+        }
+    })
 
-  return (
-    <Layout>
-      <Head>
-        <title>RedLaboratory</title>
-      </Head>
+    const header = (
+        <div>
+            RedLaboratory
 
-      <div className="top">
-        <div className="header fixed-width">
-          <div className="date">2020-06-07</div>
-          <div className="title">
-            Untitled
-          </div>
-          <div className="subtitle">
-            subtitle
-          </div>
-          <div className="tags">
-          </div>
+            <style jsx>{`
+            `}</style>
         </div>
-      </div>
+    )
 
-      <main className="content-wrapper">
-        <div className="content fixed-width">
-          <h1>Title</h1>
-          <p>Test</p>
-          <h2>Title</h2>
-          <p>Test</p>
-          {posts.map(post => {
-            return (
-              <div key={post.slug}>
-                <Link href='/blog/[...slug]' as={`${process.env.baseUrl}/blog/${post.slug.join('/')}`}>
-                  <a>
-                    {post.slug.join('/')}
-                    {post.frontmatter.title || 'untitled'}
-                  </a>
-                </Link>
-              </div>
-            )
-          })}
-        </div>
-      </main>
+    return (
+        <DefaultLayout header={header}>
+            <Head>
+                <title>RedLaboratory</title>
+            </Head>
 
-      <style jsx>{`
-      .top {
-        margin: 0;
-        background-color: #ff6565;
-        box-shadow: 0 0 5px black;
+            {posts.map((post, index) => {
+                return (
+                    <>
+                        <PostCard key={post.slug.join('/')} post={post}></PostCard>
+                        { index != posts.length - 1 && <hr /> }
+                    </>
+                )
+            })}
 
-        color: white;
-      }
-      .fixed-width {
-        max-width: 600px;
-        padding: 0 20px;
-        margin: 0 auto;
-      }
-      .header {
-        padding-top: 40px;
-        padding-bottom: 40px;
-      }
-      .header .title {
-        font-size: 50px;
-        font-weight: bold;
-      }
-      .header .subtitle {
-        font-weight: bold;
-      }
-      .tag {
-        padding: 2px 4px;
-        font-size: 9px;
-        border-radius: 3px;
-        background-color: #0000007a;
-      }
-      .content-wrapper {
-        margin: 40px 0;
-      }
-      .content {
-      }
-      `}</style>
-    </Layout>
-  )
+            <style jsx>{`
+            `}</style>
+        </DefaultLayout>
+    )
 }
 
 // This function is called on server-side at build time.
 // Returned props will be used to pre-render the page.
 export async function getStaticProps(context) {
-  var postHelper = require('../helper/post-helper')
-  console.log(postHelper.getPosts())
+    const postHelper = require('../helper/post-helper')
 
-  const posts = (context => {
-    const keys = context.keys()
-    const values = keys.map(context)
+    const posts = Array.from(postHelper.getPosts().values())
 
-    const data = keys.map((key, index) => {
-      const slug = key
-        .replace(/ /g, '-')
-        .slice(0, -3)
-        .trim()
-        .split('/')
-        .slice(1)
-      const value = values[index]
-      const document = matter(value.default)
-
-      return {
-        frontmatter: JSON.stringify(document.data),
-        markdownbody: document.content,
-        slug
-      }
-    })
-
-    return data
-  })(require.context('../posts', true, /\.md$/))
-
-  return {
-    props: {
-      posts
+    return {
+        props: {
+            posts
+        }
     }
-  }
 }
 
 // export default function Home() {
