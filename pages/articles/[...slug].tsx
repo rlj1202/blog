@@ -157,6 +157,9 @@ const Article: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ pos
         }
         .post-tags {
           margin: 10px 0;
+          display: flex;
+          flex-wrap: wrap;
+          row-gap: 6px;
         }
         .post-suggestions {
           display: flex;
