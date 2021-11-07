@@ -28,7 +28,7 @@ const PostCard: NextPage<{ post: Post }> = ({ post }) => {
         </div>
         <div className="postcard-tags">
           {post.metadata.tags?.map(tag => (
-            <Tag>{tag}</Tag>
+            <Tag key={tag}>{tag}</Tag>
           ))}
         </div>
       </header>

@@ -38,7 +38,7 @@ const Tags: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts,
             <h2>{tag}</h2>
 
             {posts.filter(post => post.metadata.tags?.includes(tag)).map(post => (
-              <div className="post">
+              <div className="post" key={post.postPath.join('/')}>
                 <PostLink postPath={post.postPath}>
                   <a>{post.metadata.title || post.postPath.at(-1)}</a>
                 </PostLink>

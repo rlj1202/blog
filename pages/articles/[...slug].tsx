@@ -114,7 +114,7 @@ const Article: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ pos
         <hr />
         <div className="post-suggestions">
           {suggestedPosts.map(post => (
-            <PostCard post={post} />
+            <PostCard post={post} key={post.postPath.join('/')} />
           ))}
         </div>
         <hr />
