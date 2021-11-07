@@ -55,8 +55,8 @@ const Comment: NextPage<{ name: string, date: Date }> = ({ name, date, children 
   return (
     <div className="comment">
       <header className="comment-header">
-        <span className="comment-name">{name}</span>
-        <span className="comment-date">{date.toString()}</span>
+        <div className="comment-name">{name}</div>
+        <div className="comment-date">{dateFormat(date, 'yyyy-mm-dd hh:MM:ss')}</div>
       </header>
       <div className="comment-content">
         {children}
@@ -71,6 +71,14 @@ const Comment: NextPage<{ name: string, date: Date }> = ({ name, date, children 
         }
         .comment-content {
           margin: 20px 0;
+        }
+        .comment-name {
+          margin: 10px 0;
+        }
+        .comment-date {
+          margin: 10px 0;
+          color: #999999;
+          font-size: 0.9em;
         }
       `}</style>
     </div>

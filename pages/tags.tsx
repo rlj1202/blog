@@ -34,7 +34,7 @@ const Tags: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts,
         <h1>태그</h1>
 
         {tags.map(tag => (
-          <>
+          <div key={tag}>
             <h2>{tag}</h2>
 
             {posts.filter(post => post.metadata.tags?.includes(tag)).map(post => (
@@ -44,7 +44,7 @@ const Tags: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts,
                 </PostLink>
               </div>
             ))}
-          </>
+          </div>
         ))}
 
         <hr />
