@@ -31,10 +31,10 @@ const Topbar: NextPage = () => {
         </div>
         <div className="topbar-right">
           <span className="topbar-link"><a href="https://github.com/rlj1202">
-            <Image src={githubPic} alt="GitHub" width={20} height={20} />
+            <Image src={githubPic} alt="GitHub" width={20} height={20} layout="fixed" />
           </a></span>
           <span className="topbar-link"><a href="https://twitter.com/jisoosim">
-            <Image src={twitterPic} alt="Twitter" width={20} height={20} />
+            <Image src={twitterPic} alt="Twitter" width={20} height={20} layout="fixed" />
           </a></span>
         </div>
 
@@ -47,6 +47,8 @@ const Topbar: NextPage = () => {
             display: flex;
             justify-content: space-between;
             padding: 0 40px;
+
+            overflow-x: auto;
           }
           .topbar-left {
             display: flex;
