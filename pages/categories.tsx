@@ -40,7 +40,7 @@ const Categories: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ 
             {posts.filter(post => post.postPath.slice(0, -1).join('/') == category.join('/')).map(post => (
               <div className="post" key={post.postPath.join('/')}>
                 <PostLink postPath={post.postPath}>
-                  <a>{post.metadata.title || post.postPath.at(-1)}</a>
+                  <a>{post.metadata.title || post.postPath[post.postPath.length - 1]}</a>
                 </PostLink>
               </div>
             ))}
