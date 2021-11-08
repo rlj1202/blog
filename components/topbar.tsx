@@ -40,7 +40,7 @@ const Topbar: NextPage = () => {
 
         <style jsx>{`
           .topbar {
-            font-family: 'Consolas';
+            font-family: 'Consolas', 'Ubuntu Mono', monospace;
             font-size: 1em;
             box-shadow: rgba(0, 0, 0, 0.05) 0 4px 4px;
 

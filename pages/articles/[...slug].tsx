@@ -6,6 +6,7 @@ import dateFormat from 'dateformat'
 
 import PostLink from '../../components/postlink'
 import PostCard from '../../components/postcard'
+import Utterances from '../../components/utterances'
 import Tag from '../../components/tag'
 import Layout from '../../components/layout'
 
@@ -119,6 +120,8 @@ const Article: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ pos
           <Comment name={"Jisu Sim"} date={new Date()}>댓글 내용</Comment>
           <Comment name={"Hong Gil Dong"} date={new Date()}>댓글 내용</Comment>
         </div>
+        <hr />
+        <Utterances />
         <hr />
         <div className="post-suggestions">
           {suggestedPosts.map(post => (

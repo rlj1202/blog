@@ -48,7 +48,7 @@ const Layout: NextPage = ({ children }) => {
 
       <style jsx>{`
         .footer {
-          font-family: 'Consolas';
+          font-family: 'Consolas', 'Ubuntu Mono', monospace;
           margin: 40px;
           text-align: center;
         }

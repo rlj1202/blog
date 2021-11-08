@@ -28,8 +28,8 @@
     "unified": "^10.1.0"
   },
   "devDependencies": {
-    "@types/glob": "^7.2.0",
     "@types/dateformat": "^5.0.0",
+    "@types/glob": "^7.2.0",
     "@types/node": "16.11.6",
     "@types/react": "17.0.34",
     "eslint": "7.32.0",
