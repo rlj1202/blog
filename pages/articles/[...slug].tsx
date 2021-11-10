@@ -130,11 +130,6 @@ const Article: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ pos
         <div className="post-content" dangerouslySetInnerHTML={{ __html: content }}>
         </div>
         <hr />
-        <div className="post-comments">
-          <Comment name={"Jisu Sim"} date={new Date()}>댓글 내용</Comment>
-          <Comment name={"Hong Gil Dong"} date={new Date()}>댓글 내용</Comment>
-        </div>
-        <hr />
         <Utterances />
         <hr />
         <div className="post-suggestions">

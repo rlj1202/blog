@@ -6,6 +6,7 @@ import styles from '../styles/Home.module.css'
 
 import Layout from '../components/layout'
 import PostCard from '../components/postcard'
+import Paginator from '../components/paginator'
 
 import { Post, getPosts } from '../utils/postUtils'
 
@@ -41,6 +42,8 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts 
           ))}
         </div>
 
+        <Paginator curPage={2} pageUrl={(page) => { return '/' }} />
+
         <hr />
       </div>
 
@@ -57,7 +60,7 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts 
           flex-wrap: wrap;
           row-gap: 40px;
           column-gap: 40px;
-          padding: 40px 0;
+          margin: 40px 0;
         }
       `}</style>
     </Layout>

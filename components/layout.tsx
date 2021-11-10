@@ -1,11 +1,13 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import Script from 'next/script'
 
 import Topbar from './topbar'
 
 const Layout: NextPage = ({ children }) => {
   return (
     <div>
+      <Script src="https://kit.fontawesome.com/1dddf9384f.js" crossOrigin="anonymous" />
       <Head>
         <title>{process.env.test}</title>
 
