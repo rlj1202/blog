@@ -7,6 +7,7 @@ import dateFormat from 'dateformat'
 import PostLink from '../../components/postlink'
 import PostCard from '../../components/postcard'
 import Utterances from '../../components/utterances'
+import MathJax3 from '../../components/mathjax3'
 import Tag from '../../components/tag'
 import Layout from '../../components/layout'
 
@@ -91,6 +92,7 @@ const Article: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ pos
 
   return (
     <Layout>
+      <MathJax3 />
       <Head>
         <title>{metadata.title}</title>
 

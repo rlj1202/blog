@@ -5,9 +5,11 @@ import { unified } from 'unified'
 import remarkParse from 'remark-parse'
 import remarkGfm from 'remark-gfm'
 import remarkRehype from 'remark-rehype'
+import rehypeRaw from 'rehype-raw'
 import rehypeHighlight from 'rehype-highlight'
 import rehypeStringify from 'rehype-stringify'
 import matter from 'gray-matter'
+import { visit } from 'unist-util-visit'
 
 const postsPath = path.join(process.cwd(), 'posts')
 
@@ -19,6 +21,7 @@ export interface PostMetadata {
     date?: Date
     categories?: string | string[]
     tags?: string[]
+    imgs?: string[]
 }
 
 export interface Post {
@@ -51,20 +54,34 @@ export async function getPost(postPath: string[]): Promise<Post> {
                 (data as PostMetadata).tags = [data.tags]
             }
 
-            return unified()
+            var mdast = unified()
                 .use(remarkParse)
                 .use(remarkGfm) // NOTE: tables are not standard. WOW
+                .parse(content)
+
+            var hast = unified()
                 .use(remarkRehype, { allowDangerousHtml: true })
+                .use(rehypeRaw)
                 .use(rehypeHighlight)
+                .runSync(mdast)
+
+            var imgs: string[] = []
+            visit(hast, { type: 'element', tagName: 'img' }, (node) => {
+                if (node.properties) {
+                    imgs.push(node.properties.src as string)
+                }
+            })
+            data.imgs = imgs
+
+            var result = unified()
                 .use(rehypeStringify, { allowDangerousHtml: true })
-                .process(content)
-                .then(result => {
-                    return {
-                        postPath,
-                        content: String(result),
-                        metadata: data as PostMetadata
-                    }
-                })
+                .stringify(hast)
+
+            return {
+                postPath,
+                content: String(result),
+                metadata: data as PostMetadata
+            }
         })
 }
 

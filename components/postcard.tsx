@@ -11,7 +11,8 @@ const PostCard: NextPage<{ post: Post }> = ({ post }) => {
   return (
     <div className="postcard">
       <PostLink postPath={post.postPath}>
-        <a><div className="postcard-img">
+        <a><div className="postcard-img-box">
+          {post.metadata.imgs && post.metadata.imgs.length > 0 && ( <img className="postcard-img" src={post.metadata.imgs[0]} /> )}
         </div></a>
       </PostLink>
       <header className="postcard-header">
@@ -42,9 +43,14 @@ const PostCard: NextPage<{ post: Post }> = ({ post }) => {
           display: flex;
           flex-direction: column;
         }
-        .postcard-img {
+        .postcard-img-box {
           background-color: gray;
           height: 200px;
+        }
+        .postcard-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
         }
         .postcard-header {
           padding: 20px;
