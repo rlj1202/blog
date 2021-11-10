@@ -22,6 +22,7 @@ export interface PostMetadata {
     categories?: string | string[]
     tags?: string[]
     imgs?: string[]
+    excerpt?: string
 }
 
 export interface Post {
@@ -72,6 +73,7 @@ export async function getPost(postPath: string[]): Promise<Post> {
                 }
             })
             data.imgs = imgs
+            data.excerpt = content.slice(0, 1000)
 
             var result = unified()
                 .use(rehypeStringify, { allowDangerousHtml: true })

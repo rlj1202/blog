@@ -12,10 +12,21 @@ const PostCard: NextPage<{ post: Post }> = ({ post }) => {
     <div className="postcard">
       <PostLink postPath={post.postPath}>
         <a><div className="postcard-img-box">
-          {post.metadata.imgs && post.metadata.imgs.length > 0 && ( <img className="postcard-img" src={post.metadata.imgs[0]} /> )}
+          {post.metadata.imgs && post.metadata.imgs.length > 0 ? (
+            <img className="postcard-img" src={post.metadata.imgs[0]} />
+          ) : (
+            <div className="postcard-excerpt">
+              {post.metadata.excerpt}
+            </div>
+          )}
         </div></a>
       </PostLink>
       <header className="postcard-header">
+        {post.postPath.length > 1 && (
+          <div className="postcard-categories">
+            {post.postPath.slice(0, -1).join('/')}
+          </div>
+        )}
         <h1 className="postcard-title">
           <PostLink postPath={post.postPath}>
             <a>{post.metadata.title || post.postPath.join('/')}</a>
@@ -27,11 +38,13 @@ const PostCard: NextPage<{ post: Post }> = ({ post }) => {
         <div className="postcard-date">
           {dateFormat(post.metadata.date, 'yyyy-mm-dd')}
         </div>
-        <div className="postcard-tags">
-          {post.metadata.tags?.map(tag => (
-            <Tag key={tag}>{tag}</Tag>
-          ))}
-        </div>
+        {post.metadata.tags && post.metadata.tags.length > 0 && (
+          <div className="postcard-tags">
+            {post.metadata.tags?.map(tag => (
+              <Tag key={tag}>{tag}</Tag>
+            ))}
+          </div>
+        )}
       </header>
 
       <style jsx>{`
@@ -52,27 +65,50 @@ const PostCard: NextPage<{ post: Post }> = ({ post }) => {
           height: 100%;
           object-fit: cover;
         }
+        .postcard-excerpt {
+          padding: 20px;
+          overflow: hidden;
+          word-break: break-all;
+          height: 100%;
+          width: 100%;
+          color: #dddddd;
+          position: relative;
+        }
+        .postcard-excerpt::before {
+          display: block;
+          position: absolute;
+          content: "";
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+
+          background: linear-gradient(#00000000 50%, gray 95%);
+        }
         .postcard-header {
           padding: 20px;
           flex-grow: 1;
 
           display: flex;
           flex-direction: column;
+          row-gap: 10px;
+        }
+        .postcard-categories {
+          color: #999999;
+          font-size: 0.9em;
         }
         .postcard-title {
           font-size: 1em;
           font-weight: bold;
           margin: 0;
-          margin-bottom: 10px;
-
-          flex-grow: 1;
         }
         .postcard-subtitle {
           font-size: 1em;
           font-weight: normal;
-          margin: 0;
-          margin-bottom: 10px;
           color: #999999;
+          margin: 0;
+
+          flex-grow: 1;
         }
         .postcard-date {
           font-size: 0.9em;
@@ -80,7 +116,6 @@ const PostCard: NextPage<{ post: Post }> = ({ post }) => {
         }
         .postcard-tags {
           font-size: 0.9em;
-          margin-top: 10px;
 
           display: flex;
           flex-wrap: wrap;
