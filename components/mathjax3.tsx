@@ -6,8 +6,8 @@ import Script from 'next/script'
 import { useEffect } from 'react'
 
 interface MathJax3 {
-  typeset(): void
-  typesetPromise(): Promise<void>
+  typeset?(): void
+  typesetPromise?(): Promise<void>
 }
 
 function getMathJax3(): MathJax3 | undefined {
@@ -16,7 +16,7 @@ function getMathJax3(): MathJax3 | undefined {
 
 const MathJax3: NextPage = () => {
   useEffect(() => {
-    getMathJax3()?.typesetPromise()
+    getMathJax3()?.typesetPromise?.()
   })
 
   return (
