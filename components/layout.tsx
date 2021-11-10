@@ -1,21 +1,11 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Script from 'next/script'
 
 import Topbar from './topbar'
 
 const Layout: NextPage = ({ children }) => {
   return (
     <div>
-      {/* MathJax 3 */}
-      <Script src="/mathjax.js" strategy="beforeInteractive" defer />
-      <Script src="https://polyfill.io/v3/polyfill.min.js?features=es6" strategy="beforeInteractive" defer />
-      <Script
-        id="MathJax-script"
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
-        strategy="beforeInteractive" defer />
-      <Script id="mathjax-run" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: `MathJax.typeset()` }} defer />
-
       <Head>
         <title>{process.env.test}</title>
 

@@ -1,6 +1,7 @@
 // @refresh reset
 
 import { NextPage } from 'next'
+import { useEffect } from 'react'
 
 /*
 <script
@@ -18,13 +19,12 @@ import { NextPage } from 'next'
 */
 
 const Utterances: NextPage = () => {
-  console.log(`Utterances called ${Date.now().toString()}`)
-
   return (
     <section ref={element => {
       if (!element) {
         return
       }
+      
       var frames: HTMLCollectionOf<Element>
       if ((frames = document.getElementsByClassName('utterances')).length > 0) {
         console.log('utterances does already exist.')
