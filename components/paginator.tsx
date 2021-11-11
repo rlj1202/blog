@@ -5,21 +5,23 @@ const Paginator: NextPage<{
   curPage?: number, perPage?: number, total?: number,
   pageUrl?: (page: number) => string
 }> = ({ curPage = 1, perPage = 20, total = 100, pageUrl = (page: number) => { return '/' } }) => {
+  let maxPage = Math.ceil(total / perPage)
+
   return (
     <div className="pagination-wrapper">
       <div className="pagination">
         <div className="pagination-button">
-          <Link href={pageUrl(1)}><a>
+          <Link href={pageUrl(Math.max(curPage - 1, 1))}><a>
             <i className="fas fa-chevron-left"></i>
           </a></Link>
         </div>
-        {[...Array.from(Array(Math.ceil(total / perPage) + 1).keys()).slice(1)].map(i => (
+        {[...Array.from(Array(maxPage + 1).keys()).slice(1)].map(i => (
           <div key={i} className={`pagination-button ${i == curPage ? 'pagination-button-selected' : ''}`}>
             <Link href={pageUrl(i)}><a>{i}</a></Link>
           </div>
         ))}
         <div className="pagination-button">
-          <Link href={pageUrl(1)}><a>
+          <Link href={pageUrl(Math.min(curPage + 1, maxPage))}><a>
             <i className="fas fa-chevron-right"></i>
           </a></Link>
         </div>

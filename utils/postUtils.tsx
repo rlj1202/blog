@@ -29,8 +29,13 @@ export interface Post {
     postPath: string[]
     content: string
     metadata: PostMetadata
+    url: string
 }
 
+/**
+ * Get all post paths.
+ * @returns 
+ */
 export async function getPostPaths(): Promise<string[][]> {
     return new Promise<string[]>((resolve, reject) => {
             glob("**/*.md", { cwd: postsPath }, (err, matches) => {
@@ -42,6 +47,11 @@ export async function getPostPaths(): Promise<string[][]> {
         .then(paths => paths.map(path => path.split('/')))
 }
 
+/**
+ * Get post from post path.
+ * @param postPath 
+ * @returns Post object contains metadata(a.k.a frontmatter) and actual html content.
+ */
 export async function getPost(postPath: string[]): Promise<Post> {
     return fs.promises
         .readFile(`./posts/${postPath.join('/')}.md`, { encoding: 'utf-8' })
@@ -82,18 +92,48 @@ export async function getPost(postPath: string[]): Promise<Post> {
             return {
                 postPath,
                 content: String(result),
-                metadata: data as PostMetadata
+                metadata: data as PostMetadata,
+                url: `/articles/${postPath.join('/')}`
             }
         })
 }
 
-export async function getPosts(): Promise<Post[]> {
+/**
+ * 
+ * @param options
+ * @returns 
+ */
+export async function getPosts({
+    sortFn = (a, b) => -((a.metadata.date?.getTime() || 0) - (b.metadata.date?.getTime() || 0)),
+    offset = 0,
+    limit
+}: {
+    /** Uses date to sort by default. */
+    sortFn?: (a: Post, b: Post) => number,
+    /** 0 is default value */
+    offset?: number,
+    /** Number of posts which will be returned. Returns remaining all posts if not specified. */
+    limit?: number
+} = {}): Promise<{
+    posts: Post[],
+    /** Total number of posts. */
+    total: number
+}> {
     return getPostPaths()
-        .then(postPaths => {
-            return Promise.all(postPaths.map(postPath => getPost(postPath)))
+        .then(postPaths => Promise.all(postPaths.map(postPath => getPost(postPath))))
+        .then(posts => posts.sort(sortFn))
+        .then(posts => {
+            return {
+                posts: limit ? posts.slice(offset, offset + limit) : posts,
+                total: posts.length
+            }
         })
 }
 
+/**
+ * 
+ * @returns 
+ */
 export async function getCategoryPaths(): Promise<string[][]> {
     return getPostPaths()
         .then(postPaths => Array
@@ -102,8 +142,12 @@ export async function getCategoryPaths(): Promise<string[][]> {
         )
 }
 
+/**
+ * 
+ * @returns 
+ */
 export async function getTags(): Promise<string[]> {
-    return getPosts().then(posts => {
+    return getPosts().then(({ posts }) => {
         let tags: string[] = []
 
         posts.forEach(post => {
@@ -116,13 +160,4 @@ export async function getTags(): Promise<string[]> {
 
         return Array.from(new Set(tags))
     })
-}
-
-export async function getPage(page: number, perPage: number): Promise<Post[]> {
-    return getPosts()
-        .then(posts => {
-            var start = page * perPage
-            
-            return posts.slice(start, start + perPage)
-        })
 }

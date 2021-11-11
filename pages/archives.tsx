@@ -11,11 +11,7 @@ interface Props {
 }
 
 export const getStaticProps: GetStaticProps<Props> = async (context) => {
-  let posts = await getPosts()
-
-  posts.sort((a, b) => {
-    return -((a.metadata.date?.getTime?.() || 0) - (b.metadata.date?.getTime?.() || 0));
-  })
+  let { posts } = await getPosts()
 
   return {
     props: {
@@ -40,7 +36,7 @@ const Archives: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ po
 
             {posts.filter(post => post.metadata.date?.getFullYear() == year).map(post => (
               <div className="post" key={post.postPath.join('/')}>
-                <PostLink postPath={post.postPath}>
+                <PostLink post={post}>
                   <a>{post.metadata.title}</a>
                 </PostLink>
               </div>

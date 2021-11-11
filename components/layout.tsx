@@ -35,10 +35,16 @@ const Layout: NextPage = ({ children }) => {
       </main>
 
       <footer className="footer">
-        Copyright (c) 2021, Jisu Sim. All rights reserved.
+        <i className="fas fa-rss rss"></i>
+        <div>
+          Copyright (c) 2021, Jisu Sim. All rights reserved.
+        </div>
       </footer>
 
       <style jsx>{`
+        .rss {
+          margin-bottom: 10px;
+        }
         .footer {
           font-family: 'Consolas', 'Ubuntu Mono', monospace;
           margin: 40px;

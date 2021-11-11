@@ -33,13 +33,13 @@ export const getStaticProps: GetStaticProps<Props, Routes> = async (context) => 
   }
 
   let post = await getPost(postPath)
-  let posts = await getPosts()
+  let { posts } = await getPosts({ offset: 0, limit: 2 })
 
   return {
     props: {
       post,
       postPath,
-      suggestedPosts: posts.slice(0, 2)
+      suggestedPosts: posts
     }
   }
 }
@@ -113,7 +113,7 @@ const Article: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ pos
         <header className="post-header">
           <span className="post-category">{postPath.slice(0, -1).join('/')}</span>
           <h1 className="post-title">
-            <PostLink postPath={postPath}><a>{metadata.title}</a></PostLink>
+            <PostLink post={post}><a>{metadata.title}</a></PostLink>
           </h1>
           <h2 className="post-subtitle">{metadata.subtitle}</h2>
           <div className="post-info">

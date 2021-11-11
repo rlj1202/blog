@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const getStaticProps: GetStaticProps<Props> = async (context) => {
-  let posts = await getPosts()
+  let { posts } = await getPosts()
   let tags = await getTags()
 
   return {
@@ -39,7 +39,7 @@ const Tags: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts,
 
             {posts.filter(post => post.metadata.tags?.includes(tag)).map(post => (
               <div className="post" key={post.postPath.join('/')}>
-                <PostLink postPath={post.postPath}>
+                <PostLink post={post}>
                   <a>{post.metadata.title || post.postPath.at(-1)}</a>
                 </PostLink>
               </div>

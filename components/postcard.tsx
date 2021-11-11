@@ -10,7 +10,7 @@ import { Post } from '../utils/postUtils'
 const PostCard: NextPage<{ post: Post }> = ({ post }) => {
   return (
     <div className="postcard">
-      <PostLink postPath={post.postPath}>
+      <PostLink post={post}>
         <a><div className="postcard-img-box">
           {post.metadata.imgs && post.metadata.imgs.length > 0 ? (
             <img className="postcard-img" src={post.metadata.imgs[0]} />
@@ -28,7 +28,7 @@ const PostCard: NextPage<{ post: Post }> = ({ post }) => {
           </div>
         )}
         <h1 className="postcard-title">
-          <PostLink postPath={post.postPath}>
+          <PostLink post={post}>
             <a>{post.metadata.title || post.postPath.join('/')}</a>
           </PostLink>
         </h1>
