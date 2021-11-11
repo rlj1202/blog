@@ -4,6 +4,8 @@ import { ParsedUrlQuery } from 'querystring'
 
 import dateFormat from 'dateformat'
 
+import Config from '../../config'
+
 import PostLink from '../../components/postlink'
 import PostCard from '../../components/postcard'
 import Utterances from '../../components/utterances'
@@ -96,15 +98,11 @@ const Article: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ pos
       <Head>
         <title>{metadata.title}</title>
 
-        {/* SEO */}
-        <meta name="description" content="rlj1202의 개발 블로그" />
-        <meta name="keywords" content="" />
-
         {/* opengraph */}
         <meta property="og:title" content={metadata.title} />
         <meta property="og:locale" content="ko_KR" />
         <meta property="og:type" content="website" />
-        <meta property="og:description" content="rlj1202의 개발 블로그" />
+        <meta property="og:description" content={Config.description} />
         <meta property="og:url" content="" />
         <meta property="og:image" content="" />
       </Head>

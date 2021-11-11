@@ -11,7 +11,9 @@ import rehypeStringify from 'rehype-stringify'
 import matter from 'gray-matter'
 import { visit } from 'unist-util-visit'
 
-const postsPath = path.join(process.cwd(), 'posts')
+import Config from '../config'
+
+const postsPath = path.join(process.cwd(), Config.postsDir)
 
 // frontmatter
 export interface PostMetadata {
@@ -48,13 +50,24 @@ export async function getPostPaths(): Promise<string[][]> {
 }
 
 /**
+ * Get post url from post path.
+ * @param postPath 
+ * @returns 
+ */
+export function getPostUrl(postPath: string[]): string {
+    return `/articles/${postPath.join('/')}`
+}
+
+/**
  * Get post from post path.
  * @param postPath 
  * @returns Post object contains metadata(a.k.a frontmatter) and actual html content.
  */
 export async function getPost(postPath: string[]): Promise<Post> {
+    var postFilePath = path.join(postsPath, `${postPath.join('/')}.md`)
+
     return fs.promises
-        .readFile(`./posts/${postPath.join('/')}.md`, { encoding: 'utf-8' })
+        .readFile(postFilePath, { encoding: 'utf-8' })
         .then((raw) => {
             let { content, data } = matter(raw)
 
@@ -93,7 +106,7 @@ export async function getPost(postPath: string[]): Promise<Post> {
                 postPath,
                 content: String(result),
                 metadata: data as PostMetadata,
-                url: `/articles/${postPath.join('/')}`
+                url: getPostUrl(postPath)
             }
         })
 }
