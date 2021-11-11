@@ -1,4 +1,7 @@
 import { NextPage, GetStaticProps, GetStaticPaths, InferGetStaticPropsType } from 'next'
+import Head from 'next/head'
+
+import Config from '../../config'
 
 import Layout from '../../components/layout'
 import PostCard from '../../components/postcard'
@@ -11,12 +14,10 @@ interface Props extends ParsedUrlQuery {
   page: string
 }
 
-const perPage = 10
-
 export const getStaticProps: GetStaticProps<{ page: number, posts: Post[], total: number }, Props> = async (context) => {
   let page = parseInt(context.params?.page || '1')
 
-  let { posts, total } = await getPosts({ offset: (page - 1) * perPage, limit: perPage })
+  let { posts, total } = await getPosts({ offset: (page - 1) * Config.postsPerPage, limit: Config.postsPerPage })
 
   posts.sort((a, b) => {
     return -((a.metadata.date?.getTime() || 0) - (b.metadata.date?.getTime() || 0))
@@ -33,7 +34,7 @@ export const getStaticProps: GetStaticProps<{ page: number, posts: Post[], total
 
 export const getStaticPaths: GetStaticPaths<Props> = async (context) => {
   let { total } = await getPosts()
-  let pages = Math.ceil(total / perPage)
+  let pages = Math.ceil(total / Config.postsPerPage)
 
   return {
     paths: [...Array.from(new Array(pages + 1).keys()).slice(1)].map(i => ({ params: { page: `${i}` } })),
@@ -44,6 +45,10 @@ export const getStaticPaths: GetStaticPaths<Props> = async (context) => {
 const Page: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ page, posts, total }) => {
   return (
     <Layout>
+      <Head>
+        <title>{`Page ${page} - ${Config.title}`}</title>
+      </Head>
+
       <main className="main">
         <div className="postcards">
           {posts.map(post => (
@@ -52,7 +57,7 @@ const Page: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ page, 
         </div>
 
         <Paginator
-          curPage={page} perPage={perPage} total={total}
+          curPage={page} perPage={Config.postsPerPage} total={total}
           pageUrl={(page) => { return `/pages/${page}` }} />
 
         <hr />

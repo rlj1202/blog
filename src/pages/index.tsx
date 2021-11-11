@@ -2,6 +2,8 @@ import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 
+import Config from '../config'
+
 import Layout from '../components/layout'
 import PostCard from '../components/postcard'
 
@@ -21,7 +23,7 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts 
   return (
     <Layout>
       <Head>
-
+        <title>{`Home - ${Config.title}`}</title>
       </Head>
 
       <main className="main">

@@ -2,6 +2,8 @@ import type { NextPage } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 
+import Config from '../config'
+
 import githubPic from '../../public/assets/github.svg'
 import twitterPic from '../../public/assets/twitter.svg'
 
@@ -15,25 +17,18 @@ const Topbar: NextPage = () => {
             </Link>
           </div>
           <div className="topbar-left-links">
-            <span className="topbar-link">
-              <Link href="/about"><a>About</a></Link>
-            </span>
-            <span className="topbar-link">
-              <Link href="/tags"><a>Tags</a></Link>
-            </span>
-            <span className="topbar-link">
-              <Link href="/categories"><a>Categories</a></Link>
-            </span>
-            <span className="topbar-link">
-              <Link href="/archives"><a>Archives</a></Link>
-            </span>
+            {Config.menus.map(menu => (
+              <span className="topbar-link">
+                <Link href={menu.path}><a>{menu.label}</a></Link>
+              </span>
+            ))}
           </div>
         </div>
         <div className="topbar-right">
-          <span className="topbar-link"><a href="https://github.com/rlj1202">
+          <span className="topbar-link"><a href={Config.author.contacts.github}>
             <Image src={githubPic} alt="GitHub" width={20} height={20} layout="fixed" />
           </a></span>
-          <span className="topbar-link"><a href="https://twitter.com/jisoosim">
+          <span className="topbar-link"><a href={Config.author.contacts.twitter}>
             <Image src={twitterPic} alt="Twitter" width={20} height={20} layout="fixed" />
           </a></span>
         </div>
