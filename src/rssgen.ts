@@ -7,7 +7,7 @@ import { getPosts } from './utils/postUtils'
 
 export const generateRssFeed = async () => {
     const { posts } = await getPosts()
-    const siteUrl = process.env.HOST
+    const siteUrl = process.env.HOST || process.env.NEXT_PUBLIC_VERCEL_URL
     const date = new Date()
 
     const feed = new Feed({
