@@ -14,6 +14,7 @@
     "@types/jsdom": "^16.2.13",
     "babel-plugin-superjson-next": "^0.4.2",
     "dateformat": "^5.0.2",
+    "feed": "^4.2.2",
     "fs": "^0.0.1-security",
     "glob": "^7.2.0",
     "gray-matter": "^4.0.3",

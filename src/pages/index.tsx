@@ -3,6 +3,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 
 import Config from '../config'
+import { generateRssFeed } from '../rssgen'
 
 import Layout from '../components/layout'
 import PostCard from '../components/postcard'
@@ -11,6 +12,8 @@ import { Post, getPosts } from '../utils/postUtils'
 
 export const getStaticProps: GetStaticProps<{ posts: Post[] }> = async (context) => {
   var { posts } = await getPosts({ limit: 10 })
+
+  generateRssFeed()
 
   return {
     props: {

@@ -2,7 +2,13 @@ const Config = {
     title: 'rlj1202.github.io',
     description: 'rlj1202의 개발 블로그',
     keywords: '',
-    copyright: 'Copyright (c) 2021, Jisu Sim. All rights reserved.',
+    copyright: `Copyright (c) ${new Date().getFullYear()}, Jisu Sim. All rights reserved.`,
+
+    rss: {
+        rss2Path: '/rss/feed.xml',
+        atom1Path: '/rss/atom.xml',
+        json1Path: '/rss/feed.json',
+    },
 
     menus: [
         {
@@ -25,12 +31,13 @@ const Config = {
 
     googleAnalyticsId: '',
 
+    /** Local dir path to where post files are in */
     postsDir: 'posts',
 
     postsPerPage: 10,
 
     author: {
-        name: 'rlj1202',
+        name: 'Jisu Sim',
         photo: './some_image.png',
         bio: 'developer',
         contacts: {

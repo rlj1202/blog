@@ -38,7 +38,12 @@ const Layout: NextPage = ({ children }) => {
       </main>
 
       <footer className="footer">
-        <i className="fas fa-rss rss"></i>
+        <div className="rss">
+          <i className="fas fa-rss"></i>
+          <a href={Config.rss.rss2Path}>RSS 2.0</a>
+          <a href={Config.rss.atom1Path}>ATOM 1.0</a>
+          <a href={Config.rss.json1Path}>JSON 1.0</a>
+        </div>
         <div>
           {Config.copyright}
         </div>
@@ -47,11 +52,17 @@ const Layout: NextPage = ({ children }) => {
       <style jsx>{`
         .rss {
           margin-bottom: 20px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          column-gap: 10px;
         }
         .footer {
           font-family: 'Consolas', 'Ubuntu Mono', monospace;
           margin: 40px;
           text-align: center;
+          color: #999999;
+          font-size: 0.9em;
         }
       `}</style>
     </div>
