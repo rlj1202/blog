@@ -18,7 +18,7 @@ const Topbar: NextPage = () => {
           </div>
           <div className="topbar-left-links">
             {Config.menus.map(menu => (
-              <span className="topbar-link">
+              <span className="topbar-link" key={menu.label}>
                 <Link href={menu.path}><a>{menu.label}</a></Link>
               </span>
             ))}
