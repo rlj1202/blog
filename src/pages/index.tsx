@@ -66,7 +66,7 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts 
           justify-content: right;
         }
         .arrow {
-          margin-left: 5px;
+          margin-left: 10px;
         }
         .readmore {
           box-shadow: rgba(0, 0, 0, 0.15) 0 0 4px;

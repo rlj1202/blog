@@ -2,8 +2,8 @@ import type { NextPage } from 'next'
 
 import dateFormat from 'dateformat'
 
-import Tag from '../components/tag'
-import PostLink from '../components/postlink'
+import Tag from './tag'
+import PostLink from './postlink'
 
 import { Post } from '../utils/postUtils'
 

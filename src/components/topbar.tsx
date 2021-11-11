@@ -2,8 +2,8 @@ import type { NextPage } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import githubPic from '../public/assets/github.svg'
-import twitterPic from '../public/assets/twitter.svg'
+import githubPic from '../../public/assets/github.svg'
+import twitterPic from '../../public/assets/twitter.svg'
 
 const Topbar: NextPage = () => {
     return (

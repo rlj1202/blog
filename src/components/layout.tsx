@@ -43,7 +43,7 @@ const Layout: NextPage = ({ children }) => {
 
       <style jsx>{`
         .rss {
-          margin-bottom: 10px;
+          margin-bottom: 20px;
         }
         .footer {
           font-family: 'Consolas', 'Ubuntu Mono', monospace;
