@@ -1,9 +1,11 @@
 import { NextPage } from 'next'
 import Link from 'next/link'
 
-const PostLink: NextPage<{ postPath: string[] }> = ({ postPath, children }) => {
+import { Post } from '../utils/postUtils'
+
+const PostLink: NextPage<{ post: Post }> = ({ post, children }) => {
   return (
-    <Link href={`/articles/${postPath.join('/')}`} passHref>
+    <Link href={post.url} passHref>
       {children}
     </Link>
   )

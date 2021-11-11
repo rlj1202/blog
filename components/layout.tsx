@@ -1,11 +1,13 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import Script from 'next/script'
 
 import Topbar from './topbar'
 
 const Layout: NextPage = ({ children }) => {
   return (
     <div>
+      <Script src="https://kit.fontawesome.com/1dddf9384f.js" crossOrigin="anonymous" />
       <Head>
         <title>{process.env.test}</title>
 
@@ -33,10 +35,16 @@ const Layout: NextPage = ({ children }) => {
       </main>
 
       <footer className="footer">
-        Copyright (c) 2021, Jisu Sim. All rights reserved.
+        <i className="fas fa-rss rss"></i>
+        <div>
+          Copyright (c) 2021, Jisu Sim. All rights reserved.
+        </div>
       </footer>
 
       <style jsx>{`
+        .rss {
+          margin-bottom: 10px;
+        }
         .footer {
           font-family: 'Consolas', 'Ubuntu Mono', monospace;
           margin: 40px;

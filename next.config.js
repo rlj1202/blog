@@ -15,6 +15,10 @@ module.exports = (phase, { defaultConfig }) => {
     images: {
       loader: 'custom'
     },
+    async redirects() {
+      return [
+      ]
+    },
 
     webpack(config, options) {
       return config
