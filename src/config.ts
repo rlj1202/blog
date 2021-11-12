@@ -12,6 +12,12 @@ const Config = {
         json1Path: '/rss/feed.json',
     },
 
+    utterances: {
+        repo: 'rlj1202/blog',
+        issueTerm: 'pathname',
+        theme: 'github-light',
+    },
+
     menus: [
         {
             label: 'About',
