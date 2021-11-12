@@ -16,14 +16,20 @@ const Layout: NextPage = ({ children }) => {
         <meta name="description" content={Config.description} />
         <meta name="keywords" content={Config.keywords} />
 
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href={Config.favicon} />
         {/* <link rel="icon" sizes="192x192" href="/favicon.png" /> */}
+        {/* Safari browser */}
+        <link rel="mask-icon" href={Config.favicon} color="#000000" />
+        {/* iOS */}
+        {/* <link rel="apple-touch-icon" href={Config.favicon} /> */}
 
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         {/* Chrome, Firefox and Opera */}
         {/* will not be used in android device when the dark mode is enabled. */}
         <meta name="theme-color" content="#FF4F4F" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FF4F4F" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#FF4F4F" />
         {/* Windows Phone */}
         <meta name="msapplication-navbutton-color" content="#FF4F4F" />
         {/* iOS Safari */}

@@ -17,7 +17,7 @@ export const generateRssFeed = async () => {
         link: `${siteUrl}`,
         language: 'ko-KR',
         // image: `${siteUrl}/some_image.png`,
-        favicon: `${siteUrl}/favicon.ico`,
+        favicon: `${siteUrl}${Config.favicon}`,
         copyright: Config.copyright,
         feedLinks: {
             rss2: `${siteUrl}${Config.rss.rss2Path}`,

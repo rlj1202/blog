@@ -4,6 +4,8 @@ const Config = {
     keywords: '',
     copyright: `Copyright (c) ${new Date().getFullYear()}, Jisu Sim. All rights reserved.`,
 
+    favicon: '/favicon.svg',
+
     rss: {
         rss2Path: '/rss/feed.xml',
         atom1Path: '/rss/atom.xml',
