@@ -63,6 +63,7 @@ const Tag: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ tag, po
         .main {
           max-width: 800px;
           margin: 40px auto;
+          padding: 0 40px;
         }
         .posts {
           display: flex;
