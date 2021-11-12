@@ -6,6 +6,8 @@ import Config from './config'
 import { getPosts } from './utils/postUtils'
 
 export const generateRssFeed = async () => {
+    console.log('Generate rss...')
+
     const { posts } = await getPosts()
     const siteUrl = process.env.HOST
     const date = new Date()
@@ -17,7 +19,7 @@ export const generateRssFeed = async () => {
         link: `${siteUrl}`,
         language: 'ko-KR',
         // image: `${siteUrl}/some_image.png`,
-        favicon: `${siteUrl}/favicon.ico`,
+        favicon: `${siteUrl}${Config.favicon}`,
         copyright: Config.copyright,
         feedLinks: {
             rss2: `${siteUrl}${Config.rss.rss2Path}`,

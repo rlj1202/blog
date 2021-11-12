@@ -3,6 +3,8 @@
 import { NextPage } from 'next'
 import { useEffect } from 'react'
 
+import Config from '../config'
+
 /*
 <script
   src="https://utteranc.es/client.js"
@@ -37,9 +39,9 @@ const Utterances: NextPage = () => {
       const scriptElem = document.createElement('script')
       scriptElem.src = 'https://utteranc.es/client.js'
       scriptElem.async = true
-      scriptElem.setAttribute('repo', 'rlj1202/blog')
-      scriptElem.setAttribute('issue-term', 'pathname')
-      scriptElem.setAttribute('theme', 'github-light')
+      scriptElem.setAttribute('repo', Config.utterances.repo)
+      scriptElem.setAttribute('issue-term', Config.utterances.issueTerm)
+      scriptElem.setAttribute('theme', Config.utterances.theme)
       // scriptElem.setAttribute('label', '')
       scriptElem.crossOrigin = 'anonymous'
       element.appendChild(scriptElem)

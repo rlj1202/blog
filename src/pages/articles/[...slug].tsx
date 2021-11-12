@@ -130,6 +130,7 @@ const Article: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ pos
         <hr />
         <Utterances />
         <hr />
+        <h1>Latest</h1>
         <div className="post-suggestions">
           {suggestedPosts.map(post => (
             <PostCard post={post} key={post.postPath.join('/')} />

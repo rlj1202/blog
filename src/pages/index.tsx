@@ -4,6 +4,7 @@ import Link from 'next/link'
 
 import Config from '../config'
 import { generateRssFeed } from '../rssgen'
+import { generateSitemap } from '../sitemapgen'
 
 import Layout from '../components/layout'
 import PostCard from '../components/postcard'
@@ -14,6 +15,7 @@ export const getStaticProps: GetStaticProps<{ posts: Post[] }> = async (context)
   var { posts } = await getPosts({ limit: 10 })
 
   generateRssFeed()
+  generateSitemap()
 
   return {
     props: {
@@ -30,6 +32,8 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts 
       </Head>
 
       <main className="main">
+        <h1>Latest</h1>
+
         <div className="postcards">
           {posts.map(post => (
             <PostCard key={post.postPath.join('/')} post={post} />
@@ -53,7 +57,7 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts 
       <style jsx>{`
         .main {
           max-width: 1500px;
-          margin: 0 auto;
+          margin: 40px auto;
           box-sizing: content-box;
           padding: 0 40px;
         }

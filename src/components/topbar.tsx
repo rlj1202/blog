@@ -1,11 +1,7 @@
 import type { NextPage } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
 
 import Config from '../config'
-
-import githubPic from '../../public/assets/github.svg'
-import twitterPic from '../../public/assets/twitter.svg'
 
 const Topbar: NextPage = () => {
     return (
@@ -25,12 +21,14 @@ const Topbar: NextPage = () => {
           </div>
         </div>
         <div className="topbar-right">
-          <span className="topbar-link"><a href={Config.author.contacts.github}>
-            <Image src={githubPic} alt="GitHub" width={20} height={20} layout="fixed" />
-          </a></span>
-          <span className="topbar-link"><a href={Config.author.contacts.twitter}>
-            <Image src={twitterPic} alt="Twitter" width={20} height={20} layout="fixed" />
-          </a></span>
+          {/* Ready for dark-mode
+          <span className="topbar-link">
+            <i className="fas fa-moon"></i>
+          </span>
+          <span className="topbar-link">
+            <i className="fas fa-sun"></i>
+          </span>
+          */}
         </div>
 
         <style jsx>{`

@@ -4,10 +4,22 @@ const Config = {
     keywords: '',
     copyright: `Copyright (c) ${new Date().getFullYear()}, Jisu Sim. All rights reserved.`,
 
+    favicon: '/favicon.svg',
+
     rss: {
         rss2Path: '/rss/feed.xml',
         atom1Path: '/rss/atom.xml',
         json1Path: '/rss/feed.json',
+    },
+
+    sitemap: {
+        path: '/sitemap.xml',
+    },
+
+    utterances: {
+        repo: 'rlj1202/blog',
+        issueTerm: 'pathname',
+        theme: 'github-light',
     },
 
     menus: [

@@ -16,14 +16,20 @@ const Layout: NextPage = ({ children }) => {
         <meta name="description" content={Config.description} />
         <meta name="keywords" content={Config.keywords} />
 
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href={Config.favicon} />
         {/* <link rel="icon" sizes="192x192" href="/favicon.png" /> */}
+        {/* Safari browser */}
+        <link rel="mask-icon" href={Config.favicon} color="#000000" />
+        {/* iOS */}
+        {/* <link rel="apple-touch-icon" href={Config.favicon} /> */}
 
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         {/* Chrome, Firefox and Opera */}
         {/* will not be used in android device when the dark mode is enabled. */}
         <meta name="theme-color" content="#FF4F4F" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FF4F4F" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#FF4F4F" />
         {/* Windows Phone */}
         <meta name="msapplication-navbutton-color" content="#FF4F4F" />
         {/* iOS Safari */}
@@ -38,11 +44,33 @@ const Layout: NextPage = ({ children }) => {
       </main>
 
       <footer className="footer">
-        <div className="rss">
-          <i className="fas fa-rss"></i>
-          <a href={Config.rss.rss2Path}>RSS 2.0</a>
-          <a href={Config.rss.atom1Path}>ATOM 1.0</a>
-          <a href={Config.rss.json1Path}>JSON 1.0</a>
+        <div className="links">
+          <span>
+            <i className="fab fa-github-square"></i>
+            <a href={Config.author.contacts.github}>Github</a>
+          </span>
+          <span>
+            <i className="fab fa-twitter-square"></i>
+            <a href={Config.author.contacts.twitter}>Twitter</a>
+          </span>
+          <span>
+            <i className="fas fa-envelope"></i>
+            <a href={`mailto:${Config.author.contacts.email}`}>{Config.author.contacts.email}</a>
+          </span>
+        </div>
+        <div className="links">
+          <span>
+            <i className="fas fa-rss"></i>
+            <a href={Config.rss.rss2Path}>RSS 2.0</a>
+          </span>
+          <span>
+            <i className="fas fa-rss"></i>
+            <a href={Config.rss.atom1Path}>ATOM 1.0</a>
+          </span>
+          <span>
+            <i className="fas fa-rss"></i>
+            <a href={Config.rss.json1Path}>JSON 1.0</a>
+          </span>
         </div>
         <div>
           {Config.copyright}
@@ -50,12 +78,16 @@ const Layout: NextPage = ({ children }) => {
       </footer>
 
       <style jsx>{`
-        .rss {
-          margin-bottom: 20px;
+        .links {
           display: flex;
           justify-content: center;
           align-items: center;
           column-gap: 10px;
+          row-gap: 10px;
+          flex-wrap: wrap;
+        }
+        .links span i {
+          margin-right: 5px;
         }
         .footer {
           font-family: 'Consolas', 'Ubuntu Mono', monospace;
@@ -63,6 +95,9 @@ const Layout: NextPage = ({ children }) => {
           text-align: center;
           color: #999999;
           font-size: 0.9em;
+          display: flex;
+          flex-direction: column;
+          row-gap: 20px;
         }
       `}</style>
     </div>
