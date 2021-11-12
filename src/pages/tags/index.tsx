@@ -1,10 +1,11 @@
 import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next'
 import Head from 'next/head'
+import Link from 'next/link'
 
-import PostLink from '../components/postlink'
-import Layout from '../components/layout'
+import Layout from '../../components/layout'
+import Tag from '../../components/tag'
 
-import { Post, getPosts, getTags } from '../utils/postUtils'
+import { Post, getPosts, getTags } from '../../utils/postUtils'
 
 interface Props {
   posts: Post[]
@@ -31,21 +32,17 @@ const Tags: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts,
       </Head>
 
       <div className="main">
-        <h1>태그</h1>
+        <h1>Tags</h1>
 
-        {tags.map(tag => (
-          <div key={tag}>
-            <h2>{tag}</h2>
-
-            {posts.filter(post => post.metadata.tags?.includes(tag)).map(post => (
-              <div className="post" key={post.postPath.join('/')}>
-                <PostLink post={post}>
-                  <a>{post.metadata.title || post.postPath.at(-1)}</a>
-                </PostLink>
-              </div>
-            ))}
-          </div>
-        ))}
+        <div className="tags">
+          {tags.map(tag => (
+            <div key={tag}>
+              <Link href={`/tags/${tag}`}>
+                <a><Tag>{`${tag} · ${posts.filter(post => post.metadata.tags?.includes(tag)).length}`}</Tag></a>
+              </Link>
+            </div>
+          ))}
+        </div>
 
         <hr />
       </div>
@@ -57,8 +54,14 @@ const Tags: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts,
           box-sizing: content-box;
           padding: 0 40px;
         }
-        .post {
-          margin: 20px 0;
+        .tags {
+          display: flex;
+          flex-wrap: wrap;
+          row-gap: 6px;
+          margin: 40px 0;
+        }
+        hr {
+          margin: 40px 0;
         }
       `}</style>
     </Layout>

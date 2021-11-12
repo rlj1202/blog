@@ -6,6 +6,8 @@ import Config from './config'
 import { getPosts } from './utils/postUtils'
 
 export const generateRssFeed = async () => {
+    console.log('Generate rss...')
+
     const { posts } = await getPosts()
     const siteUrl = process.env.HOST
     const date = new Date()

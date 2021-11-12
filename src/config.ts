@@ -12,6 +12,10 @@ const Config = {
         json1Path: '/rss/feed.json',
     },
 
+    sitemap: {
+        path: '/sitemap.xml',
+    },
+
     utterances: {
         repo: 'rlj1202/blog',
         issueTerm: 'pathname',

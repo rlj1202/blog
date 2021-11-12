@@ -61,6 +61,9 @@ const Categories: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ 
         .post {
           margin: 20px 0;
         }
+        hr {
+          margin: 40px 0;
+        }
       `}</style>
     </Layout>
   )

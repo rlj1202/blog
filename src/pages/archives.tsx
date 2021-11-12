@@ -57,6 +57,9 @@ const Archives: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ po
         .post {
           margin: 20px 0;
         }
+        hr {
+          margin: 40px 0;
+        }
       `}</style>
     </Layout>
   )

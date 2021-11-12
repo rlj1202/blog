@@ -119,22 +119,25 @@ export async function getPost(postPath: string[]): Promise<Post> {
 export async function getPosts({
     sortFn = (a, b) => -((a.metadata.date?.getTime() || 0) - (b.metadata.date?.getTime() || 0)),
     offset = 0,
-    limit
+    limit,
+    tag,
 }: {
     /** Uses date to sort by default. */
     sortFn?: (a: Post, b: Post) => number,
     /** 0 is default value */
     offset?: number,
     /** Number of posts which will be returned. Returns remaining all posts if not specified. */
-    limit?: number
+    limit?: number,
+    tag?: string,
 } = {}): Promise<{
     posts: Post[],
     /** Total number of posts. */
-    total: number
+    total: number,
 }> {
     return getPostPaths()
         .then(postPaths => Promise.all(postPaths.map(postPath => getPost(postPath))))
         .then(posts => posts.sort(sortFn))
+        .then(posts => tag ? posts.filter(post => post.metadata.tags?.includes(tag)) : posts)
         .then(posts => {
             return {
                 posts: limit ? posts.slice(offset, offset + limit) : posts,
