@@ -4,6 +4,8 @@ title:      마인크래프트 한글 입력 모드 1.0.0 릴리즈 - 자바 에
 categories:
 tags:       [minecraft, forge, mod, hangulinput, programming]
 date:       2019-08-07 23:59:32 +0900
+typora-root-url: ..\public
+typora-copy-images-to: ..\public\asset\posts\hangulinput-1.0.0
 ---
 
 # 모드 소개

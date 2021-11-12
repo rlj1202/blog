@@ -188,6 +188,9 @@ const Article: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ pos
           column-gap: 40px;
           margin: 40px 0;
         }
+        hr {
+          margin: 40px 0;
+        }
       `}</style>
       <style jsx global>{`
         .post-content img, .post-content iframe {
@@ -200,9 +203,28 @@ const Article: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ pos
           border: none;
           border-top: solid 1px #dddddd;
         }
+        .post-content h1 {
+          font-size: 2em;
+        }
+        .post-content h2 {
+          font-size: 1.5em;
+        }
+        .post-content h3 {
+          font-size: 1.3em;
+        }
+        .post-content p,
+        .post-content ul,
+        .post-content ol,
+        .post-content pre,
+        .post-content table,
+        .post-content blockquote {
+          margin-top: 20px;
+          margin-bottom: 20px;
+        }
         .post-content blockquote {
           border-left: solid 2px #dddddd;
           padding-left: 20px;
+          color: #888888;
         }
         .post-content code {
           background-color: #3D3D3D;
@@ -210,6 +232,20 @@ const Article: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ pos
           padding: 2px 6px;
           font-family: 'Consolas';
         }
+        .post-content table {
+          border: solid 1px #dddddd;
+          border-collapse: collapse;
+          width: 100%;
+        }
+        .post-content th {
+          background-color: #f0f0f0;
+          text-align: center;
+        }
+        .post-content th, .post-content td {
+          border: solid 1px #dddddd;
+          padding: 10px;
+        }
+
         code.hljs {
           display: inline-block;
           width: 100%;
