@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -8,6 +9,15 @@ import logo from '../../public/favicon.svg'
 const Topbar: React.FC = () => {
   // TODO
   var darkMode = false
+
+  var [ navShow, setNavShow ] = useState(false)
+
+  var toggleNav = () => {
+    setNavShow(status => {
+
+      return !status
+    })
+  }
 
   return (
     <div className="topbar">
@@ -32,8 +42,11 @@ const Topbar: React.FC = () => {
           </div>
         </div>
         <div className="topbar-right">
+          <button className="topbar-button topbar-button-more" onClick={toggleNav}>
+            <i className="fas fa-bars fa-lg"></i>
+          </button>
           <button
-            className="theme-button topbar-link"
+            className="topbar-button"
             onClick={() => {  }}>
             {darkMode ? (
               <i className="fas fa-sun fa-lg"></i>
@@ -41,6 +54,15 @@ const Topbar: React.FC = () => {
               <i className="fas fa-moon fa-lg"></i>
             )}
           </button>
+        </div>
+      </div>
+      <div className={`topbar-nav ${navShow ? 'show' : ''}`}>
+        <div className="topbar-nav-links">
+          {Config.menus.map(menu => (
+            <div>
+              <Link href={menu.path}><a>{menu.label}</a></Link>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -51,13 +73,25 @@ const Topbar: React.FC = () => {
           overflow-x: auto;
         }
         .topbar-content {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .topbar-content, .topbar-nav {
           max-width: 800px;
           margin: 0 auto;
           box-sizing: content-box;
           padding: 0 40px;
+        }
+        .topbar-nav {
+          max-height: 0;
+          transition: max-height 0.25s ease-out;
+        }
+        .topbar-nav-links {
           display: flex;
-          justify-content: space-between;
-          align-items: center;
+          flex-direction: column;
+          row-gap: 20px;
+          padding-bottom: 40px;
         }
         .topbar-left {
           display: flex;
@@ -65,12 +99,13 @@ const Topbar: React.FC = () => {
         }
         .topbar-left-links {
           display: flex;
-          column-gap: 2rem;
-          padding: 0 2rem;
+          column-gap: 2em;
+          padding: 0 2em;
         }
         .topbar-right {
           display: flex;
           align-items: center;
+          column-gap: 2em;
         }
         .topbar-link {
           font-weight: 400;
@@ -86,14 +121,31 @@ const Topbar: React.FC = () => {
           column-gap: 0.5em;
         }
         .topbar-logo {
-          padding: 0 5px;
+          padding: 0;
           display: inline-flex;
         }
-        .theme-button {
+        .topbar-button {
           display: block;
           border: none;
           background: none;
-          padding: 1em;
+          padding: 0;
+        }
+        .show {
+          max-height: 500px;
+          transition: max-height 0.25s ease-in;
+        }
+        @media (min-width: 800px) {
+          .topbar-button-more {
+            display: none;
+          }
+          .topbar-nav {
+            display: none;
+          }
+        }
+        @media (max-width: 800px) {
+          .topbar-left-links {
+            display: none;
+          }
         }
       `}</style>
     </div>
