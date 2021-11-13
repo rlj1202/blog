@@ -15,8 +15,10 @@ const Topbar: React.FC = () => {
         <div className="topbar-left">
           <Link href="/">
             <a>
-              <div className="topbar-logo">
-                <Image src={logo} width={'25'} height={'25'} />
+              <div className="topbar-title">
+                <div className="topbar-logo">
+                  <Image src={logo} width={'25'} height={'25'} layout="fixed" />
+                </div>
                 {Config.title}
               </div>
             </a>
@@ -55,6 +57,7 @@ const Topbar: React.FC = () => {
           padding: 0 40px;
           display: flex;
           justify-content: space-between;
+          align-items: center;
         }
         .topbar-left {
           display: flex;
@@ -72,14 +75,19 @@ const Topbar: React.FC = () => {
         .topbar-link {
           font-weight: 400;
         }
-        .topbar-logo {
+        .topbar-title {
           padding: 1.7rem 0;
           font-weight: 600;
           font-size: 1.2em;
+          line-height: 100%;
 
           display: flex;
           align-items: center;
           column-gap: 0.5em;
+        }
+        .topbar-logo {
+          padding: 0 5px;
+          display: inline-flex;
         }
         .theme-button {
           display: block;
