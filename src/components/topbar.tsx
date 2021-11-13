@@ -7,15 +7,23 @@ import Config from '../config'
 import logo from '../../public/favicon.svg'
 
 const Topbar: React.FC = () => {
-  // TODO
-  var darkMode = false
-
+  var [ activeTheme, setTheme ] = useState('light')
   var [ navShow, setNavShow ] = useState(false)
 
   var toggleNav = () => {
     setNavShow(status => {
 
       return !status
+    })
+  }
+
+  var toggleTheme = () => {
+    setTheme(theme => {
+      theme = theme == 'light' ? 'dark' : 'light'
+
+      document.body.dataset.theme = theme
+
+      return theme
     })
   }
 
@@ -47,11 +55,11 @@ const Topbar: React.FC = () => {
           </button>
           <button
             className="topbar-button"
-            onClick={() => {  }}>
-            {darkMode ? (
-              <i className="fas fa-sun fa-lg"></i>
-            ) : (
+            onClick={toggleTheme}>
+            {activeTheme == 'light' ? (
               <i className="fas fa-moon fa-lg"></i>
+            ) : (
+              <i className="fas fa-sun fa-lg"></i>
             )}
           </button>
         </div>
@@ -68,7 +76,6 @@ const Topbar: React.FC = () => {
 
       <style jsx>{`
         .topbar {
-          color: #333333;
           box-shadow: rgba(0, 0, 0, 0.05) 0 0 20px 5px;
           overflow-x: auto;
         }
@@ -131,7 +138,7 @@ const Topbar: React.FC = () => {
           padding: 0;
         }
         .show {
-          max-height: 500px;
+          max-height: ${Config.menus.length * 4}em;
           transition: max-height 0.25s ease-in;
         }
         @media (min-width: 800px) {

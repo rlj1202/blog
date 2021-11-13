@@ -40,7 +40,7 @@ const Footer: React.FC = () => {
           font-family: 'Consolas', 'Ubuntu Mono', monospace;
           margin: 40px 0;
           text-align: center;
-          color: #999999;
+          color: var(--color-text-secondary);
           font-size: 0.9rem;
           display: flex;
           flex-direction: column;

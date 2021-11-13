@@ -33,9 +33,9 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
         <h2 className="postcard-subtitle">
           {post.metadata.subtitle}
         </h2>
-        <div className="postcard-date">
+        <h2 className="postcard-date">
           {dateFormat(post.metadata.date, 'yyyy-mm-dd')}
-        </div>
+        </h2>
         {post.metadata.tags && post.metadata.tags.length > 0 && (
           <div className="postcard-tags">
             {post.metadata.tags?.map(tag => (
@@ -103,14 +103,14 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
         .postcard-subtitle {
           font-size: 1em;
           font-weight: normal;
-          color: #666666;
           margin: 0;
 
           flex-grow: 1;
         }
         .postcard-date {
           font-size: 0.9em;
-          color: #666666;
+          font-weight: normal;
+          margin: 0;
         }
         .postcard-tags {
           font-size: 0.9em;

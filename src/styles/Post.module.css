@@ -6,6 +6,9 @@
 .post a {
   color: #6464ff;
 }
+[data-theme="dark"] .post a {
+  color: #64b7ff;
+}
 
 .post table {
   border: solid 1px #dddddd;
@@ -21,6 +24,13 @@
 .post td {
   border: solid 1px #dddddd;
   padding: 0.3rem 0.6rem;
+}
+[data-theme="dark"] .post th {
+  background-color: #818181;
+}
+[data-theme="dark"] .post th,
+[data-theme="dark"] .post td {
+  border: solid 1px #5f5f5f;
 }
 
 .post h1 {
@@ -43,9 +53,9 @@
 }
 
 .post blockquote {
-  border-left: solid 2px #dddddd;
+  border-left: solid 2px var(--color-text-secondary);
   padding-left: 1rem;
-  color: #888888;
+  color: var(--color-text-secondary);
 }
 
 .post code {
@@ -55,6 +65,10 @@
   font-weight: 600;
   padding: 2px 4px;
   font-size: 0.9rem;
+}
+[data-theme="dark"] .post code {
+  color: #ff7575;
+  background-color: #343434;
 }
 
 .post img,

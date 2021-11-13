@@ -116,15 +116,13 @@ const Article: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ pos
             <PostLink post={post}><a>{metadata.title}</a></PostLink>
           </h1>
           <h2 className="post-subtitle">{metadata.subtitle}</h2>
-          <div className="post-info">
-            <div className="post-date">
-              {dateFormat(metadata.date, 'yyyy-mm-dd hh:MM:ss')}
-            </div>
-            <div className="post-tags">
-              {(metadata.tags as string[])?.map?.(tag => (
-                <Tag key={tag} tag={tag}>{tag}</Tag>
-              ))}
-            </div>
+          <h2 className="post-date">
+            {dateFormat(metadata.date, 'yyyy-mm-dd hh:MM:ss')}
+          </h2>
+          <div className="post-tags">
+            {(metadata.tags as string[])?.map?.(tag => (
+              <Tag key={tag} tag={tag}>{tag}</Tag>
+            ))}
           </div>
         </header>
         <div
@@ -156,12 +154,11 @@ const Article: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ pos
         .post-subtitle {
           font-size: 1.3em;
           margin: 10px 0;
-          color: #666666;
           font-weight: normal;
         }
-        .post-info {
-          margin: 10px 0;
-          font-size: 0.9em;
+        .post-date {
+          font-weight: normal;
+          font-size: 1em;
         }
         .post-date {
           margin: 10px 0;
