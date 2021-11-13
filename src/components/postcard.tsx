@@ -1,5 +1,3 @@
-import type { NextPage } from 'next'
-
 import dateFormat from 'dateformat'
 
 import Tag from './tag'
@@ -7,7 +5,7 @@ import PostLink from './postlink'
 
 import { Post } from '../utils/postUtils'
 
-const PostCard: NextPage<{ post: Post }> = ({ post }) => {
+const PostCard: React.FC<{ post: Post }> = ({ post }) => {
   return (
     <div className="postcard">
       <PostLink post={post}>
@@ -41,7 +39,7 @@ const PostCard: NextPage<{ post: Post }> = ({ post }) => {
         {post.metadata.tags && post.metadata.tags.length > 0 && (
           <div className="postcard-tags">
             {post.metadata.tags?.map(tag => (
-              <Tag key={tag}>{tag}</Tag>
+              <Tag tag={tag} key={tag}>{tag}</Tag>
             ))}
           </div>
         )}
@@ -49,7 +47,7 @@ const PostCard: NextPage<{ post: Post }> = ({ post }) => {
 
       <style jsx>{`
         .postcard {
-          box-shadow: rgba(0, 0, 0, 0.15) 0 0 4px;
+          box-shadow: rgba(0, 0, 0, 0.05) 0 0 20px 5px;
           flex-basis: 300px;
           flex-grow: 1;
 
@@ -66,7 +64,7 @@ const PostCard: NextPage<{ post: Post }> = ({ post }) => {
           object-fit: cover;
         }
         .postcard-excerpt {
-          padding: 20px;
+          padding: 1.5em;
           overflow: hidden;
           word-break: break-all;
           height: 100%;
@@ -86,7 +84,7 @@ const PostCard: NextPage<{ post: Post }> = ({ post }) => {
           background: linear-gradient(#00000000 50%, gray 95%);
         }
         .postcard-header {
-          padding: 20px;
+          padding: 1.5em;
           flex-grow: 1;
 
           display: flex;
@@ -98,21 +96,21 @@ const PostCard: NextPage<{ post: Post }> = ({ post }) => {
           font-size: 0.9em;
         }
         .postcard-title {
-          font-size: 1em;
+          font-size: 1.3em;
           font-weight: bold;
           margin: 0;
         }
         .postcard-subtitle {
           font-size: 1em;
           font-weight: normal;
-          color: #999999;
+          color: #666666;
           margin: 0;
 
           flex-grow: 1;
         }
         .postcard-date {
           font-size: 0.9em;
-          color: #999999;
+          color: #666666;
         }
         .postcard-tags {
           font-size: 0.9em;
@@ -120,6 +118,7 @@ const PostCard: NextPage<{ post: Post }> = ({ post }) => {
           display: flex;
           flex-wrap: wrap;
           row-gap: 6px;
+          column-gap: 6px;
         }
       `}</style>
     </div>

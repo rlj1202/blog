@@ -6,6 +6,8 @@ import Layout from '../components/layout'
 
 import { Post, getPosts, getCategoryPaths } from '../utils/postUtils'
 
+import Config from '../config'
+
 interface Props {
   posts: Post[]
   categories: string[][]
@@ -27,11 +29,11 @@ const Categories: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ 
   return (
     <Layout>
       <Head>
-        <title>Categories</title>
+        <title>{`Categories - ${Config.title}`}</title>
       </Head>
 
-      <div className="main">
-        <h1>카테고리</h1>
+      <div>
+        <h1>Categories</h1>
 
         {categories.map(category => (
           <>
@@ -46,23 +48,11 @@ const Categories: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ 
             ))}
           </>
         ))}
-
-        <hr />
       </div>
 
       <style jsx>{`
-        .main {
-          margin: 40px auto;
-          max-width: 800px;
-          box-sizing: content-box;
-          padding: 0 40px;
-        }
-
         .post {
           margin: 20px 0;
-        }
-        hr {
-          margin: 40px 0;
         }
       `}</style>
     </Layout>

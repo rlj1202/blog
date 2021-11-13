@@ -25,6 +25,7 @@ export interface PostMetadata {
     tags?: string[]
     imgs?: string[]
     excerpt?: string
+    published?: boolean
 }
 
 export interface Post {
@@ -71,11 +72,13 @@ export async function getPost(postPath: string[]): Promise<Post> {
         .then((raw) => {
             let { content, data } = matter(raw)
 
-            if (typeof (data as PostMetadata).date == 'string') {
-                (data as PostMetadata).date = new Date(Date.parse(data.date as string))
+            var metadata: PostMetadata = data as PostMetadata
+
+            if (typeof metadata.date == 'string') {
+                metadata.date = new Date(Date.parse(data.date as string))
             }
-            if (typeof (data as PostMetadata).tags == 'string') {
-                (data as PostMetadata).tags = [data.tags]
+            if (typeof metadata.tags == 'string') {
+                metadata.tags = [data.tags]
             }
 
             var mdast = unified()
@@ -95,8 +98,9 @@ export async function getPost(postPath: string[]): Promise<Post> {
                     imgs.push(node.properties.src as string)
                 }
             })
-            data.imgs = imgs
-            data.excerpt = content.slice(0, 1000)
+            metadata.imgs = imgs
+            metadata.excerpt = content.slice(0, 1000)
+            metadata.published ??= true
 
             var result = unified()
                 .use(rehypeStringify, { allowDangerousHtml: true })
@@ -105,7 +109,7 @@ export async function getPost(postPath: string[]): Promise<Post> {
             return {
                 postPath,
                 content: String(result),
-                metadata: data as PostMetadata,
+                metadata,
                 url: getPostUrl(postPath)
             }
         })
@@ -121,6 +125,7 @@ export async function getPosts({
     offset = 0,
     limit,
     tag,
+    onlyPublished = process.env.NODE_ENV == 'production' || false,
 }: {
     /** Uses date to sort by default. */
     sortFn?: (a: Post, b: Post) => number,
@@ -129,6 +134,7 @@ export async function getPosts({
     /** Number of posts which will be returned. Returns remaining all posts if not specified. */
     limit?: number,
     tag?: string,
+    onlyPublished?: boolean,
 } = {}): Promise<{
     posts: Post[],
     /** Total number of posts. */
@@ -138,6 +144,7 @@ export async function getPosts({
         .then(postPaths => Promise.all(postPaths.map(postPath => getPost(postPath))))
         .then(posts => posts.sort(sortFn))
         .then(posts => tag ? posts.filter(post => post.metadata.tags?.includes(tag)) : posts)
+        .then(posts => onlyPublished ? posts.filter(post => post.metadata.published) : posts)
         .then(posts => {
             return {
                 posts: limit ? posts.slice(offset, offset + limit) : posts,

@@ -1,11 +1,11 @@
-import type { NextPage } from 'next'
 import Head from 'next/head'
 import Script from 'next/script'
 
 import Config from '../config'
 import Topbar from '../components/topbar'
+import Footer from './footer'
 
-const Layout: NextPage = ({ children }) => {
+const Layout: React.FC = ({ children }) => {
   return (
     <div>
       <Script src="https://kit.fontawesome.com/1dddf9384f.js" crossOrigin="anonymous" />
@@ -27,7 +27,6 @@ const Layout: NextPage = ({ children }) => {
 
         {/* Chrome, Firefox and Opera */}
         {/* will not be used in android device when the dark mode is enabled. */}
-        <meta name="theme-color" content="#FF4F4F" />
         <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FF4F4F" />
         <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#FF4F4F" />
         {/* Windows Phone */}
@@ -35,69 +34,31 @@ const Layout: NextPage = ({ children }) => {
         {/* iOS Safari */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="#black-translucent" />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet" />
       </Head>
 
       <Topbar />
 
-      <main>
+      <div className="main">
         {children}
-      </main>
 
-      <footer className="footer">
-        <div className="links">
-          <span>
-            <i className="fab fa-github-square"></i>
-            <a href={Config.author.contacts.github}>Github</a>
-          </span>
-          <span>
-            <i className="fab fa-twitter-square"></i>
-            <a href={Config.author.contacts.twitter}>Twitter</a>
-          </span>
-          <span>
-            <i className="fas fa-envelope"></i>
-            <a href={`mailto:${Config.author.contacts.email}`}>{Config.author.contacts.email}</a>
-          </span>
-        </div>
-        <div className="links">
-          <span>
-            <i className="fas fa-rss"></i>
-            <a href={Config.rss.rss2Path}>RSS 2.0</a>
-          </span>
-          <span>
-            <i className="fas fa-rss"></i>
-            <a href={Config.rss.atom1Path}>ATOM 1.0</a>
-          </span>
-          <span>
-            <i className="fas fa-rss"></i>
-            <a href={Config.rss.json1Path}>JSON 1.0</a>
-          </span>
-        </div>
-        <div>
-          {Config.copyright}
-        </div>
-      </footer>
+        <hr />
+      </div>
+
+      <Footer />
 
       <style jsx>{`
-        .links {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          column-gap: 10px;
-          row-gap: 10px;
-          flex-wrap: wrap;
+        .main {
+          margin: 40px auto;
+          max-width: 800px;
+          padding: 0 40px;
+          box-sizing: content-box;
         }
-        .links span i {
-          margin-right: 5px;
-        }
-        .footer {
-          font-family: 'Consolas', 'Ubuntu Mono', monospace;
-          margin: 40px;
-          text-align: center;
-          color: #999999;
-          font-size: 0.9em;
-          display: flex;
-          flex-direction: column;
-          row-gap: 20px;
+        hr {
+          margin: 40px 0;
         }
       `}</style>
     </div>

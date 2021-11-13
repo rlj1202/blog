@@ -1,10 +1,10 @@
-import { NextPage } from 'next'
 import Link from 'next/link'
+import Config from '../config'
 
-const Paginator: NextPage<{
+const Paginator: React.FC<{
   curPage?: number, perPage?: number, total?: number,
   pageUrl?: (page: number) => string
-}> = ({ curPage = 1, perPage = 20, total = 100, pageUrl = (page: number) => { return '/' } }) => {
+}> = ({ curPage = 1, perPage = Config.postsPerPage, total = 100, pageUrl = (page: number) => { return '/' } }) => {
   let maxPage = Math.ceil(total / perPage)
 
   return (
@@ -31,7 +31,6 @@ const Paginator: NextPage<{
         .pagination-wrapper {
           display: flex;
           justify-content: center;
-          margin: 40px 0;
         }
         .pagination {
           display: flex;

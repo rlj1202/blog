@@ -1,0 +1,35 @@
+/* block code */
+pre code.hljs {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  color: white;
+  background-color: #363636;
+}
+.hljs-keyword {
+  font-weight: bold;
+  color: #93a6ff;
+}
+.hljs-title {
+  color: inherit;
+}
+.hljs-function {
+  color: #ffe0a7;
+}
+.hljs-variable {
+  color: #aeff9a;
+}
+.hljs-number {
+  color: #fcff41;
+}
+.hljs-string {
+  color: #ffb16f;
+}
+.hljs-attribute {
+  color: #ff9292;
+}
+.hljs-selector-class {
+  color: #a8a8d7;
+}
