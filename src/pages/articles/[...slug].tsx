@@ -13,6 +13,8 @@ import MathJax3 from '../../components/mathjax3'
 import Tag from '../../components/tag'
 import Layout from '../../components/layout'
 
+import styles from '../../styles/Post.module.css'
+
 import { Post, getPostPaths, getPost, getPosts } from '../../utils/postUtils'
 
 interface Props {
@@ -96,7 +98,7 @@ const Article: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ pos
     <Layout>
       <MathJax3 />
       <Head>
-        <title>{metadata.title}</title>
+        <title>{`${metadata.title} - ${Config.title}`}</title>
 
         {/* opengraph */}
         <meta property="og:title" content={metadata.title} />
@@ -107,7 +109,7 @@ const Article: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ pos
         <meta property="og:image" content="" />
       </Head>
 
-      <article className="post">
+      <article>
         <header className="post-header">
           <span className="post-category">{postPath.slice(0, -1).join('/')}</span>
           <h1 className="post-title">
@@ -120,13 +122,14 @@ const Article: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ pos
             </div>
             <div className="post-tags">
               {(metadata.tags as string[])?.map?.(tag => (
-                <Tag key={tag}>{tag}</Tag>
+                <Tag key={tag} tag={tag}>{tag}</Tag>
               ))}
             </div>
           </div>
         </header>
-        <div className="post-content" dangerouslySetInnerHTML={{ __html: content }}>
-        </div>
+        <div
+          className={styles.post}
+          dangerouslySetInnerHTML={{ __html: content }} />
         <hr />
         <Utterances />
         <hr />
@@ -136,34 +139,24 @@ const Article: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ pos
             <PostCard post={post} key={post.postPath.join('/')} />
           ))}
         </div>
-        <hr />
       </article>
 
       <style jsx>{`
-        .post {
-          margin: 40px auto;
-          max-width: 800px;
-          padding: 0 40px;
-          box-sizing: content-box;
-        }
-        .post-header {
-          font-family: 'Roboto';
-        }
         .post-header, .post-content, .post-comments {
-          margin: 40px 0;
+          margin: 6rem 0;
         }
         .post-category {
-          color: #999999;
+          color: #666666;
         }
         .post-title {
           font-size: 3em;
-          margin: 10px 0;
-          font-weight: normal;
+          margin: 0.3em 0;
+          font-weight: bold;
         }
         .post-subtitle {
           font-size: 1.3em;
           margin: 10px 0;
-          color: #999999;
+          color: #666666;
           font-weight: normal;
         }
         .post-info {
@@ -172,13 +165,14 @@ const Article: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ pos
         }
         .post-date {
           margin: 10px 0;
-          color: #999999;
+          color: #666666;
         }
         .post-tags {
           margin: 10px 0;
           display: flex;
           flex-wrap: wrap;
           row-gap: 6px;
+          column-gap: 6px;
         }
         .post-suggestions {
           display: flex;
@@ -190,92 +184,6 @@ const Article: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ pos
         }
         hr {
           margin: 40px 0;
-        }
-      `}</style>
-      <style jsx global>{`
-        .post-content img, .post-content iframe {
-          max-width: 100%;
-        }
-        .post-content a {
-          color: #6464ff;
-        }
-        hr, .post-content hr {
-          border: none;
-          border-top: solid 1px #dddddd;
-        }
-        .post-content h1 {
-          font-size: 2em;
-        }
-        .post-content h2 {
-          font-size: 1.5em;
-        }
-        .post-content h3 {
-          font-size: 1.3em;
-        }
-        .post-content p,
-        .post-content ul,
-        .post-content ol,
-        .post-content pre,
-        .post-content table,
-        .post-content blockquote {
-          margin-top: 20px;
-          margin-bottom: 20px;
-        }
-        .post-content blockquote {
-          border-left: solid 2px #dddddd;
-          padding-left: 20px;
-          color: #888888;
-        }
-        .post-content code {
-          background-color: #3D3D3D;
-          color: white;
-          padding: 2px 6px;
-          font-family: 'Consolas';
-        }
-        .post-content table {
-          border: solid 1px #dddddd;
-          border-collapse: collapse;
-          width: 100%;
-        }
-        .post-content th {
-          background-color: #f0f0f0;
-          text-align: center;
-        }
-        .post-content th, .post-content td {
-          border: solid 1px #dddddd;
-          padding: 10px;
-        }
-
-        code.hljs {
-          display: inline-block;
-          width: 100%;
-          padding: 20px;
-          overflow-x: auto;
-        }
-        .hljs-keyword {
-          font-weight: bold;
-          color: #93a6ff;
-        }
-        .hljs-title {
-
-        }
-        .hljs-function {
-          color: #ffe0a7;
-        }
-        .hljs-variable {
-          color: #aeff9a;
-        }
-        .hljs-number {
-          color: #fcff41;
-        }
-        .hljs-string {
-          color: #ffb16f;
-        }
-        .hljs-attribute {
-          color: #ff9292;
-        }
-        .hljs-selector-class {
-          color: #a8a8d7;
         }
       `}</style>
     </Layout>

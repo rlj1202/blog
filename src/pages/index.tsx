@@ -31,7 +31,7 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts 
         <title>{`Home - ${Config.title}`}</title>
       </Head>
 
-      <main className="main">
+      <main>
         <h1>Latest</h1>
 
         <div className="postcards">
@@ -50,17 +50,9 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts 
             </Link>
           </div>
         </div>
-
-        <hr />
       </main>
 
       <style jsx>{`
-        .main {
-          max-width: 1500px;
-          margin: 40px auto;
-          box-sizing: content-box;
-          padding: 0 40px;
-        }
         .postcards {
           display: flex;
           flex-direction: row;
@@ -75,13 +67,14 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts 
           justify-content: right;
         }
         .arrow {
-          margin-left: 10px;
+          margin-left: 0.5em;
         }
         .readmore {
-          box-shadow: rgba(0, 0, 0, 0.15) 0 0 4px;
-          padding: 10px;
+          box-shadow: rgba(0, 0, 0, 0.05) 0 0 20px 5px;
+          padding: 1em;
           background-color: #FF4F4F;
           color: white;
+          font-size: 0.9em;
         }
       `}</style>
     </Layout>

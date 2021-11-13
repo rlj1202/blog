@@ -4,8 +4,7 @@ import Head from 'next/head'
 import Config from '../../config'
 
 import Layout from '../../components/layout'
-import PostCard from '../../components/postcard'
-import Paginator from '../../components/paginator'
+import PostList from '../../components/postlist'
 
 import { Post, getPosts } from '../../utils/postUtils'
 import { ParsedUrlQuery } from 'querystring'
@@ -14,20 +13,15 @@ interface Props extends ParsedUrlQuery {
   page: string
 }
 
-export const getStaticProps: GetStaticProps<{ page: number, posts: Post[], total: number }, Props> = async (context) => {
+export const getStaticProps: GetStaticProps<{ page: number, posts: Post[] }, Props> = async (context) => {
   let page = parseInt(context.params?.page || '1')
 
-  let { posts, total } = await getPosts({ offset: (page - 1) * Config.postsPerPage, limit: Config.postsPerPage })
-
-  posts.sort((a, b) => {
-    return -((a.metadata.date?.getTime() || 0) - (b.metadata.date?.getTime() || 0))
-  })
+  let { posts } = await getPosts()
 
   return {
     props: {
       page,
-      posts,
-      total
+      posts
     }
   }
 }
@@ -42,42 +36,20 @@ export const getStaticPaths: GetStaticPaths<Props> = async (context) => {
   }
 }
 
-const Page: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ page, posts, total }) => {
+const Page: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ page, posts }) => {
   return (
     <Layout>
       <Head>
         <title>{`Page ${page} - ${Config.title}`}</title>
       </Head>
 
-      <main className="main">
-        <div className="postcards">
-          {posts.map(post => (
-            <PostCard key={post.postPath.join('/')} post={post} />
-          ))}
-        </div>
-
-        <Paginator
-          curPage={page} perPage={Config.postsPerPage} total={total}
-          pageUrl={(page) => { return `/pages/${page}` }} />
-
-        <hr />
-      </main>
+      <PostList
+        title={`Page ${page}`}
+        curPage={page}
+        posts={posts}
+        pageUrl={page => `/pages/${page}`} />
 
       <style jsx>{`
-        .main {
-          max-width: 1500px;
-          margin: 0 auto;
-          box-sizing: content-box;
-          padding: 0 40px;
-        }
-        .postcards {
-          display: flex;
-          flex-direction: row;
-          flex-wrap: wrap;
-          row-gap: 40px;
-          column-gap: 40px;
-          margin: 40px 0;
-        }
       `}</style>
     </Layout>
   )

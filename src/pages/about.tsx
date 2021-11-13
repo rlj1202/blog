@@ -3,28 +3,24 @@ import Head from 'next/head'
 
 import Layout from '../components/layout'
 
+import Config from '../config'
+
 const About: NextPage = () => {
   return (
     <Layout>
       <Head>
-        <title>About</title>
+        <title>{`About - ${Config.title}`}</title>
       </Head>
 
-      <div className="main">
+      <div>
         <h1>About</h1>
 
-        me
-
-        <hr />
+        <p>
+          me
+        </p>
       </div>
 
       <style jsx>{`
-        .main {
-          margin: 40px auto;
-          max-width: 800px;
-          box-sizing: content-box;
-          padding: 0 40px;
-        }
       `}</style>
     </Layout>
   )

@@ -1,17 +1,26 @@
-import type { NextPage } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 
 import Config from '../config'
 
-const Topbar: NextPage = () => {
-    return (
-      <div className="topbar">
+import logo from '../../public/favicon.svg'
+
+const Topbar: React.FC = () => {
+  // TODO
+  var darkMode = false
+
+  return (
+    <div className="topbar">
+      <div className="topbar-content">
         <div className="topbar-left">
-          <div className="topbar-logo">
-            <Link href="/">
-              <a>rlj1202.github.io</a>
-            </Link>
-          </div>
+          <Link href="/">
+            <a>
+              <div className="topbar-logo">
+                <Image src={logo} width={'25'} height={'25'} />
+                {Config.title}
+              </div>
+            </a>
+          </Link>
           <div className="topbar-left-links">
             {Config.menus.map(menu => (
               <span className="topbar-link" key={menu.label}>
@@ -21,51 +30,66 @@ const Topbar: NextPage = () => {
           </div>
         </div>
         <div className="topbar-right">
-          {/* Ready for dark-mode
-          <span className="topbar-link">
-            <i className="fas fa-moon"></i>
-          </span>
-          <span className="topbar-link">
-            <i className="fas fa-sun"></i>
-          </span>
-          */}
+          <button
+            className="theme-button topbar-link"
+            onClick={() => {  }}>
+            {darkMode ? (
+              <i className="fas fa-sun fa-lg"></i>
+            ) : (
+              <i className="fas fa-moon fa-lg"></i>
+            )}
+          </button>
         </div>
-
-        <style jsx>{`
-          .topbar {
-            font-family: 'Consolas', 'Ubuntu Mono', monospace;
-            font-size: 1em;
-            box-shadow: rgba(0, 0, 0, 0.05) 0 4px 4px;
-
-            display: flex;
-            justify-content: space-between;
-            padding: 0 40px;
-
-            overflow-x: auto;
-          }
-          .topbar-left {
-            display: flex;
-            align-items: center;
-          }
-          .topbar-left-links {
-            display: flex;
-          }
-          .topbar-right {
-            display: flex;
-            align-items: center;
-          }
-          .topbar-link {
-            margin-left: 40px;
-          }
-          .topbar-logo {
-            padding: 30px 20px;
-            background-color: #FF4F4F;
-            color: white;
-            font-weight: bold;
-          }
-        `}</style>
       </div>
-    )
+
+      <style jsx>{`
+        .topbar {
+          color: #333333;
+          box-shadow: rgba(0, 0, 0, 0.05) 0 0 20px 5px;
+          overflow-x: auto;
+        }
+        .topbar-content {
+          max-width: 800px;
+          margin: 0 auto;
+          box-sizing: content-box;
+          padding: 0 40px;
+          display: flex;
+          justify-content: space-between;
+        }
+        .topbar-left {
+          display: flex;
+          align-items: center;
+        }
+        .topbar-left-links {
+          display: flex;
+          column-gap: 2rem;
+          padding: 0 2rem;
+        }
+        .topbar-right {
+          display: flex;
+          align-items: center;
+        }
+        .topbar-link {
+          font-weight: 400;
+        }
+        .topbar-logo {
+          padding: 1.7rem 0;
+          font-weight: 600;
+          font-size: 1.2em;
+
+          display: flex;
+          align-items: center;
+          column-gap: 0.5em;
+        }
+        .theme-button {
+          display: block;
+          border: none;
+          background: none;
+          padding: 1em;
+        }
+      `}</style>
+    </div>
+  )
 }
 
 export default Topbar

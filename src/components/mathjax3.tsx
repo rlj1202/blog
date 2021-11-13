@@ -1,7 +1,5 @@
 // @refresh reset
 
-import { NextPage } from 'next'
-
 import Script from 'next/script'
 import { useEffect } from 'react'
 
@@ -14,7 +12,7 @@ function getMathJax3(): MathJax3 | undefined {
   return (window as any).MathJax as MathJax3
 }
 
-const MathJax3: NextPage = () => {
+const MathJax3: React.FC = () => {
   useEffect(() => {
     getMathJax3()?.typesetPromise?.()
   })

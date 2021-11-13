@@ -1,17 +1,18 @@
-import { NextPage } from 'next'
+import Link from 'next/link'
 
-const Tag: NextPage = ({ children }) => {
+const Tag: React.FC<{ tag: string }> = ({ tag, children }) => {
   return (
     <span className="tag">
-      {children}
+      <Link href={`/tags/${tag}/pages/1`}>
+        <a>{children}</a>
+      </Link>
 
       <style jsx>{`
         .tag {
           display: inline-block;
           background-color: #EEE6C4;
-          padding: 6px;
-          margin-right: 6px;
-          color: #938E7B;
+          padding: 0.5em;
+          color: #6a6759;
           line-height: 100%;
         }
       `}</style>

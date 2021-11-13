@@ -1,6 +1,5 @@
 // @refresh reset
 
-import { NextPage } from 'next'
 import { useEffect } from 'react'
 
 import Config from '../config'
@@ -20,7 +19,7 @@ import Config from '../config'
 - https://cheese10yun.github.io/utterances/
 */
 
-const Utterances: NextPage = () => {
+const Utterances: React.FC = () => {
   return (
     <section ref={element => {
       if (!element) {

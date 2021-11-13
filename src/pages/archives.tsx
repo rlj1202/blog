@@ -6,6 +6,8 @@ import Layout from '../components/layout'
 
 import { Post, getPosts } from '../utils/postUtils'
 
+import Config from '../config'
+
 interface Props {
   posts: Post[]
 }
@@ -24,11 +26,11 @@ const Archives: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ po
   return (
     <Layout>
       <Head>
-        <title>Archives</title>
+        <title>{`Archives - ${Config.title}`}</title>
       </Head>
 
-      <div className="main">
-        <h1>아카이브</h1>
+      <div>
+        <h1>Archives</h1>
 
         {Array.from(new Set(posts.map(post => post.metadata.date?.getFullYear()))).map(year => (
           <>
@@ -43,22 +45,11 @@ const Archives: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ po
             ))}
           </>
         ))}
-
-        <hr />
       </div>
 
       <style jsx>{`
-        .main {
-          max-width: 800px;
-          margin: 40px auto;
-          box-sizing: content-box;
-          padding: 0 40px;
-        }
         .post {
           margin: 20px 0;
-        }
-        hr {
-          margin: 40px 0;
         }
       `}</style>
     </Layout>
