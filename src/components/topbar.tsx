@@ -59,7 +59,7 @@ const Topbar: React.FC = () => {
       <div className={`topbar-nav ${navShow ? 'show' : ''}`}>
         <div className="topbar-nav-links">
           {Config.menus.map(menu => (
-            <div>
+            <div key={menu.label}>
               <Link href={menu.path}><a>{menu.label}</a></Link>
             </div>
           ))}
