@@ -46,9 +46,9 @@ const Layout: React.FC = ({ children }) => {
         {children}
 
         <hr />
-      </div>
 
-      <Footer />
+        <Footer />
+      </div>
 
       <style jsx>{`
         .main {
