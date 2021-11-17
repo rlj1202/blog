@@ -35,7 +35,7 @@ const Topbar: React.FC = () => {
             <a>
               <div className="topbar-title">
                 <div className="topbar-logo">
-                  <Image src={logo} width={'25'} height={'25'} layout="fixed" />
+                  <Image src={logo} width={'25'} height={'25'} layout="fixed" alt="Logo" />
                 </div>
                 {Config.title}
               </div>

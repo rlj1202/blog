@@ -11,7 +11,7 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
       <PostLink post={post}>
         <a><div className="postcard-preview-box">
           {post.metadata.imgs && post.metadata.imgs.length > 0 ? (
-            <img className="postcard-img" src={post.metadata.imgs[0]} />
+            <img className="postcard-img" src={post.metadata.imgs[0]} alt={''} />
           ) : (
             <div className="postcard-excerpt">
               {post.metadata.excerpt}
