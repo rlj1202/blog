@@ -2,7 +2,6 @@ import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } fro
 import Head from 'next/head'
 import { ParsedUrlQuery } from 'querystring'
 
-import Layout from '../../../../components/layout'
 import PostList from '../../../../components/postlist'
 import Config from '../../../../config'
 
@@ -58,7 +57,7 @@ export const getStaticPaths: GetStaticPaths<Props> = async () => {
 
 const Page: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ tag, curPage, posts }) => {
   return (
-    <Layout>
+    <>
       <Head>
         <title>{`${tag} - ${Config.title}`}</title>
       </Head>
@@ -71,7 +70,7 @@ const Page: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ tag, c
 
       <style jsx>{`
       `}</style>
-    </Layout>
+    </>
   )
 }
 

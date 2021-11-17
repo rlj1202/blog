@@ -3,7 +3,6 @@ import Head from 'next/head'
 
 import Config from '../../config'
 
-import Layout from '../../components/layout'
 import PostList from '../../components/postlist'
 
 import { Post, getPosts } from '../../utils/postUtils'
@@ -38,7 +37,7 @@ export const getStaticPaths: GetStaticPaths<Props> = async (context) => {
 
 const Page: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ page, posts }) => {
   return (
-    <Layout>
+    <>
       <Head>
         <title>{`Page ${page} - ${Config.title}`}</title>
       </Head>
@@ -51,7 +50,7 @@ const Page: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ page, 
 
       <style jsx>{`
       `}</style>
-    </Layout>
+    </>
   )
 }
 
