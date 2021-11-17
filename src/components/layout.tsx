@@ -28,7 +28,7 @@ const Layout: React.FC = ({ children }) => {
         {/* Chrome, Firefox and Opera */}
         {/* will not be used in android device when the dark mode is enabled. */}
         <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FF4F4F" />
-        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#FF4F4F" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#272727" />
         {/* Windows Phone */}
         <meta name="msapplication-navbutton-color" content="#FF4F4F" />
         {/* iOS Safari */}

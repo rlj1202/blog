@@ -13,12 +13,14 @@ body[data-theme="light"] {
   --color-text-primary: black;
   --color-text-secondary: #666666;
   --color-bg-primary: white;
+  --color-bg-secondary: white;
 }
 
 body[data-theme="dark"] {
   --color-text-primary: white;
   --color-text-secondary: #c5c5c5;
   --color-bg-primary: #272727;
+  --color-bg-secondary: #272727;
 }
 
 body {
