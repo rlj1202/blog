@@ -1,4 +1,4 @@
-import '../styles/globals.css'
+import '../styles/globals.scss'
 import '../styles/hljs.css'
 import '../styles/utterances.css'
 import type { AppProps } from 'next/app'

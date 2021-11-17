@@ -6,10 +6,14 @@ import remarkParse from 'remark-parse'
 import remarkGfm from 'remark-gfm'
 import remarkRehype from 'remark-rehype'
 import rehypeRaw from 'rehype-raw'
+import rehypeSlug from 'rehype-slug'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeHighlight from 'rehype-highlight'
 import rehypeStringify from 'rehype-stringify'
 import matter from 'gray-matter'
 import { visit } from 'unist-util-visit'
+import { Heading, Text, ThematicBreak } from 'mdast'
+import { toc } from 'mdast-util-toc'
 
 import Config from '../config'
 
@@ -86,10 +90,29 @@ export async function getPost(postPath: string[]): Promise<Post> {
                 .use(remarkGfm) // NOTE: tables are not standard. WOW
                 .parse(content)
 
+            /* Table of contents */
+            const tocResult = toc(mdast)
+            if (tocResult && tocResult.map) {
+                mdast.children.unshift(<ThematicBreak>{ type: 'thematicBreak' })
+                mdast.children.unshift(tocResult.map)
+                mdast.children.unshift(<Heading>{
+                    type: 'heading',
+                    depth: 1,
+                    children: [
+                        <Text>{
+                            type: 'text',
+                            value: Config.tableOfContents.label,
+                        },
+                    ],
+                })
+            }
+
             var hast = unified()
                 .use(remarkRehype, { allowDangerousHtml: true })
                 .use(rehypeRaw)
                 .use(rehypeHighlight)
+                .use(rehypeSlug)
+                .use(rehypeAutolinkHeadings)
                 .runSync(mdast)
 
             var imgs: string[] = []
@@ -99,6 +122,7 @@ export async function getPost(postPath: string[]): Promise<Post> {
                 }
             })
             metadata.imgs = imgs
+
             metadata.excerpt = content.slice(0, 1000)
             metadata.published ??= true
 

@@ -52,3 +52,27 @@ hr {
   border: none;
   border-top: solid 1px #dddddd;
 }
+
+/* Heading Links */
+span.icon.icon-link {
+  position: relative;
+}
+span.icon.icon-link::before {
+  display: block;
+  content: "\f0c1";
+  font-family: "Font Awesome\ 5 Free";
+  position: absolute;
+  right: 100%;
+  padding: 0 .5em;
+  color: rgba(0, 0, 0, 0);
+}
+h1:hover,
+h2:hover,
+h3:hover,
+h4:hover,
+h5:hover,
+h6:hover {
+  span.icon.icon-link::before {
+    color: black;
+  }  
+}

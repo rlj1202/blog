@@ -6,6 +6,10 @@ const Config = {
 
     favicon: '/favicon.svg',
 
+    tableOfContents: {
+        label: 'Table of contents',
+    },
+
     rss: {
         rss2Path: '/rss/feed.xml',
         atom1Path: '/rss/atom.xml',

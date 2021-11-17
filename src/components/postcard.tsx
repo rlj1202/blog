@@ -9,7 +9,7 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
   return (
     <div className="postcard">
       <PostLink post={post}>
-        <a><div className="postcard-img-box">
+        <a><div className="postcard-preview-box">
           {post.metadata.imgs && post.metadata.imgs.length > 0 ? (
             <img className="postcard-img" src={post.metadata.imgs[0]} />
           ) : (
@@ -54,14 +54,22 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
           display: flex;
           flex-direction: column;
         }
-        .postcard-img-box {
+        .postcard-preview-box {
           background-color: gray;
-          height: 200px;
+          height: 13em;
+          overflow: hidden;
         }
         .postcard-img {
           width: 100%;
           height: 100%;
           object-fit: cover;
+        }
+        .postcard-img, .postcard-excerpt {
+          transform: scale(100%, 100%);
+          transition: transform 0.25s ease-in-out;
+        }
+        .postcard-img:hover, .postcard-excerpt:hover {
+          transform: scale(120%, 120%);
         }
         .postcard-excerpt {
           padding: 1.5em;
