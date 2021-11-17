@@ -1,7 +1,6 @@
 import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next'
 import Head from 'next/head'
 
-import Layout from '../../components/layout'
 import Tag from '../../components/tag'
 
 import Config from '../../config'
@@ -27,7 +26,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
 
 const Tags: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts, tags }) => {
   return (
-    <Layout>
+    <>
       <Head>
         <title>{`Tags - ${Config.title}`}</title>
       </Head>
@@ -51,7 +50,7 @@ const Tags: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts,
           margin: 40px 0;
         }
       `}</style>
-    </Layout>
+    </>
   )
 }
 

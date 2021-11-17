@@ -11,7 +11,6 @@ import PostCard from '../../components/postcard'
 import Utterances from '../../components/utterances'
 import MathJax3 from '../../components/mathjax3'
 import Tag from '../../components/tag'
-import Layout from '../../components/layout'
 
 import styles from '../../styles/Post.module.css'
 
@@ -95,7 +94,7 @@ const Article: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ pos
   let { content, metadata } = post
 
   return (
-    <Layout>
+    <>
       <MathJax3 />
       <Head>
         <title>{`${metadata.title} - ${Config.title}`}</title>
@@ -183,7 +182,7 @@ const Article: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ pos
           margin: 40px 0;
         }
       `}</style>
-    </Layout>
+    </>
   )
 }
 

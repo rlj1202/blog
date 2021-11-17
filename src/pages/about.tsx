@@ -1,13 +1,11 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 
-import Layout from '../components/layout'
-
 import Config from '../config'
 
 const About: NextPage = () => {
   return (
-    <Layout>
+    <>
       <Head>
         <title>{`About - ${Config.title}`}</title>
       </Head>
@@ -22,7 +20,7 @@ const About: NextPage = () => {
 
       <style jsx>{`
       `}</style>
-    </Layout>
+    </>
   )
 }
 

@@ -2,7 +2,6 @@ import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next'
 import Head from 'next/head'
 
 import PostLink from '../components/postlink'
-import Layout from '../components/layout'
 
 import { Post, getPosts, getCategoryPaths } from '../utils/postUtils'
 
@@ -27,7 +26,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
 
 const Categories: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts, categories }) => {
   return (
-    <Layout>
+    <>
       <Head>
         <title>{`Categories - ${Config.title}`}</title>
       </Head>
@@ -55,7 +54,7 @@ const Categories: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ 
           margin: 20px 0;
         }
       `}</style>
-    </Layout>
+    </>
   )
 }
 

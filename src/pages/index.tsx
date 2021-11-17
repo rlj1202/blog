@@ -6,7 +6,6 @@ import Config from '../config'
 import { generateRssFeed } from '../rssgen'
 import { generateSitemap } from '../sitemapgen'
 
-import Layout from '../components/layout'
 import PostCard from '../components/postcard'
 
 import { Post, getPosts } from '../utils/postUtils'
@@ -26,7 +25,7 @@ export const getStaticProps: GetStaticProps<{ posts: Post[] }> = async (context)
 
 const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts }) => {
   return (
-    <Layout>
+    <>
       <Head>
         <title>{`Home - ${Config.title}`}</title>
       </Head>
@@ -77,7 +76,7 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts 
           font-size: 0.9em;
         }
       `}</style>
-    </Layout>
+    </>
   )
 }
 
