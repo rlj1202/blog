@@ -14,24 +14,22 @@ body[data-theme="light"] {
   --color-text-secondary: #666666;
   --color-bg-primary: white;
   --color-bg-secondary: white;
+  --color-hr: #dddddd;
+
+  --color-brand: #ff4f4f;
 }
 
 body[data-theme="dark"] {
   --color-text-primary: white;
-  --color-text-secondary: #c5c5c5;
+  --color-text-secondary: #cfcfcf;
   --color-bg-primary: #272727;
-  --color-bg-secondary: #272727;
+  --color-bg-secondary: #303030;
+  --color-hr: #494949;
 }
 
 body {
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
-  transition: background-color 0.25s ease-in-out, color 0.25s ease-in-out;
-}
-
-h2 {
-  color: var(--color-text-secondary);
-  transition: color 0.25s ease-in-out;
 }
 
 a {
@@ -50,7 +48,7 @@ button {
 
 hr {
   border: none;
-  border-top: solid 1px #dddddd;
+  border-top: solid 1px var(--color-hr);
 }
 
 /* Heading Links */
@@ -73,6 +71,6 @@ h4:hover,
 h5:hover,
 h6:hover {
   span.icon.icon-link::before {
-    color: black;
+    color: var(--color-brand);
   }  
 }

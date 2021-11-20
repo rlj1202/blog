@@ -38,18 +38,20 @@ const Paginator: React.FC<{
           justify-content: center;
           align-items: center;
           box-shadow: rgba(0, 0, 0, 0.15) 0 0 4px;
+
+          background-color: var(--color-bg-secondary);
+          color: var(--color-text-frimary);
         }
         .pagination-button {
           padding: 10px 17px;
-          color: black;
           font-size: 1em;
         }
         .pagination-button-selected {
-          background-color: #FF4F4F;
+          background-color: var(--color-brand);
           color: white;
         }
         .pagination-button + .pagination-button {
-          border-left: solid 1px #dddddd
+          border-left: solid 1px rgba(0, 0, 0, 0.15)
         }
       `}</style>
     </div>

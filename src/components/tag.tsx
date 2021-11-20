@@ -10,9 +10,9 @@ const Tag: React.FC<{ tag: string }> = ({ tag, children }) => {
       <style jsx>{`
         .tag {
           display: inline-block;
-          background-color: #EEE6C4;
+          background-color: var(--color-brand);
           padding: 0.5em;
-          color: #6a6759;
+          color: white;
           line-height: 100%;
         }
       `}</style>

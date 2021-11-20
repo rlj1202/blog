@@ -10,10 +10,15 @@ module.exports = (phase, { defaultConfig }) => {
     basePath: '',
     // can be accessed with 'process.env.customKey'
     env: {
-      test: 'testtest'
+      test: 'testtest',
     },
     images: {
-      loader: 'custom'
+      domains: [
+        'blog.golang.org',
+        'cfile3.uf.tistory.com',
+        'i1.daumcdn.net',
+      ],
+      // loader: 'custom',
     },
     async redirects() {
       return [

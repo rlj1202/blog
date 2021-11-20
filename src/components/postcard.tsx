@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 import dateFormat from 'dateformat'
 
 import Tag from './tag'
@@ -11,7 +13,9 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
       <PostLink post={post}>
         <a><div className="postcard-preview-box">
           {post.metadata.imgs && post.metadata.imgs.length > 0 ? (
-            <img className="postcard-img" src={post.metadata.imgs[0]} alt={''} />
+            <div className="postcard-img">
+              <Image src={post.metadata.imgs[0]} layout="fill" objectFit="cover" alt={''} />
+            </div>
           ) : (
             <div className="postcard-excerpt">
               {post.metadata.excerpt}
@@ -50,6 +54,7 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
           box-shadow: rgba(0, 0, 0, 0.05) 0 0 20px 5px;
           flex-basis: 300px;
           flex-grow: 1;
+          background-color: var(--color-bg-secondary);
 
           display: flex;
           flex-direction: column;
@@ -60,9 +65,9 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
           overflow: hidden;
         }
         .postcard-img {
+          position: relative;
           width: 100%;
           height: 100%;
-          object-fit: cover;
         }
         .postcard-img, .postcard-excerpt {
           transform: scale(100%, 100%);
@@ -100,15 +105,17 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
           row-gap: 10px;
         }
         .postcard-categories {
-          color: #999999;
+          color: var(--color-text-secondary);
           font-size: 0.9em;
         }
         .postcard-title {
+          color: var(--color-text-primary);
           font-size: 1.3em;
           font-weight: bold;
           margin: 0;
         }
         .postcard-subtitle {
+          color: var(--color-text-secondary);
           font-size: 1em;
           font-weight: normal;
           margin: 0;
@@ -116,6 +123,7 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
           flex-grow: 1;
         }
         .postcard-date {
+          color: var(--color-text-secondary);
           font-size: 0.9em;
           font-weight: normal;
           margin: 0;

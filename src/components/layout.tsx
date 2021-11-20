@@ -16,6 +16,7 @@ const Layout: React.FC = ({ children }) => {
         <meta name="description" content={Config.description} />
         <meta name="keywords" content={Config.keywords} />
 
+        {/* Favicon */}
         <link rel="icon" href={Config.favicon} />
         {/* <link rel="icon" sizes="192x192" href="/favicon.png" /> */}
         {/* Safari browser */}

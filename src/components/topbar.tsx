@@ -77,7 +77,8 @@ const Topbar: React.FC = () => {
       <style jsx>{`
         .topbar {
           box-shadow: rgba(0, 0, 0, 0.05) 0 0 20px 5px;
-          overflow-x: auto;
+          overflow: hidden;
+          background-color: var(--color-bg-secondary);
         }
         .topbar-content {
           display: flex;

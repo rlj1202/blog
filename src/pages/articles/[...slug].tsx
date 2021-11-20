@@ -149,19 +149,19 @@ const Article: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ pos
           font-size: 3em;
           margin: 0.3em 0;
           font-weight: bold;
+          color: var(--color-text-primary);
         }
         .post-subtitle {
           font-size: 1.3em;
           margin: 10px 0;
           font-weight: normal;
+          color: var(--color-text-secondary);
         }
         .post-date {
           font-weight: normal;
           font-size: 1em;
-        }
-        .post-date {
           margin: 10px 0;
-          color: #666666;
+          color: var(--color-text-secondary);
         }
         .post-tags {
           margin: 10px 0;

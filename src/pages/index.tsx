@@ -71,7 +71,7 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts 
         .readmore {
           box-shadow: rgba(0, 0, 0, 0.05) 0 0 20px 5px;
           padding: 1em;
-          background-color: #FF4F4F;
+          background-color: var(--color-brand);
           color: white;
           font-size: 0.9em;
         }
