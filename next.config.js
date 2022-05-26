@@ -26,6 +26,7 @@ module.exports = (phase, { defaultConfig }) => {
     },
 
     webpack(config, options) {
+      config.experiments = { topLevelAwait: true }
       return config
     }
   }

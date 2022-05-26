@@ -3,6 +3,16 @@
   line-height: 1.75;
 }
 
+.post .callout {
+  padding: 1em;
+  background-color: #eeeeee;
+  margin: 40px 0;
+}
+
+.post .equation {
+  margin: 40px 0;
+}
+
 .post a {
   color: #6464ff;
 }
