@@ -1,3 +1,8 @@
+import NotionArticles, { ArticleContentNotion } from './notion'
+import MarkdownArticles, { ArticleContentLocalMarkdown } from './markdown'
+
+export type ArticleContent = ArticleContentNotion | ArticleContentLocalMarkdown
+
 export interface Article {
   title?: string
   subtitle?: string
@@ -7,15 +12,11 @@ export interface Article {
   slug?: string
   createdAt?: Date
   updatedAt?: Date
+
+  content: ArticleContent
 }
 
-export type { ArticleNotion } from './notion'
-export type { ArticleLocalMarkdown } from './markdown'
-
-import NotionArticles, { ArticleNotion } from './notion'
-import MarkdownArticles, { ArticleLocalMarkdown } from './markdown'
-
-async function getArticles(): Promise<Array<ArticleNotion | ArticleLocalMarkdown>> {
+async function getArticles(): Promise<Array<Article>> {
   let notionArticles = await NotionArticles.getArticles()
   let markdownArticles = await MarkdownArticles.getArticles()
   
@@ -24,7 +25,7 @@ async function getArticles(): Promise<Array<ArticleNotion | ArticleLocalMarkdown
 
 const articles = await getArticles()
 
-const articlesTable: Record<string, ArticleNotion | ArticleLocalMarkdown> = {}
+const articlesTable: Record<string, Article> = {}
 
 for (let article of articles) {
   if (!article.slug) continue

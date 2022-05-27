@@ -15,7 +15,7 @@ import {
 // TODO:
 const articlesDatabaseId: string | undefined = process.env.NOTION_DATABASE_ID
 
-interface ArticleNotion extends Article {
+interface ArticleContentNotion {
   type: 'notion'
   blockChildrenResp: ListBlockChildrenResponse
 }
@@ -50,7 +50,7 @@ function getPlainText(richText: RichTextItem[]): string {
     return richText.map(richTextItem => richTextItem.plain_text).join(' ')
 }
 
-async function getArticles(): Promise<Array<ArticleNotion>> {
+async function getArticles(): Promise<Array<Article>> {
     let articlesList = await getArticlesList()
 
     let articles = (await Promise.all(articlesList.results.map(async (article) => {
@@ -60,7 +60,12 @@ async function getArticles(): Promise<Array<ArticleNotion>> {
 
         let blockChildrenResp = await getNotionBlockChildren(article.id)
 
-        let articleNotion: ArticleNotion = { type: 'notion', blockChildrenResp }
+        let articleNotion: Article = {
+            content: {
+                type: 'notion',
+                blockChildrenResp,
+            },
+        }
 
         if (article.properties['Title'].type == 'title') {
             articleNotion.title = getPlainText(article.properties['Title'].title)
@@ -94,6 +99,6 @@ async function getArticles(): Promise<Array<ArticleNotion>> {
 }
 
 export { articlesDatabaseId }
-export type { ArticleNotion }
+export type { ArticleContentNotion }
 
 export default { getArticles }

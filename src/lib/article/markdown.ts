@@ -21,7 +21,7 @@ import Config from '../../config'
 
 const postsPath = path.join(process.cwd(), Config.postsDir)
 
-interface ArticleLocalMarkdown extends Article {
+interface ArticleContentLocalMarkdown {
   type: 'local_markdown'
   htmlContent: string
 }
@@ -49,7 +49,7 @@ async function getArticlesPaths(): Promise<string[][]> {
         .then(paths => paths.map(path => path.split('/')))
 }
 
-async function getArticle(postPath: string[]): Promise<ArticleLocalMarkdown> {
+async function getArticle(postPath: string[]): Promise<Article> {
     var postFilePath = path.join(postsPath, `${postPath.join('/')}.md`)
 
     return fs.promises
@@ -119,9 +119,7 @@ async function getArticle(postPath: string[]): Promise<ArticleLocalMarkdown> {
                 // url: getPostUrl(postPath)
             // }
 
-            let articleMarkdown: ArticleLocalMarkdown = {
-                type: 'local_markdown',
-
+            let articleMarkdown: Article = {
                 title: metadata.title,
                 subtitle: metadata.subtitle,
                 categories: metadata.categories,
@@ -131,18 +129,21 @@ async function getArticle(postPath: string[]): Promise<ArticleLocalMarkdown> {
                 createdAt: metadata.date,
                 updatedAt: metadata.date,
 
-                htmlContent,
+                content: {
+                    type: 'local_markdown',
+                    htmlContent,
+                },
             }
 
             return articleMarkdown
         })
 }
 
-async function getArticles(): Promise<Array<ArticleLocalMarkdown>> {
+async function getArticles(): Promise<Array<Article>> {
     return getArticlesPaths()
         .then(paths => Promise.all(paths.map(path => getArticle(path))))
 }
 
-export type { ArticleLocalMarkdown }
+export type { ArticleContentLocalMarkdown }
 
 export default { getArticles }
