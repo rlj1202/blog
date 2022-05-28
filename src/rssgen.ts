@@ -2,8 +2,8 @@ import fs from 'fs'
 import path from 'path'
 import { Feed } from 'feed'
 
-import Config from './config'
-import { getPosts } from './utils/postUtils'
+import Config from '@/config'
+import { getPosts } from '@/utils/postUtils'
 
 export const generateRssFeed = async () => {
     console.log('Generate rss...')

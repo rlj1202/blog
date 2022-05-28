@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 import Config from '@/config'
 
-import logo from '../../public/favicon.svg'
+import logo from '@public/favicon.svg'
 
 const Topbar: React.FC = () => {
   var [ activeTheme, setTheme ] = useState('light')

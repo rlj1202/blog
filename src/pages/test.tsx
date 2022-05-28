@@ -2,19 +2,19 @@ import React from 'react'
 import type { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next'
 import Head from 'next/head'
 
-import { getNotionBlockChildren, } from '../lib/notion'
+import { getNotionBlockChildren, } from '@/lib/notion'
 
 import {
   Article, ArticleContent,
   articles, tags,
-} from '../lib/article'
+} from '@/lib/article'
 
-import ArticleContentRenderer from '../components/articlecontentrenderer'
-import ArticleCard from '../components/articlecard'
+import ArticleContentRenderer from '@/components/articlecontentrenderer'
+import ArticleCard from '@/components/articlecard'
 
-import MathJax3 from '../components/mathjax3'
+import MathJax3 from '@/components/mathjax3'
 
-import styles from '../styles/Post.module.css'
+import styles from '@/styles/Post.module.css'
 
 export const getStaticProps: GetStaticProps<{
   articleContent: ArticleContent,

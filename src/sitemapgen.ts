@@ -1,9 +1,9 @@
 import fs from 'fs'
 import { SitemapStream, streamToPromise } from 'sitemap'
 
-import Config from './config'
+import Config from '@/config'
 
-import { getPosts } from './utils/postUtils'
+import { getPosts } from '@/utils/postUtils'
 
 export const generateSitemap = async () => {
     console.log('Generate sitemap...')
