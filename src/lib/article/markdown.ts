@@ -17,7 +17,7 @@ import { toc } from 'mdast-util-toc'
 
 import { Article } from '.'
 
-import Config from '../../config'
+import Config from '@/config'
 
 const postsPath = path.join(process.cwd(), Config.postsDir)
 
@@ -33,8 +33,6 @@ interface ArticleFrontmatter {
     date?: Date
     categories?: string[]
     tags?: string[]
-    imgs?: string[]
-    excerpt?: string
     published?: boolean
 }
 
@@ -105,9 +103,7 @@ async function getArticle(postPath: string[]): Promise<Article> {
                     imgs.push(node.properties.src as string)
                 }
             })
-            metadata.imgs = imgs
 
-            metadata.excerpt = content.slice(0, 1000)
             metadata.published ??= true
 
             var htmlContent = unified()
@@ -128,6 +124,9 @@ async function getArticle(postPath: string[]): Promise<Article> {
                 slug: postPath[postPath.length - 1],
                 createdAt: metadata.date,
                 updatedAt: metadata.date,
+
+                coverImg: imgs && imgs.length ? imgs[0] : undefined,
+                excerpt: content.slice(0, 1000),
 
                 content: {
                     type: 'local_markdown',

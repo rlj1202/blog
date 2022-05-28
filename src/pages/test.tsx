@@ -10,6 +10,7 @@ import {
 } from '../lib/article'
 
 import ArticleContentRenderer from '../components/articlecontentrenderer'
+import ArticleCard from '../components/articlecard'
 
 import MathJax3 from '../components/mathjax3'
 
@@ -39,6 +40,14 @@ const Test: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articl
         <title>Test page</title>
       </Head>
 
+      <div className="articles">
+        {articles.map(article => {
+          return (
+            <ArticleCard article={article} />
+          )
+        })}
+      </div>
+
       <div className={styles.post}>
         <ArticleContentRenderer content={articleContent} />
       </div>
@@ -60,10 +69,25 @@ const Test: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articl
               <div>
                 { 'slug: ' + article.slug }
               </div>
+              <div>
+                { 'createdAt: ' + article.createdAt?.getTime() }
+              </div>
+              <hr />
             </div>
           )
         })}
       </div>
+
+      <style jsx>{`
+        .articles {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          row-gap: 40px;
+          column-gap: 40px;
+          margin: 40px 0;
+        }
+      `}</style>
     </>
   )
 }

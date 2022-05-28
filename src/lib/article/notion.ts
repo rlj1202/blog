@@ -10,9 +10,8 @@ import {
     getNotionBlockChildren,
 
     RichTextItem,
-} from '../notion'
+} from '@/lib/notion'
 
-// TODO:
 const articlesDatabaseId: string | undefined = process.env.NOTION_DATABASE_ID
 
 interface ArticleContentNotion {
@@ -74,6 +73,7 @@ async function getArticles(): Promise<Array<Article>> {
             articleNotion.subtitle = getPlainText(article.properties['Subtitle'].rich_text)
         }
         // TODO: categories
+        articleNotion.categories = undefined
         if (article.properties['Tags'].type == 'multi_select') {
             articleNotion.tags = article.properties['Tags'].multi_select.map(prop => prop.name)
         }
@@ -83,14 +83,16 @@ async function getArticles(): Promise<Array<Article>> {
         if (article.properties['Published'].type == 'checkbox') {
             articleNotion.published = article.properties['Published'].checkbox
         }
-        if (article.properties['CreatedAt'].type == 'date' &&
-            article.properties['CreatedAt'].date?.start) {
-            articleNotion.createdAt = new Date(article.properties['CreatedAt'].date?.start)
+        if (article.properties['CreatedAt'].type == 'created_time') {
+            articleNotion.createdAt = new Date(article.properties['CreatedAt'].created_time)
         }
-        if (article.properties['UpdatedAt'].type == 'date' &&
-            article.properties['UpdatedAt'].date?.start) {
-            articleNotion.createdAt = new Date(article.properties['UpdatedAt'].date?.start)
+        if (article.properties['UpdatedAt'].type == 'last_edited_time') {
+            articleNotion.updatedAt = new Date(article.properties['UpdatedAt'].last_edited_time)
         }
+        
+        // TODO:
+        articleNotion.coverImg = undefined
+        articleNotion.excerpt = undefined
 
         return articleNotion
     }))).filter(<T>(article: T | undefined | null): article is T => article !== null && article !== undefined)

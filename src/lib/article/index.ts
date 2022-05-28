@@ -13,14 +13,23 @@ export interface Article {
   createdAt?: Date
   updatedAt?: Date
 
+  coverImg?: string
+  excerpt?: string
+
   content: ArticleContent
 }
 
 async function getArticles(): Promise<Array<Article>> {
   let notionArticles = await NotionArticles.getArticles()
   let markdownArticles = await MarkdownArticles.getArticles()
-  
-  return [...notionArticles, ...markdownArticles]
+
+  let results = [...notionArticles, ...markdownArticles]
+
+  results = results
+    .sort((a, b) => (a.createdAt?.getTime() || 0) - (b.createdAt?.getTime() || 0))
+    .reverse()
+
+  return results
 }
 
 const articles = await getArticles()

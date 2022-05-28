@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Config from '../config'
+import Config from '@/config'
 
 const Paginator: React.FC<{
   curPage?: number, perPage?: number, total?: number,

@@ -1,9 +1,9 @@
 import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next'
 import Head from 'next/head'
 
-import PostLink from '../components/postlink'
+import PostLink from '@/components/postlink'
 
-import { Post, getPosts, getCategoryPaths } from '../utils/postUtils'
+import { Post, getPosts, getCategoryPaths } from '@/utils/postUtils'
 
 import Config from '../config'
 

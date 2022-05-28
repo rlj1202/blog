@@ -1,8 +1,8 @@
 import Head from 'next/head'
 import Script from 'next/script'
 
-import Config from '../config'
-import Topbar from '../components/topbar'
+import Config from '@/config'
+import Topbar from '@/components/topbar'
 import Footer from './footer'
 
 const Layout: React.FC = ({ children }) => {

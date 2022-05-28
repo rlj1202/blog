@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 
-import Config from '../config'
+import Config from '@/config'
 
 import logo from '../../public/favicon.svg'
 

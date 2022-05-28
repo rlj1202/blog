@@ -2,28 +2,26 @@ import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 
-import Config from '../config'
-import { generateRssFeed } from '../rssgen'
-import { generateSitemap } from '../sitemapgen'
+import Config from '@/config'
+import { generateRssFeed } from '@/rssgen'
+import { generateSitemap } from '@/sitemapgen'
 
-import PostCard from '../components/postcard'
+import ArticleCard from '@/components/articlecard'
 
-import { Post, getPosts } from '../utils/postUtils'
+import { Article, articles } from '@/lib/article'
 
-export const getStaticProps: GetStaticProps<{ posts: Post[] }> = async (context) => {
-  var { posts } = await getPosts({ limit: 10 })
-
+export const getStaticProps: GetStaticProps<{ articles: Article[] }> = async (context) => {
   generateRssFeed()
   generateSitemap()
 
   return {
     props: {
-      posts
+      articles: articles.slice(0, 10)
     }
   }
 }
 
-const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts }) => {
+const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articles }) => {
   return (
     <>
       <Head>
@@ -33,9 +31,9 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts 
       <main>
         <h1>Latest</h1>
 
-        <div className="postcards">
-          {posts.map(post => (
-            <PostCard key={post.postPath.join('/')} post={post} />
+        <div className="article-cards">
+          {articles.map(article => (
+            <ArticleCard key={article.slug} article={article} />
           ))}
         </div>
 
@@ -52,7 +50,7 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts 
       </main>
 
       <style jsx>{`
-        .postcards {
+        .article-cards {
           display: flex;
           flex-direction: row;
           flex-wrap: wrap;

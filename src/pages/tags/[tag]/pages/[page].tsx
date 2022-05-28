@@ -2,40 +2,38 @@ import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } fro
 import Head from 'next/head'
 import { ParsedUrlQuery } from 'querystring'
 
-import PostList from '../../../../components/postlist'
-import Config from '../../../../config'
+import ArticleList from '@/components/articlelist'
+import Config from '@/config'
 
-import { Post, getPosts, getTags } from '../../../../utils/postUtils'
+import { Article, articles, tags } from '@/lib/article'
 
 interface Props extends ParsedUrlQuery {
   tag: string
   page: string
 }
 
-export const getStaticProps: GetStaticProps<{ tag: string, curPage: number, posts: Post[] }, Props> = async (context) => {
+export const getStaticProps: GetStaticProps<{ tag: string, curPage: number, articles: Article[] }, Props> = async (context) => {
   if (!context.params?.tag || !context.params?.page) {
     return { notFound: true }
   }
 
-  var tag = context.params.tag
-  var curPage = parseInt(context.params.page)
-  var { posts } = await getPosts({ tag: tag })
+  let tag = context.params.tag
+  let curPage = parseInt(context.params.page)
+  let filteredArticles = articles.filter(article => article.tags?.includes(tag))
 
   return {
     props: {
       tag,
       curPage,
-      posts,
+      articles: filteredArticles,
     }
   }
 }
 
 export const getStaticPaths: GetStaticPaths<Props> = async () => {
-  var tags = await getTags()
-  
-  var paths = await Promise.all(tags.map(async tag => {
-    var { total } = await getPosts({ tag })
-    var pages = Math.ceil(total / Config.postsPerPage)
+  let paths = await Promise.all(tags.map(async tag => {
+    let total = articles.filter(article => article.tags?.includes(tag)).length
+    let pages = Math.ceil(total / Config.postsPerPage)
 
     return (
       [...Array.from(new Array(pages + 1).keys()).slice(1)].map(page => (
@@ -55,18 +53,18 @@ export const getStaticPaths: GetStaticPaths<Props> = async () => {
   }
 }
 
-const Page: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ tag, curPage, posts }) => {
+const Page: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ tag, curPage, articles }) => {
   return (
     <>
       <Head>
         <title>{`${tag} - ${Config.title}`}</title>
       </Head>
       
-      <PostList
+      <ArticleList
         title={tag}
         curPage={curPage}
         pageUrl={page => `/tags/${tag}/pages/${page}`}
-        posts={posts} />
+        articles={articles} />
 
       <style jsx>{`
       `}</style>

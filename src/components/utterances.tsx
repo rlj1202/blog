@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 
-import Config from '../config'
+import Config from '@/config'
 
 /*
 <script

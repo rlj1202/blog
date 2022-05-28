@@ -3,46 +3,50 @@ import Image from 'next/image'
 import dateFormat from 'dateformat'
 
 import Tag from './tag'
-import PostLink from './postlink'
 
-import { Post } from '../utils/postUtils'
+import { Article } from '@/lib/article'
+import ArticleLink from '@/components/articlelink'
 
-const PostCard: React.FC<{ post: Post }> = ({ post }) => {
+const ArticleCard: React.FC<{ article: Article }> = ({ article }) => {
   return (
     <div className="postcard">
-      <PostLink post={post}>
+      <ArticleLink article={article}>
         <a><div className="postcard-preview-box">
-          {post.metadata.imgs && post.metadata.imgs.length > 0 ? (
+          {article.coverImg ? (
             <div className="postcard-img">
-              <Image src={post.metadata.imgs[0]} layout="fill" objectFit="cover" alt={''} />
+              <Image src={article.coverImg} layout="fill" objectFit="cover" alt={''} />
+            </div>
+          ) : article.excerpt ? (
+            <div className="postcard-excerpt">
+              {article.excerpt}
             </div>
           ) : (
             <div className="postcard-excerpt">
-              {post.metadata.excerpt}
+              {article.slug}
             </div>
           )}
         </div></a>
-      </PostLink>
+      </ArticleLink>
       <header className="postcard-header">
-        {post.postPath.length > 1 && (
+        {/* {post.postPath.length > 1 && (
           <div className="postcard-categories">
             {post.postPath.slice(0, -1).join('/')}
           </div>
-        )}
+        )} */}
         <h1 className="postcard-title">
-          <PostLink post={post}>
-            <a>{post.metadata.title || post.postPath.join('/')}</a>
-          </PostLink>
+          <ArticleLink article={article}>
+            <a>{article.title || article.slug}</a>
+          </ArticleLink>
         </h1>
         <h2 className="postcard-subtitle">
-          {post.metadata.subtitle}
+          {article.subtitle}
         </h2>
         <h2 className="postcard-date">
-          {dateFormat(post.metadata.date, 'yyyy-mm-dd')}
+          {dateFormat(article.createdAt, 'yyyy-mm-dd')}
         </h2>
-        {post.metadata.tags && post.metadata.tags.length > 0 && (
+        {article.tags && article.tags.length > 0 && (
           <div className="postcard-tags">
-            {post.metadata.tags?.map(tag => (
+            {article.tags?.map(tag => (
               <Tag tag={tag} key={tag}>{tag}</Tag>
             ))}
           </div>
@@ -141,4 +145,4 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
   )
 }
 
-export default PostCard
+export default ArticleCard

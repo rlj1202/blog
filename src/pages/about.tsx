@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 
-import Config from '../config'
+import Config from '@/config'
 
 const About: NextPage = () => {
   return (

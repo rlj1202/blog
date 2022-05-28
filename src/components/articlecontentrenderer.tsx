@@ -3,15 +3,15 @@ import React from 'react'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import a11yDark from 'react-syntax-highlighter/dist/cjs/styles/prism/a11y-dark'
 
-import { ArticleContent } from '../lib/article'
+import { ArticleContent } from '@/lib/article'
 
 import {
   Block,
   CalloutBlock,
   RichTextItem,
-} from '../lib/notion'
+} from '@/lib/notion'
 
-import styles from '../styles/Post.module.css'
+import styles from '@/styles/Post.module.css'
 
 const Callout: React.FC<{ block: CalloutBlock }> = ({ block }) => {
   return (
