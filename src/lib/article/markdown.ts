@@ -145,4 +145,8 @@ async function getArticles(): Promise<Array<Article>> {
 
 export type { ArticleContentLocalMarkdown }
 
-export default { getArticles }
+const MarkdownArticles = {
+    getArticles
+}
+
+export default MarkdownArticles

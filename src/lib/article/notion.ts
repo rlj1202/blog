@@ -103,4 +103,8 @@ async function getArticles(): Promise<Array<Article>> {
 export { articlesDatabaseId }
 export type { ArticleContentNotion }
 
-export default { getArticles }
+const NotionArticles = {
+    getArticles
+}
+
+export default NotionArticles

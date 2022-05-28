@@ -1,30 +1,30 @@
 import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next'
 import Head from 'next/head'
 
-import PostLink from '@/components/postlink'
+import ArticleLink from '@/components/articlelink'
 
-import { Post, getPosts, getCategoryPaths } from '@/utils/postUtils'
+import { Article, articles } from '@/lib/article'
 
-import Config from '../config'
+import Config from '@/config'
 
 interface Props {
-  posts: Post[]
+  articles: Article[]
   categories: string[][]
 }
 
 export const getStaticProps: GetStaticProps<Props> = async (context) => {
-  let { posts } = await getPosts()
-  let categories = await getCategoryPaths()
+  // let categories = await getCategoryPaths()
+  // TODO:
 
   return {
     props: {
-      posts,
-      categories
+      articles,
+      categories: [],
     }
   }
 }
 
-const Categories: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts, categories }) => {
+const Categories: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articles, categories }) => {
   return (
     <>
       <Head>
@@ -38,11 +38,11 @@ const Categories: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ 
           <>
             <h2>{category.join('/')}</h2>
 
-            {posts.filter(post => post.postPath.slice(0, -1).join('/') == category.join('/')).map(post => (
-              <div className="post" key={post.postPath.join('/')}>
-                <PostLink post={post}>
-                  <a>{post.metadata.title || post.postPath[post.postPath.length - 1]}</a>
-                </PostLink>
+            {articles.filter(article => article.categories?.join('/') == category.join('/')).map(article => (
+              <div className="post" key={article.slug}>
+                <ArticleLink article={article}>
+                  <a>{article.title || article.slug}</a>
+                </ArticleLink>
               </div>
             ))}
           </>

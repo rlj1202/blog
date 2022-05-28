@@ -43,7 +43,7 @@ const Test: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articl
       <div className="articles">
         {articles.map(article => {
           return (
-            <ArticleCard article={article} />
+            <ArticleCard key={article.slug} article={article} />
           )
         })}
       </div>
