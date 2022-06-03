@@ -22,6 +22,9 @@ export const notion = new Client({ auth: process.env.NOTION_KEY })
 export type QueryDatabaseFilter = QueryDatabaseParameters['filter']
 export type QueryDatabaseSort = QueryDatabaseParameters['sorts']
 
+export type Page = Extract<GetPageResponse, { archived: boolean }>
+export type PageProperty = GetPagePropertyResponse
+
 export type Block = Extract<GetBlockResponse, { type: string }> & { children?: Block[] }
 export type BlockType = Block['type']
 export type ExtractBlockType<B, T extends BlockType> = B extends { type: T } ? B : never

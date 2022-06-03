@@ -118,7 +118,7 @@ async function getArticle(postPath: string[]): Promise<Article> {
             let articleMarkdown: Article = {
                 title: metadata.title,
                 subtitle: metadata.subtitle,
-                categories: metadata.categories,
+                category: metadata.categories,
                 tags: metadata.tags,
                 published: metadata.published,
                 slug: postPath[postPath.length - 1],

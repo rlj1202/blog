@@ -5,8 +5,8 @@ import Head from 'next/head'
 import { getNotionBlockChildren, } from '@/lib/notion'
 
 import {
-  Article, ArticleContent,
-  articles, tags,
+  Article, ArticleContent, Category, CategoryTree,
+  articles, categories, categoryTree, tags,
 } from '@/lib/article'
 
 import ArticleContentRenderer from '@/components/articlecontentrenderer'
@@ -20,6 +20,8 @@ export const getStaticProps: GetStaticProps<{
   articleContent: ArticleContent,
   articles: Article[],
   tags: string[],
+  categories: Category[],
+  categoryTree: Array<CategoryTree>,
 }> = async (context) => {
   let children = await getNotionBlockChildren('9c64f54f43aa41f192419a78e8ba830c')
 
@@ -28,17 +30,36 @@ export const getStaticProps: GetStaticProps<{
       articleContent: { type: 'notion', blockChildrenResp: children },
       articles,
       tags,
+      categories,
+      categoryTree,
     }
   }
 }
 
-const Test: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articleContent, articles, tags }) => {
+const Test: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articleContent, articles, categories, categoryTree, tags }) => {
   return (
     <>
       <MathJax3 />
       <Head>
         <title>Test page</title>
       </Head>
+
+      <div>
+        <ul>
+          {categoryTree.map(node => (
+            <li key={node.category.slug}>
+              {node.category.name}
+              <ul>
+                {node.children?.map(child => (
+                  <li key={child.category.slug}>
+                    {child.category.name}
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <div className="articles">
         {articles.map(article => {

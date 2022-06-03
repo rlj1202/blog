@@ -3,12 +3,11 @@ import path from 'path'
 import { Feed } from 'feed'
 
 import Config from '@/config'
-import { getPosts } from '@/utils/postUtils'
+import { articles } from '@/lib/article'
 
 export const generateRssFeed = async () => {
     console.log('Generate rss...')
 
-    const { posts } = await getPosts()
     const siteUrl = process.env.HOST
     const date = new Date()
 
@@ -33,13 +32,14 @@ export const generateRssFeed = async () => {
         }
     })
     
-    posts.map(post => {
+    articles.map(article => {
         feed.addItem({
-            title: post.metadata.title || '',
-            id: `${siteUrl}${post.url}`,
-            link: `${siteUrl}${post.url}`,
+            title: article.title || '',
+            id: `${siteUrl}/articles/${article.slug}`,
+            link: `${siteUrl}/articles/${article.slug}`,
             // description: '',
-            content: post.content,
+            // TODO:
+            content: article.content.type == 'local_markdown' ? article.content.htmlContent : article.content.type == 'notion' ? article.excerpt : '',
             author: [
                 {
                     name: Config.author.name,
@@ -48,7 +48,7 @@ export const generateRssFeed = async () => {
                 }
             ],
             contributor: [],
-            date: post.metadata.date || date,
+            date: article.createdAt || date,
             // image: '',
         })
     })

@@ -3,21 +3,20 @@ import { SitemapStream, streamToPromise } from 'sitemap'
 
 import Config from '@/config'
 
-import { getPosts } from '@/utils/postUtils'
+import { articles } from '@/lib/article'
 
 export const generateSitemap = async () => {
     console.log('Generate sitemap...')
 
     const siteUrl = process.env.HOST
-    const { posts } = await getPosts()
 
     const stream = new SitemapStream({
         hostname: siteUrl,
     })
 
-    posts.map(post => {
+    articles.map(article => {
         stream.write({
-            url: post.url,
+            url: `/articles/${article.slug}`,
             changefreq: 'monthly',
             priority: 0.3,
             // img: '',

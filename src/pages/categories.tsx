@@ -3,28 +3,25 @@ import Head from 'next/head'
 
 import ArticleLink from '@/components/articlelink'
 
-import { Article, articles } from '@/lib/article'
+import { Article, CategoryTree, articles, categoryTree } from '@/lib/article'
 
 import Config from '@/config'
 
 interface Props {
   articles: Article[]
-  categories: string[][]
+  categoryTree: Array<CategoryTree>
 }
 
 export const getStaticProps: GetStaticProps<Props> = async (context) => {
-  // let categories = await getCategoryPaths()
-  // TODO:
-
   return {
     props: {
       articles,
-      categories: [],
+      categoryTree,
     }
   }
 }
 
-const Categories: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articles, categories }) => {
+const Categories: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articles, categoryTree }) => {
   return (
     <>
       <Head>
@@ -34,19 +31,35 @@ const Categories: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ 
       <div>
         <h1>Categories</h1>
 
-        {categories.map(category => (
+        { categoryTree.map(node => (
           <>
-            <h2>{category.join('/')}</h2>
+            <h2>{node.category.name}</h2>
 
-            {articles.filter(article => article.categories?.join('/') == category.join('/')).map(article => (
+            { node.children?.map(child => {
+              return (
+                <>
+                  <h3>{child.category.name}</h3>
+
+                  { articles.filter(article => article.category == child.category.slug).map(article => (
+                    <div className="post" key={article.slug}>
+                      <ArticleLink article={article}>
+                        <a>{article.title || article.slug}</a>
+                      </ArticleLink>
+                    </div>
+                  )) }
+                </>
+              )
+            }) }
+
+            { articles.filter(article => article.category == node.category.slug).map(article => (
               <div className="post" key={article.slug}>
                 <ArticleLink article={article}>
                   <a>{article.title || article.slug}</a>
                 </ArticleLink>
               </div>
-            ))}
+            )) }
           </>
-        ))}
+        )) }
       </div>
 
       <style jsx>{`

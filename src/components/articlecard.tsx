@@ -28,11 +28,11 @@ const ArticleCard: React.FC<{ article: Article }> = ({ article }) => {
         </div></a>
       </ArticleLink>
       <header className="postcard-header">
-        {/* {post.postPath.length > 1 && (
+        {article.category && (
           <div className="postcard-categories">
-            {post.postPath.slice(0, -1).join('/')}
+            {article.category}
           </div>
-        )} */}
+        )}
         <h1 className="postcard-title">
           <ArticleLink article={article}>
             <a>{article.title || article.slug}</a>

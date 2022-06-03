@@ -1,22 +1,33 @@
-import { Article } from '.'
+import { Article, Category } from '.'
 
 import {
     ListBlockChildrenResponse,
     QueryDatabaseResponse,
+
     QueryDatabaseFilter,
     QueryDatabaseSort,
 
+    getNotionPage,
     getNotionDatabaseQuery,
     getNotionBlockChildren,
 
     RichTextItem,
 } from '@/lib/notion'
 
-const articlesDatabaseId: string | undefined = process.env.NOTION_DATABASE_ID
+const articlesDatabaseId: string | undefined = process.env.NOTION_DATABASE_ARTICLES_ID
+const categoriesDatabaseId: string | undefined = process.env.NOTION_DATABASE_CATEGORIES_ID
 
 interface ArticleContentNotion {
   type: 'notion'
   blockChildrenResp: ListBlockChildrenResponse
+}
+
+async function getCategoriesList(): Promise<QueryDatabaseResponse> {
+    if (!categoriesDatabaseId) {
+        throw new Error('No categories database id provided via environment variable')
+    }
+
+    return getNotionDatabaseQuery(categoriesDatabaseId)
 }
 
 async function getArticlesList(): Promise<QueryDatabaseResponse> {
@@ -49,6 +60,52 @@ function getPlainText(richText: RichTextItem[]): string {
     return richText.map(richTextItem => richTextItem.plain_text).join(' ')
 }
 
+async function getCategories(): Promise<Array<Category>> {
+    let categoriesList = await getCategoriesList()
+
+    let categoriesIdMap: Record<string, Category> = {}
+
+    categoriesList.results.forEach((category) => {
+        if (!('properties' in category)) {
+            return undefined
+        }
+
+        let cat: Category = {}
+
+        if (category.properties['Name'].type == 'title') {
+            let name = getPlainText(category.properties['Name'].title)
+            cat.name = name
+        }
+        if (category.properties['Slug'].type == 'rich_text') {
+            let slug = getPlainText(category.properties['Slug'].rich_text)
+            cat.slug = slug
+        }
+
+        categoriesIdMap[category.id] = cat
+    })
+
+    let result: Array<Category> = categoriesList.results.map((category) => {
+        if (!('properties' in category)) {
+            return undefined
+        }
+
+        let cur: Category = categoriesIdMap[category.id]
+
+        if (category.properties['Parent'].type == 'relation') {
+            let ids = category.properties['Parent'].relation.map(rel => rel.id)
+
+            if (ids.length) {
+                let parent = categoriesIdMap[ids[0]]
+                cur.parent = parent.slug
+            }
+        }
+
+        return cur
+    }).filter(<T>(cat: T | undefined | null): cat is T => cat !== undefined && cat !== null)
+
+    return result
+}
+
 async function getArticles(): Promise<Array<Article>> {
     let articlesList = await getArticlesList()
 
@@ -72,8 +129,17 @@ async function getArticles(): Promise<Array<Article>> {
         if (article.properties['Subtitle'].type == 'rich_text') {
             articleNotion.subtitle = getPlainText(article.properties['Subtitle'].rich_text)
         }
-        // TODO: categories
-        articleNotion.categories = undefined
+        if (article.properties['Category'].type == 'relation') {
+            let ids = article.properties['Category'].relation.map(rel => rel.id)
+            if (ids.length) {
+                let page = await getNotionPage(ids[0])
+                if ('properties' in page) {
+                    if (page.properties['Slug'].type == 'rich_text') {
+                        articleNotion.category = getPlainText(page.properties['Slug'].rich_text)
+                    }
+                }
+            }
+        }
         if (article.properties['Tags'].type == 'multi_select') {
             articleNotion.tags = article.properties['Tags'].multi_select.map(prop => prop.name)
         }
@@ -100,11 +166,11 @@ async function getArticles(): Promise<Array<Article>> {
     return articles
 }
 
-export { articlesDatabaseId }
 export type { ArticleContentNotion }
 
 const NotionArticles = {
-    getArticles
+    getArticles,
+    getCategories,
 }
 
 export default NotionArticles
