@@ -11,6 +11,7 @@ import {
     getNotionDatabaseQuery,
     getNotionBlockChildren,
 
+    Page,
     RichTextItem,
 } from '@/lib/notion'
 
@@ -106,69 +107,83 @@ async function getCategories(): Promise<Array<Category>> {
     return result
 }
 
-async function getArticles(): Promise<Array<Article>> {
-    let articlesList = await getArticlesList()
+async function getArticleById(id: string): Promise<Article | null> {
+    const article = await getNotionPage(id)
 
-    let articles = (await Promise.all(articlesList.results.map(async (article) => {
-        if (!('properties' in article)) {
-            return undefined
-        }
+    if ('properties' in article) {
+        return getArticle(article)
+    }
 
-        let blockChildrenResp = await getNotionBlockChildren(article.id)
+    return null
+}
 
-        let articleNotion: Article = {
-            content: {
-                type: 'notion',
-                blockChildrenResp,
-            },
-        }
+async function getArticle(article: Page): Promise<Article | null> {
+    if (!('properties' in article)) {
+        return null
+    }
 
-        if (article.properties['Title'].type == 'title') {
-            articleNotion.title = getPlainText(article.properties['Title'].title)
-        }
-        if (article.properties['Subtitle'].type == 'rich_text') {
-            articleNotion.subtitle = getPlainText(article.properties['Subtitle'].rich_text)
-        }
-        if (article.properties['Category'].type == 'relation') {
-            let ids = article.properties['Category'].relation.map(rel => rel.id)
-            if (ids.length) {
-                let page = await getNotionPage(ids[0])
-                if ('properties' in page) {
-                    if (page.properties['Slug'].type == 'rich_text') {
-                        articleNotion.category = getPlainText(page.properties['Slug'].rich_text)
-                    }
+    let blockChildrenResp = await getNotionBlockChildren(article.id)
+
+    let articleNotion: Article = {
+        content: {
+            type: 'notion',
+            blockChildrenResp,
+        },
+    }
+
+    if (article.properties['Title'].type == 'title') {
+        articleNotion.title = getPlainText(article.properties['Title'].title)
+    }
+    if (article.properties['Subtitle'].type == 'rich_text') {
+        articleNotion.subtitle = getPlainText(article.properties['Subtitle'].rich_text)
+    }
+    if (article.properties['Category'].type == 'relation') {
+        let ids = article.properties['Category'].relation.map(rel => rel.id)
+        if (ids.length) {
+            let page = await getNotionPage(ids[0])
+            if ('properties' in page) {
+                if (page.properties['Slug'].type == 'rich_text') {
+                    articleNotion.category = getPlainText(page.properties['Slug'].rich_text)
                 }
             }
         }
-        if (article.properties['Tags'].type == 'multi_select') {
-            articleNotion.tags = article.properties['Tags'].multi_select.map(prop => prop.name)
-        }
-        if (article.properties['Slug'].type == 'rich_text') {
-            articleNotion.slug = getPlainText(article.properties['Slug'].rich_text)
-        }
-        if (article.properties['Published'].type == 'checkbox') {
-            articleNotion.published = article.properties['Published'].checkbox
-        }
-        if (article.properties['CreatedAt'].type == 'created_time') {
-            articleNotion.createdAt = new Date(article.properties['CreatedAt'].created_time)
-        }
-        if (article.properties['UpdatedAt'].type == 'last_edited_time') {
-            articleNotion.updatedAt = new Date(article.properties['UpdatedAt'].last_edited_time)
-        }
-        
-        // TODO:
-        articleNotion.coverImg = undefined
-        articleNotion.excerpt = undefined
+    }
+    if (article.properties['Tags'].type == 'multi_select') {
+        articleNotion.tags = article.properties['Tags'].multi_select.map(prop => prop.name)
+    }
+    if (article.properties['Slug'].type == 'rich_text') {
+        articleNotion.slug = getPlainText(article.properties['Slug'].rich_text)
+    }
+    if (article.properties['Published'].type == 'checkbox') {
+        articleNotion.published = article.properties['Published'].checkbox
+    }
+    if (article.properties['CreatedAt'].type == 'created_time') {
+        articleNotion.createdAt = new Date(article.properties['CreatedAt'].created_time)
+    }
+    if (article.properties['UpdatedAt'].type == 'last_edited_time') {
+        articleNotion.updatedAt = new Date(article.properties['UpdatedAt'].last_edited_time)
+    }
+    
+    // TODO:
+    articleNotion.coverImg = undefined
+    articleNotion.excerpt = undefined
 
-        return articleNotion
-    }))).filter(<T>(article: T | undefined | null): article is T => article !== null && article !== undefined)
+    return articleNotion
+}
 
-    return articles
+async function getArticles(): Promise<Array<Article>> {
+    let articlesList = await getArticlesList()
+
+    let articles = await Promise.all(articlesList.results.map(article => getArticle(article as Page)))
+    
+    return articles.filter(<T>(article: T | undefined | null): article is T => article !== null && article !== undefined)
 }
 
 export type { ArticleContentNotion }
 
 const NotionArticles = {
+    getArticleById,
+    getArticle,
     getArticles,
     getCategories,
 }

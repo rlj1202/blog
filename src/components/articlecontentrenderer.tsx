@@ -95,6 +95,42 @@ const NotionBlock: React.FC<{ block: Block }> = ({ block }) => {
   }
 }
 
+// TODO:
+const NotionBlocks: React.FC<{ blocks: Block[] }> = ({ blocks }) => {
+  let reactNodes: React.ReactElement[] = []
+
+  let prevNode: React.ReactElement | undefined
+  let prevBlock: Block | undefined
+  for (let block of blocks) {
+    let cur: React.ReactElement | undefined
+
+    if (block.type == 'numbered_list_item') {
+      if (prevBlock?.type == 'numbered_list_item') {
+      } else {
+
+      }
+    } else if (block.type == 'bulleted_list_item') {
+      if (prevBlock?.type == 'bulleted_list_item') {
+
+      } else {
+        
+      }
+    }
+
+    if (!cur) continue
+
+    reactNodes.push(cur)
+
+    prevNode = cur
+    prevBlock = block
+  }
+
+  return (
+    <>
+    </>
+  )
+}
+
 const ArticleContentRenderer: React.FC<{ content: ArticleContent }> = ({ content }) => {
   if (content.type == 'notion') {
     return (
