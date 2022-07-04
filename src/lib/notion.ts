@@ -105,6 +105,16 @@ export async function getNotionBlockChildren(blockId: string): Promise<ListBlock
     blockChildrenResp.results.push(...more_blocks.results)
   }
 
+  for (let block of blockChildrenResp.results) {
+    if (!('type' in block)) continue
+    if (!block.has_children) continue
+
+    let children = await getNotionBlockChildren(block.id)
+
+    let cur: Block = block
+    cur.children = children.results.filter((i): i is Block => 'type' in i)
+  }
+
   return blockChildrenResp
 }
 
@@ -135,4 +145,8 @@ export async function getNotionDatabaseQuery(databaseId: string, filter?: QueryD
     }
 
     return resp
+}
+
+export function getRichTextPlainText(richText: RichTextItem[]): string {
+    return richText.map(richTextItem => richTextItem.plain_text).join(' ')
 }

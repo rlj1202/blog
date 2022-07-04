@@ -1,6 +1,7 @@
 import '@/styles/globals.scss'
 import '@/styles/hljs.css'
 import '@/styles/utterances.css'
+import '@/styles/articles.scss'
 import type { AppProps } from 'next/app'
 
 import Layout from '@/components/layout'

@@ -14,8 +14,6 @@ import Utterances from '@/components/utterances'
 import MathJax3 from '@/components/mathjax3'
 import Tag from '@/components/tag'
 
-// import styles from '@/styles/Post.module.css'
-
 import { Article, articles, articlesTable } from '@/lib/article'
 
 interface Props {
@@ -123,7 +121,9 @@ const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
             ))}
           </div>
         </header>
-        <ArticleContentRenderer content={article.content} />
+        <div className="article">
+          <ArticleContentRenderer content={article.content} />
+        </div>
         <hr />
         <Utterances />
         <hr />

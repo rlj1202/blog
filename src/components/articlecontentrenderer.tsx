@@ -9,21 +9,23 @@ import {
   Block,
   CalloutBlock,
   RichTextItem,
+
+  getRichTextPlainText,
 } from '@/lib/notion'
 
-import styles from '@/styles/Post.module.css'
+import Config from '@/config'
 
 const Callout: React.FC<{ block: CalloutBlock }> = ({ block }) => {
   return (
-    <div className={`${styles.callout} callout`}>
+    <div className="callout">
       <div className="">
         { block.callout.icon?.type == 'emoji' && block.callout.icon.emoji }
       </div>
       <div>
         { <NotionRichText richText={block.callout.rich_text} /> }
-        { block.has_children && block.children?.map(child => {
+        { block.children && block.children.map(child => {
           if ('type' in child) {
-            return <NotionBlock key={child.id} block={child} />
+            return <NotionBlocks key={child.id} blocks={[child]} />
           } else {
             return <></>
           }
@@ -43,15 +45,33 @@ const Callout: React.FC<{ block: CalloutBlock }> = ({ block }) => {
 
 const NotionRichTextItem: React.FC<{ richTextItem: RichTextItem }> = ({ richTextItem }) => {
   if (richTextItem.type == 'text') {
-    return <>{
-      richTextItem.annotations.bold
-        ? <b>{richTextItem.text.content}</b>
-        : richTextItem.text.content
-    }</>
+    let { bold, italic, underline, strikethrough, code, color } = richTextItem.annotations
+
+    let text = <>{richTextItem.text.content}</>
+
+    if (bold || italic || underline || strikethrough || color != 'default') {
+      text = <span style={{
+        ...(color != 'default' && { color: color, textDecorationColor: color }),
+        ...((underline || strikethrough) && {
+          textDecoration: `${underline ? 'underline' : ''} ${strikethrough ? 'line-through' : ''}`,
+        }),
+        ...(italic && { fontStyle: 'italic' }),
+        ...(bold && { fontWeight: 'bold' }),
+      }}>{text}</span>
+    }
+
+    if (code) {
+      text = <code>{text}</code>
+    }
+
+    return text
   } else if (richTextItem.type == 'mention') {
-    return <>{richTextItem.plain_text}</>
+    // TODO:
+    if (richTextItem.mention.type === 'date') {
+    }
+    return <span>{richTextItem.plain_text}</span>
   } else if (richTextItem.type == 'equation') {
-    return <>{richTextItem.plain_text}</>
+    return <span>{richTextItem.equation.expression}</span>
   } else {
     return <></>
   }
@@ -63,98 +83,171 @@ const NotionRichText: React.FC<{ richText: RichTextItem[] }> = ({ richText }) =>
   )
 }
 
-const NotionBlock: React.FC<{ block: Block }> = ({ block }) => {
-  if (block.type == 'paragraph') {
-    return <p><NotionRichText richText={block.paragraph.rich_text} /></p>
-  } else if (block.type == 'heading_1') {
-    return <h1><NotionRichText richText={block.heading_1.rich_text} /></h1>
-  } else if (block.type == 'heading_2') {
-    return <h2><NotionRichText richText={block.heading_2.rich_text} /></h2>
-  } else if (block.type == 'heading_3') {
-    return <h3><NotionRichText richText={block.heading_3.rich_text} /></h3>
-  } else if (block.type == 'divider') {
-    return <hr />
-  } else if (block.type == 'callout') {
-    return <Callout block={block} />
-  } else if (block.type == 'code') {
-    return (
-      <SyntaxHighlighter language='cpp' style={a11yDark}>
-        {block.code.rich_text.map(item => item.plain_text).join(' ')}
-      </SyntaxHighlighter>
-    )
-  } else if (block.type == 'equation') {
-    return <div className={styles.equation}>{`$$${block.equation.expression}$$`}</div>
-  } else if (block.type == 'quote') {
-    return <blockquote><NotionRichText richText={block.quote.rich_text} /></blockquote>
-  } else if (block.type == 'numbered_list_item') {
-    return <ol><li><NotionRichText richText={block.numbered_list_item.rich_text} /></li></ol>
-  } else if (block.type == 'bulleted_list_item') {
-    return <ul><li><NotionRichText richText={block.bulleted_list_item.rich_text} /></li></ul>
-  } else {
-    return <div>{block.type}</div>
-  }
-}
-
-// TODO:
 const NotionBlocks: React.FC<{ blocks: Block[] }> = ({ blocks }) => {
-  let reactNodes: React.ReactElement[] = []
+  let elements: JSX.Element[] = []
 
-  let prevNode: React.ReactElement | undefined
-  let prevBlock: Block | undefined
+  // Make table of contents
+  type Heading = { text: string, children: Heading[], element?: JSX.Element }
+  let headings: Heading[][] = [[], [], [], []]
+  headings[0].push({ text: 'root', children: [] })
+
   for (let block of blocks) {
-    let cur: React.ReactElement | undefined
+    let text: string
+    let level: number
 
-    if (block.type == 'numbered_list_item') {
-      if (prevBlock?.type == 'numbered_list_item') {
-      } else {
-
-      }
-    } else if (block.type == 'bulleted_list_item') {
-      if (prevBlock?.type == 'bulleted_list_item') {
-
-      } else {
-        
-      }
+    if (block.type === 'heading_1') {
+      text = getRichTextPlainText(block.heading_1.rich_text)
+      level = 1
+    } else if (block.type === 'heading_2') {
+      text = getRichTextPlainText(block.heading_2.rich_text)
+      level = 2
+    } else if (block.type === 'heading_3') {
+      text = getRichTextPlainText(block.heading_3.rich_text)
+      level = 3
+    } else {
+      continue
     }
 
-    if (!cur) continue
+    let upperLevel = headings[level - 1]
+    let last = upperLevel.length ? upperLevel[upperLevel.length - 1] : null
 
-    reactNodes.push(cur)
+    let cur: Heading = { text, children: [] }
+    last?.children.push(cur)
+    headings[level].push(cur)
+  }
 
-    prevNode = cur
-    prevBlock = block
+  for (let level = 3; level >= 1; level--) {
+    for (let heading of headings[level]) {
+      heading.element = (
+        <li key={heading.text}>
+          <a>{heading.text}</a>
+          {heading.children.length > 0 && <ul>{heading.children.map(child => child.element)}</ul>}
+        </li>
+      )
+    }
+  }
+
+  //
+  blocks = blocks.slice()
+
+  let curBlock: Block | undefined
+  while ((curBlock = blocks.shift()) !== undefined) {
+    if (curBlock.type === 'numbered_list_item') {
+      let listBlocks = [curBlock]
+
+      while (blocks.length) {
+        let nextBlock = blocks[0]
+        if (nextBlock.type !== curBlock.type) break
+
+        listBlocks.push(nextBlock)
+        blocks.shift()
+      }
+
+      elements.push((
+        <ol key={curBlock.id}>
+          {listBlocks.map(listBlock => (
+            <li key={listBlock.id}>
+              <NotionRichText richText={listBlock.numbered_list_item.rich_text}/>
+              {listBlock.children && <NotionBlocks blocks={listBlock.children} />}
+            </li>
+          ))}
+        </ol>
+      ))
+    } else if (curBlock.type === 'bulleted_list_item') {
+      let listBlocks = [curBlock]
+
+      while (blocks.length) {
+        let nextBlock = blocks[0]
+        if (nextBlock.type !== curBlock.type) break
+
+        listBlocks.push(nextBlock)
+        blocks.shift()
+      }
+
+      elements.push((
+        <ul key={curBlock.id}>
+          {listBlocks.map(listBlock => <li key={listBlock.id}><NotionRichText richText={listBlock.bulleted_list_item.rich_text}/></li>)}
+        </ul>
+      ))
+    } else if (curBlock.type === 'paragraph') {
+      elements.push((
+        <p key={curBlock.id}><NotionRichText richText={curBlock.paragraph.rich_text} /></p>
+      ))
+    } else if (curBlock.type === 'heading_1') {
+      elements.push((
+        <h1 key={curBlock.id}><NotionRichText richText={curBlock.heading_1.rich_text} /></h1>
+      ))
+    } else if (curBlock.type === 'heading_2') {
+      elements.push((
+        <h2 key={curBlock.id}><NotionRichText richText={curBlock.heading_2.rich_text} /></h2>
+      ))
+    } else if (curBlock.type === 'heading_3') {
+      elements.push((
+        <h3 key={curBlock.id}><NotionRichText richText={curBlock.heading_3.rich_text} /></h3>
+      ))
+    } else if (curBlock.type === 'divider') {
+      elements.push((
+        <hr key={curBlock.id}></hr>
+      ))
+    } else if (curBlock.type === 'callout') {
+      elements.push((
+        <Callout key={curBlock.id} block={curBlock} />
+      ))
+    } else if (curBlock.type === 'code') {
+      elements.push((
+        <SyntaxHighlighter key={curBlock.id} language='cpp' style={a11yDark}>
+          {curBlock.code.rich_text.map(item => item.plain_text).join(' ')}
+        </SyntaxHighlighter>
+      ))
+    } else if (curBlock.type === 'equation') {
+      elements.push((
+        <div key={curBlock.id} className="equation">{`$$${curBlock.equation.expression}$$`}</div>
+      ))
+    } else if (curBlock.type === 'quote') {
+      elements.push((
+        <blockquote key={curBlock.id}>
+          <NotionRichText richText={curBlock.quote.rich_text} />
+          {curBlock.children && <NotionBlocks blocks={curBlock.children}/>}
+        </blockquote>
+      ))
+    } else if (curBlock.type === 'table_of_contents') {
+      elements.push((
+        <>
+          <h1>{Config.tableOfContents.label}</h1>
+          <ul>
+            {headings[0][0].children.map(child => child.element)}
+          </ul>
+          <hr />
+        </>
+      ))
+    } else {
+      elements.push((
+        <div key={curBlock.id}>{curBlock.type}</div>
+      ))
+    }
   }
 
   return (
     <>
+      {elements}
     </>
   )
 }
 
 const ArticleContentRenderer: React.FC<{ content: ArticleContent }> = ({ content }) => {
   if (content.type == 'notion') {
+    let blocks = content.blockChildrenResp.results.filter((block): block is Block => 'type' in block)
+
     return (
-      <>
-        {
-          content.blockChildrenResp.results.map(block => {
-            if ('type' in block) {
-              return <NotionBlock key={block.id} block={block} />
-            } else {
-              return <></>
-            }
-          })
-        }
-      </>
+      <NotionBlocks blocks={blocks} />
     )
   } else if (content.type == 'local_markdown') {
     return (
       <div dangerouslySetInnerHTML={{ __html: content.htmlContent }} />
     )
-  } else {
-    return (
-      <></>
-    )
   }
+
+  return <></>
 }
 
 export default ArticleContentRenderer

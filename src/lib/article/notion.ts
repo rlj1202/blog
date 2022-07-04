@@ -12,7 +12,8 @@ import {
     getNotionBlockChildren,
 
     Page,
-    RichTextItem,
+
+    getRichTextPlainText,
 } from '@/lib/notion'
 
 const articlesDatabaseId: string | undefined = process.env.NOTION_DATABASE_ARTICLES_ID
@@ -57,10 +58,6 @@ async function getArticlesList(): Promise<QueryDatabaseResponse> {
     return getNotionDatabaseQuery(articlesDatabaseId, filter, sorts)
 }
 
-function getPlainText(richText: RichTextItem[]): string {
-    return richText.map(richTextItem => richTextItem.plain_text).join(' ')
-}
-
 async function getCategories(): Promise<Array<Category>> {
     let categoriesList = await getCategoriesList()
 
@@ -74,11 +71,11 @@ async function getCategories(): Promise<Array<Category>> {
         let cat: Category = {}
 
         if (category.properties['Name'].type == 'title') {
-            let name = getPlainText(category.properties['Name'].title)
+            let name = getRichTextPlainText(category.properties['Name'].title)
             cat.name = name
         }
         if (category.properties['Slug'].type == 'rich_text') {
-            let slug = getPlainText(category.properties['Slug'].rich_text)
+            let slug = getRichTextPlainText(category.properties['Slug'].rich_text)
             cat.slug = slug
         }
 
@@ -132,10 +129,10 @@ async function getArticle(article: Page): Promise<Article | null> {
     }
 
     if (article.properties['Title'].type == 'title') {
-        articleNotion.title = getPlainText(article.properties['Title'].title)
+        articleNotion.title = getRichTextPlainText(article.properties['Title'].title)
     }
     if (article.properties['Subtitle'].type == 'rich_text') {
-        articleNotion.subtitle = getPlainText(article.properties['Subtitle'].rich_text)
+        articleNotion.subtitle = getRichTextPlainText(article.properties['Subtitle'].rich_text)
     }
     if (article.properties['Category'].type == 'relation') {
         let ids = article.properties['Category'].relation.map(rel => rel.id)
@@ -143,7 +140,7 @@ async function getArticle(article: Page): Promise<Article | null> {
             let page = await getNotionPage(ids[0])
             if ('properties' in page) {
                 if (page.properties['Slug'].type == 'rich_text') {
-                    articleNotion.category = getPlainText(page.properties['Slug'].rich_text)
+                    articleNotion.category = getRichTextPlainText(page.properties['Slug'].rich_text)
                 }
             }
         }
@@ -152,7 +149,7 @@ async function getArticle(article: Page): Promise<Article | null> {
         articleNotion.tags = article.properties['Tags'].multi_select.map(prop => prop.name)
     }
     if (article.properties['Slug'].type == 'rich_text') {
-        articleNotion.slug = getPlainText(article.properties['Slug'].rich_text)
+        articleNotion.slug = getRichTextPlainText(article.properties['Slug'].rich_text)
     }
     if (article.properties['Published'].type == 'checkbox') {
         articleNotion.published = article.properties['Published'].checkbox
