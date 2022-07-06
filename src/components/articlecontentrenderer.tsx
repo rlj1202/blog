@@ -3,6 +3,8 @@ import React from 'react'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import a11yDark from 'react-syntax-highlighter/dist/cjs/styles/prism/a11y-dark'
 
+import slugify from 'slugify'
+
 import { ArticleContent } from '@/lib/article'
 
 import {
@@ -87,9 +89,14 @@ const NotionBlocks: React.FC<{ blocks: Block[] }> = ({ blocks }) => {
   let elements: JSX.Element[] = []
 
   // Make table of contents
-  type Heading = { text: string, children: Heading[], element?: JSX.Element }
+  type Heading = {
+    text: string
+    slug: string
+    children: Heading[]
+    element?: JSX.Element
+  }
   let headings: Heading[][] = [[], [], [], []]
-  headings[0].push({ text: 'root', children: [] })
+  headings[0].push({ text: 'root', slug: '', children: [] })
 
   for (let block of blocks) {
     let text: string
@@ -111,7 +118,9 @@ const NotionBlocks: React.FC<{ blocks: Block[] }> = ({ blocks }) => {
     let upperLevel = headings[level - 1]
     let last = upperLevel.length ? upperLevel[upperLevel.length - 1] : null
 
-    let cur: Heading = { text, children: [] }
+    let slug = slugify(text)
+
+    let cur: Heading = { text, children: [], slug }
     last?.children.push(cur)
     headings[level].push(cur)
   }
@@ -120,7 +129,7 @@ const NotionBlocks: React.FC<{ blocks: Block[] }> = ({ blocks }) => {
     for (let heading of headings[level]) {
       heading.element = (
         <li key={heading.text}>
-          <a>{heading.text}</a>
+          <a href={`#${heading.slug}`}>{heading.text}</a>
           {heading.children.length > 0 && <ul>{heading.children.map(child => child.element)}</ul>}
         </li>
       )
@@ -174,16 +183,19 @@ const NotionBlocks: React.FC<{ blocks: Block[] }> = ({ blocks }) => {
         <p key={curBlock.id}><NotionRichText richText={curBlock.paragraph.rich_text} /></p>
       ))
     } else if (curBlock.type === 'heading_1') {
+      let text = getRichTextPlainText(curBlock.heading_1.rich_text)
       elements.push((
-        <h1 key={curBlock.id}><NotionRichText richText={curBlock.heading_1.rich_text} /></h1>
+        <h1 key={curBlock.id} id={slugify(text)}><NotionRichText richText={curBlock.heading_1.rich_text} /></h1>
       ))
     } else if (curBlock.type === 'heading_2') {
+      let text = getRichTextPlainText(curBlock.heading_2.rich_text)
       elements.push((
-        <h2 key={curBlock.id}><NotionRichText richText={curBlock.heading_2.rich_text} /></h2>
+        <h2 key={curBlock.id} id={slugify(text)}><NotionRichText richText={curBlock.heading_2.rich_text} /></h2>
       ))
     } else if (curBlock.type === 'heading_3') {
+      let text = getRichTextPlainText(curBlock.heading_3.rich_text)
       elements.push((
-        <h3 key={curBlock.id}><NotionRichText richText={curBlock.heading_3.rich_text} /></h3>
+        <h3 key={curBlock.id} id={slugify(text)}><NotionRichText richText={curBlock.heading_3.rich_text} /></h3>
       ))
     } else if (curBlock.type === 'divider') {
       elements.push((
@@ -212,13 +224,13 @@ const NotionBlocks: React.FC<{ blocks: Block[] }> = ({ blocks }) => {
       ))
     } else if (curBlock.type === 'table_of_contents') {
       elements.push((
-        <>
+        <div key={curBlock.id}>
           <h1>{Config.tableOfContents.label}</h1>
           <ul>
             {headings[0][0].children.map(child => child.element)}
           </ul>
           <hr />
-        </>
+        </div>
       ))
     } else {
       elements.push((

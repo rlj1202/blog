@@ -38,6 +38,7 @@
     "remark-rehype": "^10.0.0",
     "sass": "^1.43.4",
     "sitemap": "^7.0.0",
+    "slugify": "^1.6.5",
     "unified": "^10.1.0",
     "unist-util-visit": "^4.1.0"
   },

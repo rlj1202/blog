@@ -31,6 +31,8 @@ interface ArticleFrontmatter {
     subtitle?: string
     author?: string
     date?: Date
+    category?: string
+    /** @deprecated */
     categories?: string[]
     tags?: string[]
     published?: boolean
@@ -118,7 +120,7 @@ async function getArticle(postPath: string[]): Promise<Article> {
             let articleMarkdown: Article = {
                 title: metadata.title,
                 subtitle: metadata.subtitle,
-                category: metadata.categories,
+                category: metadata.category,
                 tags: metadata.tags,
                 published: metadata.published,
                 slug: postPath[postPath.length - 1],
