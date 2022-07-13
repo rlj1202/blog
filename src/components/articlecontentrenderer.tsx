@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+// import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import SyntaxHighlighter from 'react-syntax-highlighter'
 import a11yDark from 'react-syntax-highlighter/dist/cjs/styles/prism/a11y-dark'
 
 import slugify from 'slugify'
@@ -206,8 +207,9 @@ const NotionBlocks: React.FC<{ blocks: Block[] }> = ({ blocks }) => {
         <Callout key={curBlock.id} block={curBlock} />
       ))
     } else if (curBlock.type === 'code') {
+      // TODO: language
       elements.push((
-        <SyntaxHighlighter key={curBlock.id} language='cpp' style={a11yDark}>
+        <SyntaxHighlighter key={curBlock.id} language='cpp' useInlineStyles={false}>
           {curBlock.code.rich_text.map(item => item.plain_text).join(' ')}
         </SyntaxHighlighter>
       ))

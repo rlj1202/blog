@@ -14,8 +14,6 @@ import ArticleCard from '@/components/articlecard'
 
 import MathJax3 from '@/components/mathjax3'
 
-import styles from '@/styles/Post.module.css'
-
 export const getStaticProps: GetStaticProps<{
   articleContent: ArticleContent,
   articles: Article[],
@@ -69,7 +67,7 @@ const Test: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articl
         })}
       </div>
 
-      <div className={styles.post}>
+      <div className="article">
         <ArticleContentRenderer content={articleContent} />
       </div>
 
