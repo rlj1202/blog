@@ -19,7 +19,7 @@ import { Article } from '.'
 
 import Config from '@/config'
 
-const postsPath = path.join(process.cwd(), Config.postsDir)
+const articlesPath = path.join(process.cwd(), Config.articles.directory)
 
 interface ArticleContentLocalMarkdown {
   type: 'local_markdown'
@@ -40,7 +40,7 @@ interface ArticleFrontmatter {
 
 async function getArticlesPaths(): Promise<string[][]> {
     return new Promise<string[]>((resolve, reject) => {
-            glob("**/*.md", { cwd: postsPath }, (err, matches) => {
+            glob("**/*.md", { cwd: articlesPath }, (err, matches) => {
                 if (err) reject(err)
                 else resolve(matches)
             })
@@ -50,7 +50,7 @@ async function getArticlesPaths(): Promise<string[][]> {
 }
 
 async function getArticle(postPath: string[]): Promise<Article> {
-    var postFilePath = path.join(postsPath, `${postPath.join('/')}.md`)
+    var postFilePath = path.join(articlesPath, `${postPath.join('/')}.md`)
 
     return fs.promises
         .readFile(postFilePath, { encoding: 'utf-8' })

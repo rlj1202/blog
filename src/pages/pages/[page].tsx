@@ -25,7 +25,7 @@ export const getStaticProps: GetStaticProps<{ page: number, articles: Article[] 
 
 export const getStaticPaths: GetStaticPaths<Props> = async (context) => {
   let total = articles.length
-  let pages = Math.ceil(total / Config.postsPerPage)
+  let pages = Math.ceil(total / Config.articles.perPage)
 
   return {
     paths: [...Array.from(new Array(pages + 1).keys()).slice(1)].map(i => ({ params: { page: `${i}` } })),

@@ -11,7 +11,7 @@ const ArticleList: React.FC<{
   perPage?: number,
   pageUrl: (page: number) => string,
   articles: Article[],
-}> = ({ title, curPage = 1, perPage = Config.postsPerPage, pageUrl, articles }) => {
+}> = ({ title, curPage = 1, perPage = Config.articles.perPage, pageUrl, articles }) => {
   var start = (curPage - 1) * perPage
 
   return (

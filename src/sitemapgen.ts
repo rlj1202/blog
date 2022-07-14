@@ -6,9 +6,9 @@ import Config from '@/config'
 import { articles } from '@/lib/article'
 
 export const generateSitemap = async () => {
-    console.log('Generate sitemap...')
+    const siteUrl = process.env.HOST || 'localhost'
 
-    const siteUrl = process.env.HOST
+    console.log(`Generate sitemap... : host = ${siteUrl}`)
 
     const stream = new SitemapStream({
         hostname: siteUrl,

@@ -4,7 +4,7 @@ import Config from '@/config'
 const Paginator: React.FC<{
   curPage?: number, perPage?: number, total?: number,
   pageUrl?: (page: number) => string
-}> = ({ curPage = 1, perPage = Config.postsPerPage, total = 100, pageUrl = (page: number) => { return '/' } }) => {
+}> = ({ curPage = 1, perPage = Config.articles.perPage, total = 100, pageUrl = (page: number) => { return '/' } }) => {
   let maxPage = Math.ceil(total / perPage)
 
   return (

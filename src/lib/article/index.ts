@@ -47,6 +47,10 @@ async function getArticles(): Promise<Array<Article>> {
   results = results
     .sort((a, b) => (a.createdAt?.getTime() || 0) - (b.createdAt?.getTime() || 0))
     .reverse()
+  
+  if (process.env.NODE_ENV === 'production') {
+    results = results.filter(article => article.published)
+  }
 
   return results
 }

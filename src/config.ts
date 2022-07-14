@@ -47,10 +47,11 @@ const Config = {
 
     googleAnalyticsId: '',
 
-    /** Local dir path to where post files are in */
-    postsDir: 'posts',
-
-    postsPerPage: 10,
+    articles: {
+        /** Local dir path to where the article files are located in */
+        directory: 'articles',
+        perPage: 10,
+    },
 
     author: {
         name: 'Jisu Sim',

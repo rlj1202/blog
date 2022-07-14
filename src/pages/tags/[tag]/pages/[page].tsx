@@ -33,7 +33,7 @@ export const getStaticProps: GetStaticProps<{ tag: string, curPage: number, arti
 export const getStaticPaths: GetStaticPaths<Props> = async () => {
   let paths = await Promise.all(tags.map(async tag => {
     let total = articles.filter(article => article.tags?.includes(tag)).length
-    let pages = Math.ceil(total / Config.postsPerPage)
+    let pages = Math.ceil(total / Config.articles.perPage)
 
     return (
       [...Array.from(new Array(pages + 1).keys()).slice(1)].map(page => (
