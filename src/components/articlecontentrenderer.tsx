@@ -1,9 +1,5 @@
 import React from 'react'
-
-// import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import SyntaxHighlighter from 'react-syntax-highlighter'
-import a11yDark from 'react-syntax-highlighter/dist/cjs/styles/prism/a11y-dark'
-
 import slugify from 'slugify'
 
 import { ArticleContent } from '@/lib/article'
@@ -65,6 +61,12 @@ const NotionRichTextItem: React.FC<{ richTextItem: RichTextItem }> = ({ richText
 
     if (code) {
       text = <code>{text}</code>
+    }
+
+    if (richTextItem.href) {
+      text = <a href={richTextItem.href}>{text}</a>
+    } else if (richTextItem.text.link) {
+      text = <a href={richTextItem.text.link.url}>{text}</a>
     }
 
     return text
@@ -232,6 +234,39 @@ const NotionBlocks: React.FC<{ blocks: Block[] }> = ({ blocks }) => {
           </ul>
           <hr />
         </div>
+      ))
+    } else if (curBlock.type === 'image') {
+      let image = curBlock.image
+      let url: string = ''
+
+      if (image.type === 'external') {
+        url = image.external.url
+      } else if (image.type === 'file') {
+        url = image.file.url
+      }
+
+      elements.push((
+        <figure key={curBlock.id}>
+          <img src={url} alt={getRichTextPlainText(image.caption)} />
+          <figcaption>
+            <NotionRichText richText={image.caption} />
+          </figcaption>
+        </figure>
+      ))
+    } else if (curBlock.type === 'video') {
+      let video = curBlock.video
+      let url: string = ''
+
+      if (video.type === 'external') {
+        url = video.external.url
+      } else if (video.type === 'file') {
+        url = video.file.url
+      }
+
+      elements.push((
+        <video key={curBlock.id}>
+          <source src={url} />
+        </video>
       ))
     } else {
       elements.push((

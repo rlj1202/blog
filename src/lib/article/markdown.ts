@@ -38,7 +38,7 @@ interface ArticleFrontmatter {
     published?: boolean
 }
 
-async function getArticlesPaths(): Promise<string[][]> {
+async function getArticlesPaths(): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
             glob("**/*.md", { cwd: articlesPath }, (err, matches) => {
                 if (err) reject(err)
@@ -46,11 +46,25 @@ async function getArticlesPaths(): Promise<string[][]> {
             })
         })
         .then(paths => paths.map(path => path.replace(/\.md$/, '')))
-        .then(paths => paths.map(path => path.split('/')))
 }
 
-async function getArticle(postPath: string[]): Promise<Article> {
-    var postFilePath = path.join(articlesPath, `${postPath.join('/')}.md`)
+async function getArticle(slug: string): Promise<Article | null> {
+    let paths = await new Promise<string[]>((resolve, reject) => {
+        glob(`**/${slug}.md`, { cwd: articlesPath }, (err, matches) => {
+            if (err) reject(err)
+            else resolve(matches)
+        })
+    })
+
+    if (paths.length == 0) return null
+
+    let article = await getArticleFromPath(paths[0])
+
+    return article
+}
+
+async function getArticleFromPath(postPath: string): Promise<Article | null> {
+    var postFilePath = path.join(articlesPath, `${postPath}.md`)
 
     return fs.promises
         .readFile(postFilePath, { encoding: 'utf-8' })
@@ -137,18 +151,24 @@ async function getArticle(postPath: string[]): Promise<Article> {
             }
 
             return articleMarkdown
+        }).catch(err => {
+            return null
         })
 }
 
 async function getArticles(): Promise<Array<Article>> {
     return getArticlesPaths()
-        .then(paths => Promise.all(paths.map(path => getArticle(path))))
+        .then(paths => Promise.all(paths.map(path => getArticleFromPath(path))))
+        .then(articles =>
+            articles.filter(<T>(article: T | undefined | null): article is T => article !== undefined && article !== null)
+        )
 }
 
 export type { ArticleContentLocalMarkdown }
 
 const MarkdownArticles = {
-    getArticles
+    getArticles,
+    getArticle,
 }
 
 export default MarkdownArticles

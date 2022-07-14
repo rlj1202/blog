@@ -30,6 +30,14 @@ export interface CategoryTree {
   children?: Array<CategoryTree>
 }
 
+async function getArticle(slug: string): Promise<Article | null> {
+  let article =
+    await MarkdownArticles.getArticle(slug) ||
+    await NotionArticles.getArticle(slug)
+
+  return article
+}
+
 async function getCategories(): Promise<Array<Category>> {
   let notionCategories = await NotionArticles.getCategories()
 
@@ -107,4 +115,6 @@ export {
   categoryTreeTable,
 
   tags,
+
+  getArticle,
 }

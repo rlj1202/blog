@@ -32,28 +32,27 @@ async function getCategoriesList(): Promise<QueryDatabaseResponse> {
     return getNotionDatabaseQuery(categoriesDatabaseId)
 }
 
-async function getArticlesList(): Promise<QueryDatabaseResponse> {
-    if (!articlesDatabaseId) {
-        throw new Error('No database id provided via environment variable')
-    }
-
-    let filter: QueryDatabaseFilter = {
+async function getArticlesList(
+    filter: QueryDatabaseFilter = {
         or: [
-            {
-                property: 'Published',
-                checkbox: {
-                    equals: true,
-                },
-            },
-        ],
-    }
-
-    let sorts: QueryDatabaseSort = [
+            // {
+            //     property: 'Published',
+            //     checkbox: {
+            //         equals: true,
+            //     },
+            // }
+        ]
+    },
+    sorts: QueryDatabaseSort = [
         {
             property: 'CreatedAt',
             direction: 'ascending',
-        },
+        }
     ]
+): Promise<QueryDatabaseResponse> {
+    if (!articlesDatabaseId) {
+        throw new Error('No database id provided via environment variable')
+    }
 
     return getNotionDatabaseQuery(articlesDatabaseId, filter, sorts)
 }
@@ -108,13 +107,13 @@ async function getArticleById(id: string): Promise<Article | null> {
     const article = await getNotionPage(id)
 
     if ('properties' in article) {
-        return getArticle(article)
+        return getArticleFromPage(article)
     }
 
     return null
 }
 
-async function getArticle(article: Page): Promise<Article | null> {
+async function getArticleFromPage(article: Page): Promise<Article | null> {
     if (!('properties' in article)) {
         return null
     }
@@ -168,10 +167,20 @@ async function getArticle(article: Page): Promise<Article | null> {
     return articleNotion
 }
 
+async function getArticle(slug: string): Promise<Article | null> {
+    let articles = await getArticlesList({ or: [ { property: 'Slug', rich_text: { equals: slug } } ] })
+
+    if (articles.results.length == 0) return null
+
+    let article = await getArticleFromPage(articles.results[0] as Page)
+
+    return article
+}
+
 async function getArticles(): Promise<Array<Article>> {
     let articlesList = await getArticlesList()
 
-    let articles = await Promise.all(articlesList.results.map(article => getArticle(article as Page)))
+    let articles = await Promise.all(articlesList.results.map(article => getArticleFromPage(article as Page)))
     
     return articles.filter(<T>(article: T | undefined | null): article is T => article !== null && article !== undefined)
 }
@@ -180,6 +189,7 @@ export type { ArticleContentNotion }
 
 const NotionArticles = {
     getArticleById,
+    getArticleFromPage,
     getArticle,
     getArticles,
     getCategories,
