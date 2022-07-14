@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next'
 import Head from 'next/head'
 
@@ -20,6 +21,8 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
 }
 
 const Archives: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articles }) => {
+  const years = Array.from(new Set(articles.map(article => article.createdAt?.getFullYear())))
+
   return (
     <>
       <Head>
@@ -29,19 +32,19 @@ const Archives: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ ar
       <div>
         <h1>Archives</h1>
 
-        {Array.from(new Set(articles.map(article => article.createdAt?.getFullYear()))).map(year => (
-          <>
-            <h2 key={year}>{year}</h2>
+        { years.map(year => (
+          <Fragment key={year}>
+            <h2>{year}</h2>
 
-            {articles.filter(article => article.createdAt?.getFullYear() == year).map(article => (
+            { articles.filter(article => article.createdAt?.getFullYear() == year).map(article => (
               <div className="post" key={article.slug}>
                 <ArticleLink article={article}>
                   <a>{article.title}</a>
                 </ArticleLink>
               </div>
-            ))}
-          </>
-        ))}
+            )) }
+          </Fragment>
+        )) }
       </div>
 
       <style jsx>{`

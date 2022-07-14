@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next'
 import Head from 'next/head'
 
@@ -21,6 +22,34 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
   }
 }
 
+const CategoryList: React.FC<{ level: number, treeNodes: CategoryTree[], articles: Article[] }> = ({ level, treeNodes, articles }) => {
+  const CustomTag = `h${level}` as keyof JSX.IntrinsicElements
+
+  return (
+    <>
+      {
+        treeNodes.map(node => {
+          return (
+            <Fragment key={node.category.slug}>
+              <CustomTag>{ node.category.name }</CustomTag>
+              { articles.filter(article => article.category === node.category.slug).map(article => {
+                return (
+                  <ArticleLink article={article} key={article.slug}>
+                    <a>{ article.title || article.slug }</a>
+                  </ArticleLink>
+                )
+              }) }
+              { node.children &&
+                <CategoryList level={level + 1} treeNodes={node.children} articles={articles} />
+              }
+            </Fragment>
+          )
+        })
+      }
+    </>
+  )
+}
+
 const Categories: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articles, categoryTree }) => {
   return (
     <>
@@ -30,42 +59,10 @@ const Categories: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ 
 
       <div>
         <h1>Categories</h1>
-
-        { categoryTree.map(node => (
-          <>
-            <h2>{node.category.name}</h2>
-
-            { node.children?.map(child => {
-              return (
-                <>
-                  <h3>{child.category.name}</h3>
-
-                  { articles.filter(article => article.category == child.category.slug).map(article => (
-                    <div className="post" key={article.slug}>
-                      <ArticleLink article={article}>
-                        <a>{article.title || article.slug}</a>
-                      </ArticleLink>
-                    </div>
-                  )) }
-                </>
-              )
-            }) }
-
-            { articles.filter(article => article.category == node.category.slug).map(article => (
-              <div className="post" key={article.slug}>
-                <ArticleLink article={article}>
-                  <a>{article.title || article.slug}</a>
-                </ArticleLink>
-              </div>
-            )) }
-          </>
-        )) }
+        <CategoryList level={2} treeNodes={categoryTree} articles={articles} />
       </div>
 
       <style jsx>{`
-        .post {
-          margin: 20px 0;
-        }
       `}</style>
     </>
   )

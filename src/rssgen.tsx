@@ -2,8 +2,12 @@ import fs from 'fs'
 import path from 'path'
 import { Feed } from 'feed'
 
+import ReactDOMServer from 'react-dom/server'
+
 import Config from '@/config'
 import { articles } from '@/lib/article'
+
+import ArticleContentRenderer from '@/components/articlecontentrenderer'
 
 export const generateRssFeed = async () => {
     console.log('Generate rss...')
@@ -33,13 +37,20 @@ export const generateRssFeed = async () => {
     })
     
     articles.map(article => {
+        let htmlContent: string = article.excerpt || ''
+
+        if (article.content.type === 'notion') {
+            htmlContent = ReactDOMServer.renderToStaticMarkup(<ArticleContentRenderer content={article.content} />)
+        } else if (article.content.type === 'local_markdown') {
+            htmlContent = article.content.htmlContent
+        }
+
         feed.addItem({
             title: article.title || '',
             id: `${siteUrl}/articles/${article.slug}`,
             link: `${siteUrl}/articles/${article.slug}`,
             // description: '',
-            // TODO:
-            content: article.content.type == 'local_markdown' ? article.content.htmlContent : article.content.type == 'notion' ? article.excerpt : '',
+            content: htmlContent,
             author: [
                 {
                     name: Config.author.name,

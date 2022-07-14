@@ -207,9 +207,8 @@ const NotionBlocks: React.FC<{ blocks: Block[] }> = ({ blocks }) => {
         <Callout key={curBlock.id} block={curBlock} />
       ))
     } else if (curBlock.type === 'code') {
-      // TODO: language
       elements.push((
-        <SyntaxHighlighter key={curBlock.id} language='cpp' useInlineStyles={false}>
+        <SyntaxHighlighter key={curBlock.id} language={curBlock.code.language} useInlineStyles={false}>
           {curBlock.code.rich_text.map(item => item.plain_text).join(' ')}
         </SyntaxHighlighter>
       ))
