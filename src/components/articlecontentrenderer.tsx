@@ -284,10 +284,8 @@ const NotionBlocks: React.FC<{ blocks: Block[] }> = ({ blocks }) => {
 
 const ArticleContentRenderer: React.FC<{ content: ArticleContent }> = ({ content }) => {
   if (content.type == 'notion') {
-    let blocks = content.blockChildrenResp.results.filter((block): block is Block => 'type' in block)
-
     return (
-      <NotionBlocks blocks={blocks} />
+      <NotionBlocks blocks={content.blocks} />
     )
   } else if (content.type == 'local_markdown') {
     return (

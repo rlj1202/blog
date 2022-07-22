@@ -8,15 +8,6 @@ import {
     GetPageResponse,
 } from '@notionhq/client/build/src/api-endpoints'
 
-export type {
-    QueryDatabaseResponse,
-    QueryDatabaseParameters,
-    GetBlockResponse,
-    GetPagePropertyResponse,
-    ListBlockChildrenResponse,
-    GetPageResponse,
-}
-
 export const notion = new Client({ auth: process.env.NOTION_KEY })
 
 export type QueryDatabaseFilter = QueryDatabaseParameters['filter']
@@ -75,10 +66,12 @@ export type UnsupportedBlock = ExtractBlockType<Block, 'unsupported'>
  * @param pageId 
  * @returns 
  */
-export async function getNotionPage(pageId: string): Promise<GetPageResponse> {
+export async function getNotionPage(pageId: string): Promise<Page> {
   let page = await notion.pages.retrieve({
     page_id: pageId
   })
+
+  if (!('archived' in page)) throw new Error('Page is empty')
 
   return page
 }
@@ -88,7 +81,7 @@ export async function getNotionPage(pageId: string): Promise<GetPageResponse> {
  * @param blockId 
  * @returns 
  */
-export async function getNotionBlockChildren(blockId: string): Promise<ListBlockChildrenResponse> {
+export async function getNotionBlockChildren(blockId: string): Promise<Block[]> {
   let blockChildrenResp = await notion.blocks.children.list({
     block_id: blockId
   })
@@ -112,10 +105,12 @@ export async function getNotionBlockChildren(blockId: string): Promise<ListBlock
     let children = await getNotionBlockChildren(block.id)
 
     let cur: Block = block
-    cur.children = children.results.filter((i): i is Block => 'type' in i)
+    cur.children = children
   }
 
-  return blockChildrenResp
+  let results = blockChildrenResp.results.filter((child: GetBlockResponse): child is Block => 'type' in child)
+
+  return results
 }
 
 /**
@@ -125,7 +120,7 @@ export async function getNotionBlockChildren(blockId: string): Promise<ListBlock
  * @param sorts 
  * @returns 
  */
-export async function getNotionDatabaseQuery(databaseId: string, filter?: QueryDatabaseFilter, sorts?: QueryDatabaseSort): Promise<QueryDatabaseResponse> {
+export async function getNotionDatabaseQuery(databaseId: string, filter?: QueryDatabaseFilter, sorts?: QueryDatabaseSort): Promise<Page[]> {
     let resp = await notion.databases.query({
         database_id: databaseId,
         filter, sorts,
@@ -144,9 +139,21 @@ export async function getNotionDatabaseQuery(databaseId: string, filter?: QueryD
         resp.results.push(...more_posts.results)
     }
 
-    return resp
+    let results = resp.results.filter((page: GetPageResponse): page is Page => 'properties' in page)
+
+    return results
 }
 
 export function getRichTextPlainText(richText: RichTextItem[]): string {
     return richText.map(richTextItem => richTextItem.plain_text).join(' ')
+}
+
+export async function walkBlock(blocks: Block[], func: (block: Block) => Promise<void>) {
+  for (let block of blocks) {
+    await func(block)
+
+    if (block.children) {
+      await walkBlock(block.children, func)
+    }
+  }
 }

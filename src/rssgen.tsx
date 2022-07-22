@@ -36,7 +36,9 @@ export const generateRssFeed = async () => {
         }
     })
     
-    articles.map(article => {
+    articles.forEach(article => {
+        if (!article.content) return
+
         let htmlContent: string = article.excerpt || ''
 
         if (article.content.type === 'notion') {

@@ -15,7 +15,7 @@ import { visit } from 'unist-util-visit'
 import { Heading, Text, ThematicBreak } from 'mdast'
 import { toc } from 'mdast-util-toc'
 
-import { Article } from '.'
+import { Article, Category, ArticleProvider } from '.'
 
 import Config from '@/config'
 
@@ -48,21 +48,6 @@ async function getArticlesPaths(): Promise<string[]> {
         .then(paths => paths.map(path => path.replace(/\.md$/, '')))
 }
 
-async function getArticle(slug: string): Promise<Article | null> {
-    let paths = await new Promise<string[]>((resolve, reject) => {
-        glob(`**/${slug}.md`, { cwd: articlesPath }, (err, matches) => {
-            if (err) reject(err)
-            else resolve(matches)
-        })
-    })
-
-    if (paths.length == 0) return null
-
-    let article = await getArticleFromPath(paths[0])
-
-    return article
-}
-
 async function getArticleFromPath(postPath: string): Promise<Article | null> {
     var postFilePath = path.join(articlesPath, `${postPath}.md`)
 
@@ -82,6 +67,8 @@ async function getArticleFromPath(postPath: string): Promise<Article | null> {
             if (typeof metadata.categories === 'string') {
                 metadata.categories = [metadata.categories]
             }
+
+            metadata.published ??= true
 
             var mdast = unified()
                 .use(remarkParse)
@@ -120,8 +107,6 @@ async function getArticleFromPath(postPath: string): Promise<Article | null> {
                 }
             })
 
-            metadata.published ??= true
-
             var htmlContent = unified()
                 .use(rehypeStringify, { allowDangerousHtml: true })
                 .stringify(hast)
@@ -156,19 +141,45 @@ async function getArticleFromPath(postPath: string): Promise<Article | null> {
         })
 }
 
-async function getArticles(): Promise<Array<Article>> {
-    return getArticlesPaths()
-        .then(paths => Promise.all(paths.map(path => getArticleFromPath(path))))
-        .then(articles =>
-            articles.filter(<T>(article: T | undefined | null): article is T => article !== undefined && article !== null)
-        )
+const markdownArticleProvider: ArticleProvider = {
+    async getArticle(slug: string): Promise<Article | null> {
+        let paths = await new Promise<string[]>((resolve, reject) => {
+            glob(`**/${slug}.md`, { cwd: articlesPath }, (err, matches) => {
+                if (err) reject(err)
+                else resolve(matches)
+            })
+        })
+ 
+        if (paths.length == 0) return null
+ 
+        let article = await getArticleFromPath(paths[0])
+ 
+        return article
+    },
+
+    async getArticles(): Promise<Article[]> {
+        return getArticlesPaths()
+            .then(paths => Promise.all(paths.map(path => getArticleFromPath(path))))
+            .then(articles =>
+                articles.filter(<T>(article: T | undefined | null): article is T => article !== undefined && article !== null)
+            )
+    },
+
+    async getArticleList(): Promise<Article[]> {
+        return (await this.getArticles()).map(article => {
+            article.content = undefined
+            return article
+        })
+    },
+
+    async getCategories(): Promise<Category[]> {
+        return []
+    },
+
+    async getTags(): Promise<string[]> {
+        return []
+    },
 }
 
 export type { ArticleContentLocalMarkdown }
-
-const MarkdownArticles = {
-    getArticles,
-    getArticle,
-}
-
-export default MarkdownArticles
+export default markdownArticleProvider

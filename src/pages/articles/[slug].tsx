@@ -122,7 +122,7 @@ const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
           </div>
         </header>
         <div className="article">
-          <ArticleContentRenderer content={article.content} />
+          { article.content && <ArticleContentRenderer content={article.content} /> }
         </div>
         <hr />
         <Utterances />

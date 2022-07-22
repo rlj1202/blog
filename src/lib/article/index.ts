@@ -1,7 +1,17 @@
-import NotionArticles, { ArticleContentNotion } from './notion'
-import MarkdownArticles, { ArticleContentLocalMarkdown } from './markdown'
+import notionArticleProvider, { ArticleContentNotion } from './notion'
+import markdownArticleProvider, { ArticleContentLocalMarkdown } from './markdown'
 
 export type ArticleContent = ArticleContentNotion | ArticleContentLocalMarkdown
+
+export interface ArticleProvider {
+  /**  */
+  getArticle(slug: string): Promise<Article | null>
+  /** Get article lists, without content. */
+  getArticleList(): Promise<Article[]>
+  getArticles(): Promise<Article[]>
+  getCategories(): Promise<Category[]>
+  getTags(): Promise<string[]>
+}
 
 export interface Article {
   title?: string
@@ -16,7 +26,7 @@ export interface Article {
   coverImg?: string
   excerpt?: string
 
-  content: ArticleContent
+  content?: ArticleContent
 }
 
 export interface Category {
@@ -32,14 +42,14 @@ export interface CategoryTree {
 
 async function getArticle(slug: string): Promise<Article | null> {
   let article =
-    await MarkdownArticles.getArticle(slug) ||
-    await NotionArticles.getArticle(slug)
+    await markdownArticleProvider.getArticle(slug) ||
+    await notionArticleProvider.getArticle(slug)
 
   return article
 }
 
 async function getCategories(): Promise<Array<Category>> {
-  let notionCategories = await NotionArticles.getCategories()
+  let notionCategories = await notionArticleProvider.getCategories()
 
   let results: Category[] = [ ...notionCategories ]
 
@@ -47,8 +57,8 @@ async function getCategories(): Promise<Array<Category>> {
 }
 
 async function getArticles(): Promise<Array<Article>> {
-  let notionArticles = await NotionArticles.getArticles()
-  let markdownArticles = await MarkdownArticles.getArticles()
+  let notionArticles = await notionArticleProvider.getArticles()
+  let markdownArticles = await markdownArticleProvider.getArticles()
 
   let results = [...notionArticles, ...markdownArticles]
 
