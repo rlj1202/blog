@@ -18,13 +18,13 @@ export const getStaticProps: GetStaticProps<{ page: number, articles: Article[] 
   return {
     props: {
       page,
-      articles: await articleProvider.getArticleList(),
+      articles: await articleProvider.getArticles(),
     }
   }
 }
 
 export const getStaticPaths: GetStaticPaths<Props> = async (context) => {
-  let articleList = await articleProvider.getArticleList()
+  let articleList = await articleProvider.getArticles()
 
   let total = articleList.length
   let pages = Math.ceil(total / Config.articles.perPage)
