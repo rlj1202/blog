@@ -8,11 +8,25 @@ import { generateSitemap } from '@/sitemapgen'
 
 import ArticleCard from '@/components/articlecard'
 
-import { Article, articles } from '@/lib/article'
+import articleProvider, { Article, ArticleContent } from '@/lib/article'
 
 export const getStaticProps: GetStaticProps<{ articles: Article[] }> = async (context) => {
-  generateRssFeed()
-  generateSitemap()
+  let articles = await articleProvider.getArticles()
+  let articleAndContents = (await Promise.all(
+    articles.map(async (article) => {
+      if (!article.slug) return null
+
+      let content = await articleProvider.getArticleContent(article.slug)
+      if (!content) return null
+
+      let result: [ Article, ArticleContent ] = [ article, content ]
+
+      return result
+    })
+  )).filter(<T,>(element: T | null): element is T => element !== null)
+
+  generateRssFeed(articleAndContents)
+  generateSitemap(articles)
 
   return {
     props: {

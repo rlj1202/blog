@@ -4,7 +4,7 @@ import Head from 'next/head'
 
 import ArticleLink from '@/components/articlelink'
 
-import { Article, articles } from '@/lib/article'
+import articleProvider, { Article } from '@/lib/article'
 
 import Config from '@/config'
 
@@ -13,6 +13,8 @@ interface Props {
 }
 
 export const getStaticProps: GetStaticProps<Props> = async (context) => {
+  let articles = await articleProvider.getArticles()
+
   return {
     props: {
       articles

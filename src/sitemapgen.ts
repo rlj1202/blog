@@ -3,9 +3,9 @@ import { SitemapStream, streamToPromise } from 'sitemap'
 
 import Config from '@/config'
 
-import { articles } from '@/lib/article'
+import { Article } from '@/lib/article'
 
-export const generateSitemap = async () => {
+export const generateSitemap = async (articles: Article[]) => {
     const siteUrl = process.env.HOST || 'localhost'
 
     console.log(`Generate sitemap... : host = ${siteUrl}`)

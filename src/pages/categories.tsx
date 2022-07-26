@@ -4,16 +4,37 @@ import Head from 'next/head'
 
 import ArticleLink from '@/components/articlelink'
 
-import { Article, CategoryTree, articles, categoryTree } from '@/lib/article'
+import articleProvider, { Article, Category } from '@/lib/article'
 
 import Config from '@/config'
+
+interface CategoryTree {
+  category: Category
+  children?: CategoryTree[]
+}
 
 interface Props {
   articles: Article[]
   categoryTree: Array<CategoryTree>
 }
 
+async function getCategoryTree(parentSlug: string | null = null): Promise<CategoryTree[]> {
+  let categories = await articleProvider.getCategories(parentSlug)
+
+  let trees: CategoryTree[] = await Promise.all(
+    categories.map(async (category) => ({
+      category,
+      children: await getCategoryTree(category.slug)
+    }))
+  )
+
+  return trees
+}
+
 export const getStaticProps: GetStaticProps<Props> = async (context) => {
+  let articles = await articleProvider.getArticles()
+  let categoryTree = await getCategoryTree()
+
   return {
     props: {
       articles,

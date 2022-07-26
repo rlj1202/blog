@@ -5,7 +5,7 @@ import { ParsedUrlQuery } from 'querystring'
 import ArticleList from '@/components/articlelist'
 import Config from '@/config'
 
-import { Article, articles, tags } from '@/lib/article'
+import articleProvider, { Article } from '@/lib/article'
 
 interface Props extends ParsedUrlQuery {
   tag: string
@@ -19,6 +19,7 @@ export const getStaticProps: GetStaticProps<{ tag: string, curPage: number, arti
 
   let tag = context.params.tag
   let curPage = parseInt(context.params.page)
+  let articles = await articleProvider.getArticles()
   let filteredArticles = articles.filter(article => article.tags?.includes(tag))
 
   return {
@@ -31,6 +32,9 @@ export const getStaticProps: GetStaticProps<{ tag: string, curPage: number, arti
 }
 
 export const getStaticPaths: GetStaticPaths<Props> = async () => {
+  let tags = await articleProvider.getTags()
+  let articles = await articleProvider.getArticles()
+
   let paths = await Promise.all(tags.map(async tag => {
     let total = articles.filter(article => article.tags?.includes(tag)).length
     let pages = Math.ceil(total / Config.articles.perPage)

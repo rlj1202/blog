@@ -6,9 +6,12 @@ import {
     GetPagePropertyResponse,
     ListBlockChildrenResponse,
     GetPageResponse,
+    GetDatabaseResponse,
 } from '@notionhq/client/build/src/api-endpoints'
 
 export const notion = new Client({ auth: process.env.NOTION_KEY })
+
+export type Database = GetDatabaseResponse
 
 export type QueryDatabaseFilter = QueryDatabaseParameters['filter']
 export type QueryDatabaseSort = QueryDatabaseParameters['sorts']
@@ -108,7 +111,8 @@ export async function getNotionBlockChildren(blockId: string): Promise<Block[]> 
     cur.children = children
   }
 
-  let results = blockChildrenResp.results.filter((child: GetBlockResponse): child is Block => 'type' in child)
+  let results = blockChildrenResp.results
+    .filter((child: GetBlockResponse): child is Block => 'type' in child)
 
   return results
 }
@@ -120,7 +124,10 @@ export async function getNotionBlockChildren(blockId: string): Promise<Block[]> 
  * @param sorts 
  * @returns 
  */
-export async function getNotionDatabaseQuery(databaseId: string, filter?: QueryDatabaseFilter, sorts?: QueryDatabaseSort): Promise<Page[]> {
+export async function getNotionDatabaseQuery(
+  databaseId: string,
+  filter?: QueryDatabaseFilter,
+  sorts?: QueryDatabaseSort): Promise<Page[]> {
     let resp = await notion.databases.query({
         database_id: databaseId,
         filter, sorts,
@@ -139,16 +146,27 @@ export async function getNotionDatabaseQuery(databaseId: string, filter?: QueryD
         resp.results.push(...more_posts.results)
     }
 
-    let results = resp.results.filter((page: GetPageResponse): page is Page => 'properties' in page)
+    let results = resp.results
+      .filter((page: GetPageResponse): page is Page => 'properties' in page)
 
     return results
+}
+
+export async function getNotionDatabase(databaseId: string): Promise<Database> {
+  let database = await notion.databases.retrieve({
+    database_id: databaseId,
+  })
+
+  return database
 }
 
 export function getRichTextPlainText(richText: RichTextItem[]): string {
     return richText.map(richTextItem => richTextItem.plain_text).join(' ')
 }
 
-export async function walkBlock(blocks: Block[], func: (block: Block) => Promise<void>) {
+export async function walkBlock(
+  blocks: Block[],
+  func: (block: Block) => Promise<void>) {
   for (let block of blocks) {
     await func(block)
 

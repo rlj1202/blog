@@ -5,7 +5,7 @@ import Tag from '@/components/tag'
 
 import Config from '@/config'
 
-import { Article, articles, tags } from '@/lib/article'
+import articleProvider, { Article } from '@/lib/article'
 
 interface Props {
   articles: Article[]
@@ -13,6 +13,9 @@ interface Props {
 }
 
 export const getStaticProps: GetStaticProps<Props> = async (context) => {
+  let articles = await articleProvider.getArticles()
+  let tags = await articleProvider.getTags()
+
   return {
     props: {
       articles,

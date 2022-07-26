@@ -14,10 +14,11 @@ import Utterances from '@/components/utterances'
 import MathJax3 from '@/components/mathjax3'
 import Tag from '@/components/tag'
 
-import { Article, articles, articlesTable } from '@/lib/article'
+import articleProvider, { Article, ArticleContent } from '@/lib/article'
 
 interface Props {
   article: Article
+  articleContent: ArticleContent
   suggestedArticles: Article[]
 }
 
@@ -27,25 +28,28 @@ interface Routes extends ParsedUrlQuery {
 
 export const getStaticProps: GetStaticProps<Props, Routes> = async (context) => {
   let slug = context.params?.slug
+  let article = slug !== undefined && await articleProvider.getArticle(slug)
+  let articleContent = slug !== undefined && await articleProvider.getArticleContent(slug)
 
-  if (!slug) {
+  if (!slug || !article || !articleContent) {
     return {
       notFound: true
     }
   }
 
-  let article = articlesTable[slug]
-  let suggestedArticles = articles.slice(0, 2)
+  let suggestedArticles = (await articleProvider.getArticles()).slice(0, 2)
 
   return {
     props: {
       article,
+      articleContent,
       suggestedArticles,
     }
   }
 }
 
 export const getStaticPaths: GetStaticPaths<ParsedUrlQuery> = async (context) => {
+  let articles = await articleProvider.getArticles()
   let slugs = articles.map(article => article.slug)
 
   return {
@@ -88,8 +92,7 @@ const Comment: NextPage<{ name: string, date: Date }> = ({ name, date, children 
   )
 }
 
-const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ article, suggestedArticles }) => {
-
+const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ article, articleContent, suggestedArticles }) => {
   return (
     <>
       <MathJax3 />
@@ -122,7 +125,7 @@ const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
           </div>
         </header>
         <div className="article">
-          { article.content && <ArticleContentRenderer content={article.content} /> }
+          { <ArticleContentRenderer content={articleContent} /> }
         </div>
         <hr />
         <Utterances />

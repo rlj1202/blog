@@ -15,7 +15,7 @@ import { visit } from 'unist-util-visit'
 import { Heading, Text, ThematicBreak } from 'mdast'
 import { toc } from 'mdast-util-toc'
 
-import { Article, Category, ArticleProvider } from '.'
+import { Article, ArticleContent, Category, ArticleProvider } from '.'
 
 import Config from '@/config'
 
@@ -38,6 +38,19 @@ interface ArticleFrontmatter {
     published?: boolean
 }
 
+async function findPath(slug: string): Promise<string | null> {
+    let paths = await new Promise<string[]>((resolve, reject) => {
+        glob(`**/${slug}.md`, { cwd: articlesPath }, (err, matches) => {
+            if (err) reject(err)
+            else resolve(matches)
+        })
+    })
+ 
+    if (paths.length == 0) return null
+
+    return paths[0].replace(/\.md$/, '')
+}
+
 async function getArticlesPaths(): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
             glob("**/*.md", { cwd: articlesPath }, (err, matches) => {
@@ -48,7 +61,7 @@ async function getArticlesPaths(): Promise<string[]> {
         .then(paths => paths.map(path => path.replace(/\.md$/, '')))
 }
 
-async function getArticleFromPath(postPath: string): Promise<Article | null> {
+async function getArticleFromPath(postPath: string): Promise<[Article, ArticleContent] | null> {
     var postFilePath = path.join(articlesPath, `${postPath}.md`)
 
     return fs.promises
@@ -111,31 +124,28 @@ async function getArticleFromPath(postPath: string): Promise<Article | null> {
                 .use(rehypeStringify, { allowDangerousHtml: true })
                 .stringify(hast)
 
-            // return {
-                // postPath,
-                // url: getPostUrl(postPath)
-            // }
-
-            let articleMarkdown: Article = {
+            let article: Article = {
                 title: metadata.title,
                 subtitle: metadata.subtitle,
                 category: metadata.category,
                 tags: metadata.tags,
                 published: metadata.published,
-                slug: postPath[postPath.length - 1],
+                slug: postPath.split('/').reverse()[0],
                 createdAt: metadata.date,
                 updatedAt: metadata.date,
 
                 coverImg: imgs && imgs.length ? imgs[0] : undefined,
                 excerpt: content.slice(0, 1000),
-
-                content: {
-                    type: 'local_markdown',
-                    htmlContent,
-                },
             }
 
-            return articleMarkdown
+            let articleContent: ArticleContent = {
+                type: 'local_markdown',
+                htmlContent,
+            }
+
+            let result: [Article, ArticleContent] = [ article, articleContent ]
+
+            return result
         }).catch(err => {
             return null
         })
@@ -143,41 +153,56 @@ async function getArticleFromPath(postPath: string): Promise<Article | null> {
 
 const markdownArticleProvider: ArticleProvider = {
     async getArticle(slug: string): Promise<Article | null> {
-        let paths = await new Promise<string[]>((resolve, reject) => {
-            glob(`**/${slug}.md`, { cwd: articlesPath }, (err, matches) => {
-                if (err) reject(err)
-                else resolve(matches)
-            })
-        })
+        let path = await findPath(slug)
+        if (!path) return null
  
-        if (paths.length == 0) return null
+        let articleAndContent = await getArticleFromPath(path)
+
+        if (articleAndContent) {
+            let [article, content] = articleAndContent
+
+            return article
+        }
  
-        let article = await getArticleFromPath(paths[0])
- 
-        return article
+        return null
     },
 
     async getArticles(): Promise<Article[]> {
         return getArticlesPaths()
             .then(paths => Promise.all(paths.map(path => getArticleFromPath(path))))
-            .then(articles =>
-                articles.filter(<T>(article: T | undefined | null): article is T => article !== undefined && article !== null)
-            )
+            .then(articleAndContents => articleAndContents
+                .filter(<T>(articleAndContent: T | undefined | null): articleAndContent is T => articleAndContent !== undefined && articleAndContent !== null))
+            .then(articles => articles.map(([article, content]) => article))
     },
 
-    async getArticleList(): Promise<Article[]> {
-        return (await this.getArticles()).map(article => {
-            article.content = undefined
-            return article
-        })
+    async getArticleContent(slug: string): Promise<ArticleContent | null> {
+        let path = await findPath(slug)
+        if (!path) return null
+ 
+        let articleAndContent = await getArticleFromPath(path)
+
+        if (articleAndContent) {
+            let [article, content] = articleAndContent
+
+            return content
+        }
+ 
+        return null
     },
 
-    async getCategories(): Promise<Category[]> {
+    async getCategory(slug: string): Promise<Category | null> {
+        // TODO:
+        return null
+    },
+
+    async getCategories(parentSlug: string | null): Promise<Category[]> {
+        // TODO:
         return []
     },
 
     async getTags(): Promise<string[]> {
-        return []
+        let articles = await this.getArticles()
+        return Array.from(new Set(articles.flatMap(article => article.tags || [])))
     },
 }
 

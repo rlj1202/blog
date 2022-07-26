@@ -5,11 +5,11 @@ import { Feed } from 'feed'
 import ReactDOMServer from 'react-dom/server'
 
 import Config from '@/config'
-import { articles } from '@/lib/article'
+import { Article, ArticleContent } from '@/lib/article'
 
 import ArticleContentRenderer from '@/components/articlecontentrenderer'
 
-export const generateRssFeed = async () => {
+export const generateRssFeed = async (articleAndContents: [Article, ArticleContent][]) => {
     console.log('Generate rss...')
 
     const siteUrl = process.env.HOST
@@ -36,16 +36,8 @@ export const generateRssFeed = async () => {
         }
     })
     
-    articles.forEach(article => {
-        if (!article.content) return
-
-        let htmlContent: string = article.excerpt || ''
-
-        if (article.content.type === 'notion') {
-            htmlContent = ReactDOMServer.renderToStaticMarkup(<ArticleContentRenderer content={article.content} />)
-        } else if (article.content.type === 'local_markdown') {
-            htmlContent = article.content.htmlContent
-        }
+    articleAndContents.forEach(([article, content]) => {
+        let htmlContent: string = article.excerpt || ReactDOMServer.renderToStaticMarkup(<ArticleContentRenderer content={content} />)
 
         feed.addItem({
             title: article.title || '',

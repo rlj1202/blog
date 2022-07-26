@@ -1,83 +1,36 @@
 import fs from 'fs'
 import path from 'path'
 
-import { Article, Category, ArticleProvider } from '.'
+import { Article, ArticleContent, Category, ArticleProvider } from '.'
 
 import {
-    QueryDatabaseFilter,
-    QueryDatabaseSort,
-
     getNotionPage,
+    getNotionDatabase,
     getNotionDatabaseQuery,
     getNotionBlockChildren,
 
+    Database,
     Block,
     Page,
 
     getRichTextPlainText,
 
     walkBlock,
+    QueryDatabaseFilter,
 } from '@/lib/notion'
 
 import { downloadImage } from '@/lib/utils'
 
-const articlesDatabaseId: string | undefined = process.env.NOTION_DATABASE_ARTICLES_ID
-const categoriesDatabaseId: string | undefined = process.env.NOTION_DATABASE_CATEGORIES_ID
+const articlesDatabaseId: string = process.env.NOTION_DATABASE_ARTICLES_ID || ''
+const categoriesDatabaseId: string = process.env.NOTION_DATABASE_CATEGORIES_ID || ''
 
 interface ArticleContentNotion {
   type: 'notion'
   blocks: Block[]
 }
 
-async function getCategoriesList(): Promise<Page[]> {
-    if (!categoriesDatabaseId) {
-        throw new Error('No categories database id provided via environment variable')
-    }
-
-    return getNotionDatabaseQuery(categoriesDatabaseId)
-}
-
-async function getArticlesList(
-    filter: QueryDatabaseFilter = {
-        or: [
-            // {
-            //     property: 'Published',
-            //     checkbox: {
-            //         equals: true,
-            //     },
-            // }
-        ]
-    },
-    sorts: QueryDatabaseSort = [
-        {
-            property: 'CreatedAt',
-            direction: 'ascending',
-        }
-    ]
-): Promise<Page[]> {
-    if (!articlesDatabaseId) {
-        throw new Error('No database id provided via environment variable')
-    }
-
-    return getNotionDatabaseQuery(articlesDatabaseId, filter, sorts)
-}
-
-async function getArticleById(id: string): Promise<Article | null> {
-    const article = await getNotionPage(id)
-
-    if ('properties' in article) {
-        return getArticleFromPage(article)
-    }
-
-    return null
-}
-
-async function getArticleFromPage(article: Page): Promise<Article | null> {
-    if (!('properties' in article)) {
-        return null
-    }
-
-    let blocks = await getNotionBlockChildren(article.id)
+async function getArticleContentNotion(id: string): Promise<ArticleContentNotion> {
+    let blocks = await getNotionBlockChildren(id)
 
     await walkBlock(blocks, async (block: Block) => {
         if (block.type !== 'image') return
@@ -95,7 +48,7 @@ async function getArticleFromPage(article: Page): Promise<Article | null> {
 
         const publicDirPath = path.join(process.cwd(), 'public')
 
-        const dirRelPath = path.join('articles', article.id)
+        const dirRelPath = path.join('articles', id)
         const fileRelPath = path.join(dirRelPath, `${block.id}${path.extname(imageUrl.pathname)}`)
 
         const dirPath = path.join(publicDirPath, dirRelPath)
@@ -118,190 +71,166 @@ async function getArticleFromPage(article: Page): Promise<Article | null> {
         }
     })
 
-    let articleNotion: Article = {
-        content: {
-            type: 'notion',
-            blocks,
-        },
+    return {
+        type: 'notion',
+        blocks,
     }
+}
 
-    if (article.properties['Title'].type == 'title') {
-        articleNotion.title = getRichTextPlainText(article.properties['Title'].title)
+async function pageToArticle(page: Page): Promise<Article | null> {
+    let article: Article = {}
+
+    if (page.properties['Title'].type == 'title') {
+        article.title = getRichTextPlainText(page.properties['Title'].title)
     }
-    if (article.properties['Subtitle'].type == 'rich_text') {
-        articleNotion.subtitle = getRichTextPlainText(article.properties['Subtitle'].rich_text)
+    if (page.properties['Subtitle'].type == 'rich_text') {
+        article.subtitle = getRichTextPlainText(page.properties['Subtitle'].rich_text)
     }
-    if (article.properties['Category'].type == 'relation') {
-        let ids = article.properties['Category'].relation.map(rel => rel.id)
+    if (page.properties['Category'].type == 'relation') {
+        let ids = page.properties['Category'].relation.map(rel => rel.id)
         if (ids.length) {
             let page = await getNotionPage(ids[0])
             if ('properties' in page) {
                 if (page.properties['Slug'].type == 'rich_text') {
-                    articleNotion.category = getRichTextPlainText(page.properties['Slug'].rich_text)
+                    article.category = getRichTextPlainText(page.properties['Slug'].rich_text)
                 }
             }
         }
     }
-    if (article.properties['Tags'].type == 'multi_select') {
-        articleNotion.tags = article.properties['Tags'].multi_select.map(prop => prop.name)
+    if (page.properties['Tags'].type == 'multi_select') {
+        article.tags = page.properties['Tags'].multi_select.map(prop => prop.name)
     }
-    if (article.properties['Slug'].type == 'rich_text') {
-        articleNotion.slug = getRichTextPlainText(article.properties['Slug'].rich_text)
+    if (page.properties['Slug'].type == 'rich_text') {
+        article.slug = getRichTextPlainText(page.properties['Slug'].rich_text)
     }
-    if (article.properties['Published'].type == 'checkbox') {
-        articleNotion.published = article.properties['Published'].checkbox
+    if (page.properties['Published'].type == 'checkbox') {
+        article.published = page.properties['Published'].checkbox
     }
-    if (article.properties['CreatedAt'].type == 'created_time') {
-        articleNotion.createdAt = new Date(article.properties['CreatedAt'].created_time)
+    if (page.properties['CreatedAt'].type == 'created_time') {
+        article.createdAt = new Date(page.properties['CreatedAt'].created_time)
     }
-    if (article.properties['UpdatedAt'].type == 'last_edited_time') {
-        articleNotion.updatedAt = new Date(article.properties['UpdatedAt'].last_edited_time)
+    if (page.properties['UpdatedAt'].type == 'last_edited_time') {
+        article.updatedAt = new Date(page.properties['UpdatedAt'].last_edited_time)
     }
     
     // TODO:
-    articleNotion.coverImg = undefined
-    articleNotion.excerpt = undefined
+    article.coverImg = undefined
+    article.excerpt = undefined
 
-    return articleNotion
+    return article
+}
+
+async function getArticlePage(slug: string): Promise<Page | null> {
+    let pages: Page[] = await getNotionDatabaseQuery(articlesDatabaseId, {
+        or: [ { property: 'Slug', rich_text: { equals: slug } } ]
+    })
+
+    if (pages.length == 0) return null
+
+    return pages[0]
+}
+
+async function getCategoryPage(slug: string): Promise<Page | null> {
+    let pages: Page[] = await getNotionDatabaseQuery(categoriesDatabaseId, {
+        or: [ { property: 'Slug', rich_text: { equals: slug } } ]
+    })
+    if (pages.length == 0) return null
+
+    return pages[0]
+}
+
+function pageToCategory(page: Page): Category {
+    let category: Category = {}
+
+    if (page.properties['Name'].type === 'title') {
+        category.name = getRichTextPlainText(page.properties['Name'].title)
+    }
+    if (page.properties['Slug'].type === 'rich_text') {
+        category.slug = getRichTextPlainText(page.properties['Slug'].rich_text)
+    }
+
+    return category
 }
 
 const notionArticleProvider: ArticleProvider = {
     async getArticle(slug: string): Promise<Article | null> {
-        let articles = await getArticlesList({ or: [ { property: 'Slug', rich_text: { equals: slug } } ] })
+        let page = await getArticlePage(slug)
+        if (!page) return null
 
-        if (articles.length == 0) return null
-
-        let article = await getArticleFromPage(articles[0] as Page)
-
+        let article = await pageToArticle(page)
         return article
     },
 
-    async getCategories(): Promise<Category[]> {
-        let categoriesList = await getCategoriesList()
- 
-        let categoriesIdMap: Record<string, Category> = {}
- 
-        categoriesList.forEach((category) => {
-            if (!('properties' in category)) {
-                return undefined
-            }
- 
-            let cat: Category = {}
- 
-            if (category.properties['Name'].type == 'title') {
-                let name = getRichTextPlainText(category.properties['Name'].title)
-                cat.name = name
-            }
-            if (category.properties['Slug'].type == 'rich_text') {
-                let slug = getRichTextPlainText(category.properties['Slug'].rich_text)
-                cat.slug = slug
-            }
- 
-            categoriesIdMap[category.id] = cat
-        })
- 
-        let result: Array<Category> = categoriesList.map((category) => {
-            if (!('properties' in category)) {
-                return undefined
-            }
- 
-            let cur: Category = categoriesIdMap[category.id]
- 
-            if (category.properties['Parent'].type == 'relation') {
-                let ids = category.properties['Parent'].relation.map(rel => rel.id)
- 
-                if (ids.length) {
-                    let parent = categoriesIdMap[ids[0]]
-                    cur.parent = parent.slug
-                }
-            }
- 
-            return cur
-        }).filter(<T>(cat: T | undefined | null): cat is T => cat !== undefined && cat !== null)
- 
-        return result
+    async getArticleContent(slug: string): Promise<ArticleContent | null> {
+        let page = await getArticlePage(slug)
+        if (!page) return null
+
+        return await getArticleContentNotion(page.id)
     },
 
-    async getArticleList(): Promise<Article[]> {
-        if (!articlesDatabaseId) {
-            throw new Error('No database id provided via environment variable')
-        }
-
-        let filter: QueryDatabaseFilter = {
-            or: [
-                // {
-                //     property: 'Published',
-                //     checkbox: {
-                //         equals: true,
-                //     },
-                // }
-            ]
-        }
-        let sorts: QueryDatabaseSort = [
+    async getArticles(): Promise<Article[]> {
+        let articleList = await getNotionDatabaseQuery(articlesDatabaseId, undefined, [
             {
                 property: 'CreatedAt',
                 direction: 'ascending',
             }
-        ]
-
-        let resp = await getNotionDatabaseQuery(articlesDatabaseId, filter, sorts)
-
-        let results = (await Promise.all(resp.map(async (page) => {
-            if (!('properties' in page)) return null
-
-            let article: Article = {}
-  
-            if (page.properties['Title'].type == 'title') {
-                article.title = getRichTextPlainText(page.properties['Title'].title)
-            }
-            if (page.properties['Subtitle'].type == 'rich_text') {
-                article.subtitle = getRichTextPlainText(page.properties['Subtitle'].rich_text)
-            }
-            if (page.properties['Category'].type == 'relation') {
-                let ids = page.properties['Category'].relation.map(rel => rel.id)
-                if (ids.length) {
-                    let page = await getNotionPage(ids[0])
-                    if ('properties' in page) {
-                        if (page.properties['Slug'].type == 'rich_text') {
-                            article.category = getRichTextPlainText(page.properties['Slug'].rich_text)
-                        }
-                    }
-                }
-            }
-            if (page.properties['Tags'].type == 'multi_select') {
-                article.tags = page.properties['Tags'].multi_select.map(prop => prop.name)
-            }
-            if (page.properties['Slug'].type == 'rich_text') {
-                article.slug = getRichTextPlainText(page.properties['Slug'].rich_text)
-            }
-            if (page.properties['Published'].type == 'checkbox') {
-                article.published = page.properties['Published'].checkbox
-            }
-            if (page.properties['CreatedAt'].type == 'created_time') {
-                article.createdAt = new Date(page.properties['CreatedAt'].created_time)
-            }
-            if (page.properties['UpdatedAt'].type == 'last_edited_time') {
-                article.updatedAt = new Date(page.properties['UpdatedAt'].last_edited_time)
-            }
-            
-            // TODO:
-            article.coverImg = undefined
-            article.excerpt = undefined
-
-            return article
-        }))).filter(<T>(article: T | undefined | null): article is T => article !== undefined && article !== null)
-
-        return results
+        ])
+        let articles = (await Promise.all(articleList.map(article => pageToArticle(article as Page))))
+            .filter(<T>(article: T | undefined | null): article is T => article !== null && article !== undefined)
+    
+        return articles
     },
 
-    async getArticles(): Promise<Article[]> {
-        let articlesList = await getArticlesList()
-        let articles = await Promise.all(articlesList.map(article => getArticleFromPage(article as Page)))
-    
-        return articles.filter(<T>(article: T | undefined | null): article is T => article !== null && article !== undefined)
+    async getCategory(slug: string): Promise<Category | null> {
+        let page = await getCategoryPage(slug)
+        if (!page) return null
+
+        return pageToCategory(page)
+    },
+
+    async getCategories(parentSlug: string | null): Promise<Category[]> {
+        let filter: QueryDatabaseFilter
+
+        let parentPage = parentSlug ? await getCategoryPage(parentSlug) : null
+        let parentPageId: string | undefined = parentPage?.id
+
+        if (parentPageId) {
+            filter = {
+                and: [
+                    {
+                        property: 'Parent',
+                        relation: {
+                            contains: parentPageId,
+                        },
+                    }
+                ]
+            }
+        } else {
+            filter = {
+                and: [
+                    {
+                        property: 'Parent',
+                        relation: {
+                            is_empty: true,
+                        }
+                    }
+                ]
+            }
+        }
+
+        let pages = await getNotionDatabaseQuery(categoriesDatabaseId, filter)
+        let categories = pages.map((page) => pageToCategory(page))
+ 
+        return categories
     },
 
     async getTags(): Promise<string[]> {
+        let database: Database = await getNotionDatabase(articlesDatabaseId)
+
+        if (database.properties['Tags'].type === 'multi_select') {
+            return database.properties['Tags'].multi_select.options.map(option => option.name)
+        }
+
         return []
     },
 }

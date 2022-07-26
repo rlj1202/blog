@@ -6,7 +6,7 @@ import Config from '@/config'
 
 import ArticleList from '@/components/articlelist'
 
-import { Article, articles } from '@/lib/article'
+import articleProvider, { Article } from '@/lib/article'
 
 interface Props extends ParsedUrlQuery {
   page: string
@@ -18,13 +18,15 @@ export const getStaticProps: GetStaticProps<{ page: number, articles: Article[] 
   return {
     props: {
       page,
-      articles,
+      articles: await articleProvider.getArticleList(),
     }
   }
 }
 
 export const getStaticPaths: GetStaticPaths<Props> = async (context) => {
-  let total = articles.length
+  let articleList = await articleProvider.getArticleList()
+
+  let total = articleList.length
   let pages = Math.ceil(total / Config.articles.perPage)
 
   return {
