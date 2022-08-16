@@ -51,6 +51,8 @@ const Config = {
         /** Local dir path to where the article files are located in */
         directory: 'articles',
         perPage: 10,
+        /** Only useful during development process */
+        caching: true,
     },
 
     author: {

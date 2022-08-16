@@ -209,8 +209,18 @@ const NotionBlocks: React.FC<{ blocks: Block[] }> = ({ blocks }) => {
         <Callout key={curBlock.id} block={curBlock} />
       ))
     } else if (curBlock.type === 'code') {
+      let language: string
+
+      switch (curBlock.code.language) {
+        case 'c++':
+          language = 'cpp'
+          break
+        default:
+          language = curBlock.code.language
+      }
+
       elements.push((
-        <SyntaxHighlighter key={curBlock.id} language={curBlock.code.language} useInlineStyles={false}>
+        <SyntaxHighlighter key={curBlock.id} language={language} useInlineStyles={false}>
           {curBlock.code.rich_text.map(item => item.plain_text).join(' ')}
         </SyntaxHighlighter>
       ))
@@ -267,6 +277,13 @@ const NotionBlocks: React.FC<{ blocks: Block[] }> = ({ blocks }) => {
         <video key={curBlock.id}>
           <source src={url} />
         </video>
+      ))
+    } else if (curBlock.type === 'bookmark') {
+      elements.push((
+        <div>
+          <NotionRichText richText={curBlock.bookmark.caption} />
+          <a href={curBlock.bookmark.url}>{curBlock.bookmark.url}</a>
+        </div>
       ))
     } else {
       elements.push((

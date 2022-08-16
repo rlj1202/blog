@@ -29,6 +29,29 @@ interface ArticleContentNotion {
   blocks: Block[]
 }
 
+/**
+ * 
+ */
+async function downloadImageAsset(url: URL, dirName: string, fileName: string): Promise<string> {
+    const publicDirPath = path.join(process.cwd(), 'public')
+
+    const dirRelPath = path.join('articles', dirName)
+    const fileRelPath = path.join(dirRelPath, `${fileName}${path.extname(url.pathname)}`)
+
+    const dirPath = path.join(publicDirPath, dirRelPath)
+    fs.mkdirSync(dirPath, { recursive: true })
+
+    const filePath = path.join(publicDirPath, fileRelPath)
+
+    const relPath = '/' + fileRelPath.split(path.sep).join('/')
+
+    if (fs.existsSync(filePath)) return relPath
+
+    await downloadImage(url, filePath)
+
+    return relPath
+}
+
 async function getArticleContentNotion(id: string): Promise<ArticleContentNotion> {
     let blocks = await getNotionBlockChildren(id)
 
@@ -46,26 +69,14 @@ async function getArticleContentNotion(id: string): Promise<ArticleContentNotion
             return
         }
 
-        const publicDirPath = path.join(process.cwd(), 'public')
-
-        const dirRelPath = path.join('articles', id)
-        const fileRelPath = path.join(dirRelPath, `${block.id}${path.extname(imageUrl.pathname)}`)
-
-        const dirPath = path.join(publicDirPath, dirRelPath)
-        fs.mkdirSync(dirPath, { recursive: true })
-
-        const filePath = path.join(publicDirPath, fileRelPath)
-
-        if (image.type === 'external') {
-            image.external.url = '/' + fileRelPath.split(path.sep).join('/')
-        } else if (image.type === 'file') {
-            image.file.url = '/' + fileRelPath.split(path.sep).join('/')
-        }
-
-        if (fs.existsSync(filePath)) return
-
         try {
-            await downloadImage(imageUrl, filePath)
+            let assetPath = await downloadImageAsset(imageUrl, id, block.id)
+     
+            if (image.type === 'external') {
+                image.external.url = assetPath
+            } else if (image.type === 'file') {
+                image.file.url = assetPath
+            }
         } catch (err) {
             console.log(err)
         }
@@ -112,10 +123,25 @@ async function pageToArticle(page: Page): Promise<Article | null> {
     if (page.properties['UpdatedAt'].type == 'last_edited_time') {
         article.updatedAt = new Date(page.properties['UpdatedAt'].last_edited_time)
     }
-    
-    // TODO:
-    article.coverImg = undefined
-    article.excerpt = undefined
+
+    let coverUrl: string | null = null
+    if (page.cover) {
+        if (page.cover.type === 'external') {
+            coverUrl = page.cover.external.url
+        } else if (page.cover.type === 'file') {
+            coverUrl = page.cover.file.url
+        }
+    }
+
+    if (coverUrl) {
+        try {
+            let assetPath = await downloadImageAsset(new URL(coverUrl), page.id, "cover")
+
+            article.coverImg = assetPath
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
     return article
 }
@@ -131,6 +157,8 @@ async function getArticlePage(slug: string): Promise<Page | null> {
 }
 
 async function getCategoryPage(slug: string): Promise<Page | null> {
+    if (slug.trim() == "") return null
+
     let pages: Page[] = await getNotionDatabaseQuery(categoriesDatabaseId, {
         or: [ { property: 'Slug', rich_text: { equals: slug } } ]
     })
@@ -202,6 +230,12 @@ const notionArticleProvider: ArticleProvider = {
                         relation: {
                             contains: parentPageId,
                         },
+                    },
+                    {
+                        property: 'Slug',
+                        rich_text: {
+                            is_not_empty: true,
+                        }
                     }
                 ]
             }
@@ -212,6 +246,12 @@ const notionArticleProvider: ArticleProvider = {
                         property: 'Parent',
                         relation: {
                             is_empty: true,
+                        }
+                    },
+                    {
+                        property: 'Slug',
+                        rich_text: {
+                            is_not_empty: true,
                         }
                     }
                 ]

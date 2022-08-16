@@ -3,6 +3,7 @@ import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next'
 import Head from 'next/head'
 
 import ArticleLink from '@/components/articlelink'
+import CategoryLink from '@/components/categorylink'
 
 import articleProvider, { Article, Category } from '@/lib/article'
 
@@ -52,7 +53,7 @@ const CategoryList: React.FC<{ level: number, treeNodes: CategoryTree[], article
         treeNodes.map(node => {
           return (
             <Fragment key={node.category.slug}>
-              <CustomTag>{ node.category.name }</CustomTag>
+              <CustomTag><CategoryLink category={node.category}><a>{ node.category.name }</a></CategoryLink></CustomTag>
               { articles.filter(article => article.category === node.category.slug).map(article => {
                 return (
                   <ArticleLink article={article} key={article.slug}>

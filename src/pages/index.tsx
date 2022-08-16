@@ -8,12 +8,15 @@ import { generateSitemap } from '@/sitemapgen'
 
 import ArticleCard from '@/components/articlecard'
 
-import articleProvider, { Article, ArticleContent } from '@/lib/article'
+import articleProvider, { Article, ArticleContent, Category } from '@/lib/article'
 
-export const getStaticProps: GetStaticProps<{ articles: Article[] }> = async (context) => {
-  let articles = await articleProvider.getArticles()
+export const getStaticProps: GetStaticProps<{
+  articles: Article[],
+  categories: (Category | null)[],
+}> = async (context) => {
+  let allArticles = await articleProvider.getArticles()
   let articleAndContents = (await Promise.all(
-    articles.map(async (article) => {
+    allArticles.map(async (article) => {
       if (!article.slug) return null
 
       let content = await articleProvider.getArticleContent(article.slug)
@@ -26,16 +29,20 @@ export const getStaticProps: GetStaticProps<{ articles: Article[] }> = async (co
   )).filter(<T,>(element: T | null): element is T => element !== null)
 
   generateRssFeed(articleAndContents)
-  generateSitemap(articles)
+  generateSitemap(allArticles)
+
+  let articles = allArticles.slice(0, 10)
+  let categories = await Promise.all(articles.map(async article => article.category ? await articleProvider.getCategory(article.category) : null))
 
   return {
     props: {
-      articles: articles.slice(0, 10)
+      articles,
+      categories,
     }
   }
 }
 
-const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articles }) => {
+const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articles, categories }) => {
   return (
     <>
       <Head>
@@ -46,8 +53,8 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articl
         <h1>Latest</h1>
 
         <div className="article-cards">
-          {articles.map(article => (
-            <ArticleCard key={article.slug} article={article} />
+          {articles.map((article, index) => (
+            <ArticleCard key={article.slug} article={article} category={categories[index] || undefined} />
           ))}
         </div>
 

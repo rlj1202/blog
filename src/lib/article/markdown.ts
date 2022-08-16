@@ -135,7 +135,6 @@ async function getArticleFromPath(postPath: string): Promise<[Article, ArticleCo
                 updatedAt: metadata.date,
 
                 coverImg: imgs && imgs.length ? imgs[0] : undefined,
-                excerpt: content.slice(0, 1000),
             }
 
             let articleContent: ArticleContent = {

@@ -37,7 +37,7 @@ export const generateRssFeed = async (articleAndContents: [Article, ArticleConte
     })
     
     articleAndContents.forEach(([article, content]) => {
-        let htmlContent: string = article.excerpt || ReactDOMServer.renderToStaticMarkup(<ArticleContentRenderer content={content} />)
+        let htmlContent: string = ReactDOMServer.renderToStaticMarkup(<ArticleContentRenderer content={content} />)
 
         feed.addItem({
             title: article.title || '',
