@@ -75,7 +75,7 @@ const NotionRichTextItem: React.FC<{ richTextItem: RichTextItem }> = ({ richText
     }
     return <span>{richTextItem.plain_text}</span>
   } else if (richTextItem.type == 'equation') {
-    return <span>{richTextItem.equation.expression}</span>
+    return <span>{`$${richTextItem.equation.expression}$`}</span>
   } else {
     return <></>
   }

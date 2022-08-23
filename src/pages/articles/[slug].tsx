@@ -10,7 +10,6 @@ import ArticleLink from '@/components/articlelink'
 import ArticleCard from '@/components/articlecard'
 
 import Utterances from '@/components/utterances'
-import MathJax3 from '@/components/mathjax3'
 import Tag from '@/components/tag'
 
 import blogService, { Article } from '@/lib/blog'
@@ -94,7 +93,6 @@ const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
 }) => {
   return (
     <>
-      <MathJax3 />
       <Head>
         <title>{`${article.title} - ${Config.title}`}</title>
 
