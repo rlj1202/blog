@@ -77,8 +77,6 @@ async function getArticleFromPath(postPath: string): Promise<Article | null> {
                 metadata.categories = [metadata.categories]
             }
 
-            metadata.published ??= true
-
             var mdast = unified()
                 .use(remarkParse)
                 .use(remarkGfm) // NOTE: tables are not standard. WOW
