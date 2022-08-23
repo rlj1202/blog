@@ -4,6 +4,7 @@ title:      한자 오필 입력기 개발 - 완성
 categories: programming
 tags:       한자오필입력기
 date:       2016-08-03 01:49:00 +0900
+published: true
 ---
 
 # 한자 오필 입력기

@@ -4,18 +4,19 @@ import dateFormat from 'dateformat'
 
 import Tag from './tag'
 
-import { Article, Category } from '@/lib/article'
 import ArticleLink from '@/components/articlelink'
 import CategoryLink from '@/components/categorylink'
 
-const ArticleCard: React.FC<{ article: Article, category?: Category }> = ({ article, category }) => {
+import { Article } from '@/lib/blog'
+
+const ArticleCard: React.FC<{ article: Article }> = ({ article }) => {
   return (
     <div className="postcard">
       <ArticleLink article={article}>
         <a><div className="postcard-preview-box">
-          {article.coverImg ? (
+          {article.coverImgUrl ? (
             <div className="postcard-img">
-              <Image src={article.coverImg} layout="fill" objectFit="cover" alt={''} />
+              <Image src={article.coverImgUrl.toString() || ''} layout="fill" objectFit="cover" alt={''} />
             </div>
           ) : (
             <div className="postcard-excerpt">
@@ -25,10 +26,10 @@ const ArticleCard: React.FC<{ article: Article, category?: Category }> = ({ arti
         </div></a>
       </ArticleLink>
       <header className="postcard-header">
-        { category && (
-          <CategoryLink category={category}>
+        { article.category && (
+          <CategoryLink category={article.category}>
             <a><div className="postcard-categories">
-              { category.name }
+              { article.category.name }
             </div></a>
           </CategoryLink>
         ) }

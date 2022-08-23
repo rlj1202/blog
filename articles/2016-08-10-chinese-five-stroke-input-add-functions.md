@@ -4,6 +4,7 @@ title:      한자 오필 입력기 기능 추가
 categories: programming
 tags:       한자오필입력기
 date:       2016-08-10 21:50:00 +0900
+published: true
 ---
 
 저번에 작성한 한자 오필 입력기 아래에 텍스트 창과 네개의 버튼을 넣어 기능을 추가하였다!

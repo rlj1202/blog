@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { Category } from '@/lib/article'
+import { Category } from '@/lib/blog'
 
 const CategoryLink: React.FC<{ category: Category }> = ({ category, children }) => {
   return (

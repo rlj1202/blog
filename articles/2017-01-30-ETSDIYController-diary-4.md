@@ -4,6 +4,7 @@ title: 유로 트럭 시뮬레이터 DIY 컨트롤러 일지 4
 categories:
 tags: 유로트럭시뮬레이터
 date: 2017-01-30 23:53:00 +0900
+published: true
 ---
 
 <center><img src="/assets/photo/2017-01-29 14.14.53.jpg" width="400px"></center>

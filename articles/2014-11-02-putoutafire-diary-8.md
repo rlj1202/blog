@@ -4,6 +4,7 @@ title:      Put out a fire 제작 현황 - 2014/11/2
 date:       2014-11-02 17:11:00 +0900
 categories: 
 tags:       PutOutAFire
+published: true
 ---
 
 *불* 구현

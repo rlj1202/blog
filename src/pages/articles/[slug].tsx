@@ -8,17 +8,15 @@ import Config from '@/config'
 
 import ArticleLink from '@/components/articlelink'
 import ArticleCard from '@/components/articlecard'
-import ArticleContentRenderer from '@/components/articlecontentrenderer'
 
 import Utterances from '@/components/utterances'
 import MathJax3 from '@/components/mathjax3'
 import Tag from '@/components/tag'
 
-import articleProvider, { Article, ArticleContent } from '@/lib/article'
+import blogService, { Article } from '@/lib/blog'
 
 interface Props {
   article: Article
-  articleContent: ArticleContent
   suggestedArticles: Article[]
 }
 
@@ -28,28 +26,26 @@ interface Routes extends ParsedUrlQuery {
 
 export const getStaticProps: GetStaticProps<Props, Routes> = async (context) => {
   let slug = context.params?.slug
-  let article = slug !== undefined && await articleProvider.getArticle(slug)
-  let articleContent = slug !== undefined && await articleProvider.getArticleContent(slug)
+  let article = slug !== undefined && await blogService.getArticle(slug)
 
-  if (!slug || !article || !articleContent) {
+  if (!slug || !article) {
     return {
       notFound: true
     }
   }
 
-  let suggestedArticles = (await articleProvider.getArticles()).slice(0, 2)
+  let suggestedArticles = (await blogService.getArticles()).slice(0, 2)
 
   return {
     props: {
       article,
-      articleContent,
       suggestedArticles,
     }
   }
 }
 
 export const getStaticPaths: GetStaticPaths<ParsedUrlQuery> = async (context) => {
-  let articles = await articleProvider.getArticles()
+  let articles = await blogService.getArticles()
   let slugs = articles.map(article => article.slug)
 
   return {
@@ -92,7 +88,10 @@ const Comment: NextPage<{ name: string, date: Date }> = ({ name, date, children 
   )
 }
 
-const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ article, articleContent, suggestedArticles }) => {
+const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
+  article,
+  suggestedArticles
+}) => {
   return (
     <>
       <MathJax3 />
@@ -125,7 +124,7 @@ const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
           </div>
         </header>
         <div className="article">
-          { <ArticleContentRenderer content={articleContent} /> }
+          <div dangerouslySetInnerHTML={{ __html: article.htmlContent || '' }} />
         </div>
         <hr />
         <Utterances />

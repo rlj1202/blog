@@ -5,21 +5,23 @@ import { ParsedUrlQuery } from 'querystring'
 import ArticleList from '@/components/articlelist'
 import Config from '@/config'
 
-import articleProvider, { Article } from '@/lib/article'
+import blogService, { Article } from '@/lib/blog'
 
 interface Props extends ParsedUrlQuery {
   tag: string
   page: string
 }
 
-export const getStaticProps: GetStaticProps<{ tag: string, curPage: number, articles: Article[] }, Props> = async (context) => {
+export const getStaticProps: GetStaticProps<{
+  tag: string, curPage: number, articles: Article[]
+}, Props> = async (context) => {
   if (!context.params?.tag || !context.params?.page) {
     return { notFound: true }
   }
 
   let tag = context.params.tag
   let curPage = parseInt(context.params.page)
-  let articles = await articleProvider.getArticles()
+  let articles = await blogService.getArticles()
   let filteredArticles = articles.filter(article => article.tags?.includes(tag))
 
   return {
@@ -32,8 +34,8 @@ export const getStaticProps: GetStaticProps<{ tag: string, curPage: number, arti
 }
 
 export const getStaticPaths: GetStaticPaths<Props> = async () => {
-  let tags = await articleProvider.getTags()
-  let articles = await articleProvider.getArticles()
+  let tags = await blogService.getTags()
+  let articles = await blogService.getArticles()
 
   let paths = await Promise.all(tags.map(async tag => {
     let total = articles.filter(article => article.tags?.includes(tag)).length

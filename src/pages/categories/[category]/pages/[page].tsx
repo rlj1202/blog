@@ -2,7 +2,7 @@ import { GetStaticPaths, GetStaticProps, InferGetServerSidePropsType, InferGetSt
 import Head from 'next/head'
 import { ParsedUrlQuery } from 'querystring'
 
-import articleProvider, { Article } from '@/lib/article'
+import blogService, { Article } from '@/lib/blog'
 
 import ArticleList from '@/components/articlelist'
 
@@ -26,8 +26,8 @@ export const getStaticProps: GetStaticProps<{
     }
   }
 
-  let allArticles = await articleProvider.getArticles()
-  let articles = allArticles.filter(article => article.category === category)
+  let allArticles = await blogService.getArticles()
+  let articles = allArticles.filter(article => article.categorySlug === category)
 
   return {
     props: {
@@ -39,11 +39,11 @@ export const getStaticProps: GetStaticProps<{
 }
 
 export const getStaticPaths: GetStaticPaths<Props> = async () => {
-  let allArticles = await articleProvider.getArticles()
-  let categories = await articleProvider.getCategories()
+  let allArticles = await blogService.getArticles()
+  let categories = await blogService.getCategories()
 
   let paths = categories.flatMap(category => {
-    let articles = allArticles.filter(article => article.category === category.slug)
+    let articles = allArticles.filter(article => article.categorySlug === category.slug)
     let total = articles.length
     let pages = Math.ceil(total / Config.articles.perPage)
 

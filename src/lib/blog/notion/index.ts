@@ -1,8 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 
-import { Article, ArticleContent, Category, ArticleProvider } from '.'
-
 import {
     getNotionPage,
     getNotionDatabase,
@@ -21,13 +19,11 @@ import {
 
 import { downloadImage } from '@/lib/utils'
 
+import { Article, Category, BlogProvider } from '../types'
+import { renderNotionBlocks } from './utils'
+
 const articlesDatabaseId: string = process.env.NOTION_DATABASE_ARTICLES_ID || ''
 const categoriesDatabaseId: string = process.env.NOTION_DATABASE_CATEGORIES_ID || ''
-
-interface ArticleContentNotion {
-  type: 'notion'
-  blocks: Block[]
-}
 
 /**
  * 
@@ -52,7 +48,7 @@ async function downloadImageAsset(url: URL, dirName: string, fileName: string): 
     return relPath
 }
 
-async function getArticleContentNotion(id: string): Promise<ArticleContentNotion> {
+async function getArticleContentNotion(id: string): Promise<Block[]> {
     let blocks = await getNotionBlockChildren(id)
 
     await walkBlock(blocks, async (block: Block) => {
@@ -82,10 +78,7 @@ async function getArticleContentNotion(id: string): Promise<ArticleContentNotion
         }
     })
 
-    return {
-        type: 'notion',
-        blocks,
-    }
+    return blocks
 }
 
 async function pageToArticle(page: Page): Promise<Article | null> {
@@ -103,7 +96,7 @@ async function pageToArticle(page: Page): Promise<Article | null> {
             let page = await getNotionPage(ids[0])
             if ('properties' in page) {
                 if (page.properties['Slug'].type == 'rich_text') {
-                    article.category = getRichTextPlainText(page.properties['Slug'].rich_text)
+                    article.categorySlug = getRichTextPlainText(page.properties['Slug'].rich_text)
                 }
             }
         }
@@ -137,7 +130,7 @@ async function pageToArticle(page: Page): Promise<Article | null> {
         try {
             let assetPath = await downloadImageAsset(new URL(coverUrl), page.id, "cover")
 
-            article.coverImg = assetPath
+            article.coverImgUrl = assetPath
         } catch (err) {
             console.log(err)
         }
@@ -180,47 +173,57 @@ function pageToCategory(page: Page): Category {
     return category
 }
 
-const notionArticleProvider: ArticleProvider = {
+class NotionBlogProvider implements BlogProvider {
     async getArticle(slug: string): Promise<Article | null> {
-        let page = await getArticlePage(slug)
+        const page = await getArticlePage(slug)
         if (!page) return null
 
-        let article = await pageToArticle(page)
+        const article = await pageToArticle(page)
+        if (!article) return null
+
+        const blocks = await getArticleContentNotion(page.id)
+        const htmlContent = renderNotionBlocks(blocks)
+
+        article.htmlContent = htmlContent
+
         return article
-    },
-
-    async getArticleContent(slug: string): Promise<ArticleContent | null> {
-        let page = await getArticlePage(slug)
-        if (!page) return null
-
-        return await getArticleContentNotion(page.id)
-    },
-
-    async getArticles(): Promise<Article[]> {
-        let articleList = await getNotionDatabaseQuery(articlesDatabaseId, undefined, [
-            {
-                property: 'CreatedAt',
-                direction: 'ascending',
-            }
-        ])
-        let articles = (await Promise.all(articleList.map(article => pageToArticle(article as Page))))
-            .filter(<T>(article: T | undefined | null): article is T => article !== null && article !== undefined)
-    
-        return articles
-    },
+    }
 
     async getCategory(slug: string): Promise<Category | null> {
-        let page = await getCategoryPage(slug)
+        const page = await getCategoryPage(slug)
         if (!page) return null
 
-        return pageToCategory(page)
-    },
+        const category = pageToCategory(page)
 
-    async getCategories(parentSlug: string | null): Promise<Category[]> {
+        return category
+    }
+
+    async getArticles(): Promise<Article[]> {
+        const articleList = await getNotionDatabaseQuery(articlesDatabaseId)
+
+        const articles = (
+            await Promise.all(articleList.map(async page => {
+                const article = await pageToArticle(page)
+                if (!article) return null
+
+                const blocks = await getArticleContentNotion(page.id)
+                const htmlContent = renderNotionBlocks(blocks)
+
+                article.htmlContent = htmlContent
+
+                return article
+            }))
+        )
+        .filter(<T>(article: T | undefined | null): article is T => article !== null && article !== undefined)
+
+        return articles
+    }
+
+    async getCategories(parentSlug: string | null = null): Promise<Category[]> {
         let filter: QueryDatabaseFilter
 
-        let parentPage = parentSlug ? await getCategoryPage(parentSlug) : null
-        let parentPageId: string | undefined = parentPage?.id
+        const parentPage = parentSlug ? await getCategoryPage(parentSlug) : null
+        const parentPageId: string | undefined = parentPage?.id
 
         if (parentPageId) {
             filter = {
@@ -258,22 +261,11 @@ const notionArticleProvider: ArticleProvider = {
             }
         }
 
-        let pages = await getNotionDatabaseQuery(categoriesDatabaseId, filter)
-        let categories = pages.map((page) => pageToCategory(page))
+        const pages = await getNotionDatabaseQuery(categoriesDatabaseId, filter)
+        const categories = pages.map((page) => pageToCategory(page))
  
         return categories
-    },
-
-    async getTags(): Promise<string[]> {
-        let database: Database = await getNotionDatabase(articlesDatabaseId)
-
-        if (database.properties['Tags'].type === 'multi_select') {
-            return database.properties['Tags'].multi_select.options.map(option => option.name)
-        }
-
-        return []
-    },
+    }
 }
 
-export type { ArticleContentNotion }
-export default notionArticleProvider
+export default new NotionBlogProvider()

@@ -2,14 +2,10 @@ import fs from 'fs'
 import path from 'path'
 import { Feed } from 'feed'
 
-import ReactDOMServer from 'react-dom/server'
-
 import Config from '@/config'
-import { Article, ArticleContent } from '@/lib/article'
+import { Article } from '@/lib/blog'
 
-import ArticleContentRenderer from '@/components/articlecontentrenderer'
-
-export const generateRssFeed = async (articleAndContents: [Article, ArticleContent][]) => {
+export const generateRssFeed = async (articleAndContents: Article[]) => {
     console.log('Generate rss...')
 
     const siteUrl = process.env.HOST
@@ -36,15 +32,13 @@ export const generateRssFeed = async (articleAndContents: [Article, ArticleConte
         }
     })
     
-    articleAndContents.forEach(([article, content]) => {
-        let htmlContent: string = ReactDOMServer.renderToStaticMarkup(<ArticleContentRenderer content={content} />)
-
+    articleAndContents.forEach((article) => {
         feed.addItem({
             title: article.title || '',
             id: `${siteUrl}/articles/${article.slug}`,
             link: `${siteUrl}/articles/${article.slug}`,
             // description: '',
-            content: htmlContent,
+            content: article.htmlContent,
             author: [
                 {
                     name: Config.author.name,

@@ -8,41 +8,26 @@ import { generateSitemap } from '@/sitemapgen'
 
 import ArticleCard from '@/components/articlecard'
 
-import articleProvider, { Article, ArticleContent, Category } from '@/lib/article'
+import blogService, { Article } from '@/lib/blog'
 
 export const getStaticProps: GetStaticProps<{
   articles: Article[],
-  categories: (Category | null)[],
 }> = async (context) => {
-  let allArticles = await articleProvider.getArticles()
-  let articleAndContents = (await Promise.all(
-    allArticles.map(async (article) => {
-      if (!article.slug) return null
+  let allArticles = await blogService.getArticles()
 
-      let content = await articleProvider.getArticleContent(article.slug)
-      if (!content) return null
-
-      let result: [ Article, ArticleContent ] = [ article, content ]
-
-      return result
-    })
-  )).filter(<T,>(element: T | null): element is T => element !== null)
-
-  generateRssFeed(articleAndContents)
+  generateRssFeed(allArticles)
   generateSitemap(allArticles)
 
   let articles = allArticles.slice(0, 10)
-  let categories = await Promise.all(articles.map(async article => article.category ? await articleProvider.getCategory(article.category) : null))
 
   return {
     props: {
       articles,
-      categories,
     }
   }
 }
 
-const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articles, categories }) => {
+const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articles }) => {
   return (
     <>
       <Head>
@@ -54,7 +39,7 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articl
 
         <div className="article-cards">
           {articles.map((article, index) => (
-            <ArticleCard key={article.slug} article={article} category={categories[index] || undefined} />
+            <ArticleCard key={article.slug} article={article} />
           ))}
         </div>
 

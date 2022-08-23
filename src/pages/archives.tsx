@@ -4,7 +4,7 @@ import Head from 'next/head'
 
 import ArticleLink from '@/components/articlelink'
 
-import articleProvider, { Article } from '@/lib/article'
+import blogService, { Article } from '@/lib/blog'
 
 import Config from '@/config'
 
@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const getStaticProps: GetStaticProps<Props> = async (context) => {
-  let articles = await articleProvider.getArticles()
+  let articles = await blogService.getArticles()
 
   return {
     props: {

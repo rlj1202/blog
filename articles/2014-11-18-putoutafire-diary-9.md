@@ -4,6 +4,7 @@ title:      Put out a fire 제작 현황 - 2014/11/18
 date:       2014-11-18 18:04:00 +0900
 categories: 
 tags:       PutOutAFire
+published: true
 ---
 
 *맵렌더링* 최적화

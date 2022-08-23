@@ -1,7 +1,7 @@
 import Paginator from './paginator'
 import ArticleCard from './articlecard'
 
-import { Article } from '@/lib/article'
+import { Article } from '@/lib/blog'
 
 import Config from '@/config'
 

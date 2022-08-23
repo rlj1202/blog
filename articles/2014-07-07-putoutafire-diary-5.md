@@ -4,6 +4,7 @@ title:      게임 개발 일지 - 5.엔티티와 벽 충돌!
 date:       2014-07-07 21:46:00 +0900
 categories: 
 tags:       PutOutAFire
+published: true
 ---
 
 드디어 오늘 엔티티와 블럭의 충돌을 구현했습니다!

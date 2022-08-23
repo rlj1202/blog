@@ -4,6 +4,7 @@ title:      게임 개발 일지 - 6-2.시야 가시 또는 빛 그림자 렌더
 date:       2014-07-14 17:46:00 +0900
 categories: 
 tags:       PutOutAFire
+published: true
 ---
 
 오늘 드디어 시야 가시 즉, 볼 수 없는 구역을 까맣게 하는 렌더링 코드를 완성했습니다! (와아아앙!!!!<img src="https://i1.daumcdn.net/mimg/mypeople/sticker/edit/sticker_372.png" alt="홧팅2" height="42" width="42">)

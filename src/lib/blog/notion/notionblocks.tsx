@@ -1,8 +1,7 @@
 import React from 'react'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import slugify from 'slugify'
-
-import { ArticleContent } from '@/lib/article'
+import Image from 'next/image'
 
 import {
   Block,
@@ -257,7 +256,10 @@ const NotionBlocks: React.FC<{ blocks: Block[] }> = ({ blocks }) => {
 
       elements.push((
         <figure key={curBlock.id}>
-          <img src={url} alt={getRichTextPlainText(image.caption)} />
+          <picture>
+            <source srcSet={url} />
+            <img src={url} alt={getRichTextPlainText(image.caption)} />
+          </picture>
           <figcaption>
             <NotionRichText richText={image.caption} />
           </figcaption>
@@ -299,18 +301,4 @@ const NotionBlocks: React.FC<{ blocks: Block[] }> = ({ blocks }) => {
   )
 }
 
-const ArticleContentRenderer: React.FC<{ content: ArticleContent }> = ({ content }) => {
-  if (content.type == 'notion') {
-    return (
-      <NotionBlocks blocks={content.blocks} />
-    )
-  } else if (content.type == 'local_markdown') {
-    return (
-      <div dangerouslySetInnerHTML={{ __html: content.htmlContent }} />
-    )
-  }
-
-  return <></>
-}
-
-export default ArticleContentRenderer
+export default NotionBlocks

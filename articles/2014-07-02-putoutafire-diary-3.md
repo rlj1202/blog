@@ -2,8 +2,8 @@
 layout:     post
 title:      게임 개발 일지 - 3.플레이어 입력 받기 및 이동!!
 date:       2014-07-02 16:13:00 +0900
-categories: 
 tags:       PutOutAFire
+published: true
 ---
 
 오늘은 플레이어를 움직여 보겠습니다!!!!!

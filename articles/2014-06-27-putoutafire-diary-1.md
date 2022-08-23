@@ -3,6 +3,7 @@ layout: post
 title: 게임 개발 일지 - 1.메인 메뉴와 맵 렌더링
 tags: PutOutAFire
 date: 2014-06-27 20:09:00 +0900
+published: true
 ---
 
 이번에 자바로 게임 만들기를 해보려고 합니다.(시험이 다음주인데 포스팅 하고 있다니!!!!)
