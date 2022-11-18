@@ -10,6 +10,9 @@ import rehypeHighlight from 'rehype-highlight';
 import remarkGfm from 'remark-gfm';
 
 import path from 'path';
+import remarkMath from 'remark-math';
+// import rehypeMathJax from 'rehype-mathjax';
+import rehypeKatex from 'rehype-katex';
 
 export const Article = defineDocumentType(() => ({
   name: 'Article',
@@ -69,7 +72,10 @@ export default makeSource({
       .use(remarkFrontmatter)
       .use(remarkParse)
       .use(remarkGfm)
+      .use(remarkMath)
       .use(remarkRehype, { allowDangerousHtml: true })
+      // .use(rehypeMathJax)
+      .use(rehypeKatex, { strict: false })
       .use(rehypeRaw)
       .use(rehypeHighlight)
       .use(rehypeSlug)

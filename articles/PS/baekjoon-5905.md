@@ -1,13 +1,14 @@
 ---
-title: "백준 5905 - 악당 로봇"
-date: "2022-08-11 20:35"
+title: '백준 5905 - 악당 로봇'
+date: '2022-08-11 20:35'
 tags:
   - baekjoon
   - PS
 ---
+
 ## 문제
 
-길이 15 이하의 N개의 문자열들과, 1000 이하의 자연수 K가 주어진다. N개의 문자열이 길이가 K인 임의의 문자열에서 등장할 수 있는 최대 갯수를 구하시오.
+길이 $15$ 이하의 $N$개의 문자열들과, $1000$ 이하의 자연수 $K$가 주어진다. N개의 문자열이 길이가 $K$인 임의의 문자열에서 등장할 수 있는 최대 갯수를 구하시오.
 
 문제 예제를 살펴보면 “ABA”, “CB”, “ABACB”가 주어지고 K는 7이다. 주어진 문자열은 최대 4번 등장할 수 있고, 예로 “ABACBCB”가 있다. “ABA”가 한 번, “CB”가 두 번, “ABACB”가 한 번 등장한다.
 
@@ -15,13 +16,13 @@ tags:
 
 [USACO](http://www.usaco.org/index.php?page=jan12problems)
 
-[luogu P3041 [USACO12JAN]视频游戏的连击Video Game Combos_lahlah_的博客-CSDN博客](https://lahlah.blog.csdn.net/article/details/98952482)
+[luogu P3041 [USACO12JAN]视频游戏的连击 Video Game Combos*lahlah*的博客-CSDN 博客](https://lahlah.blog.csdn.net/article/details/98952482)
 
 ## 풀이
 
-풀이 자체는 [계단 오르기 운동](https://www.acmicpc.net/problem/13438)과 비슷하다. 차이점이라면 경우의 수가 아니라 최대 횟수인 점, 고려해야 하는 문자열이 1개가 아니라 여러개이기 때문에 KMP가 아니라 아호코라식을 이용한 점이다.
+풀이 자체는 [계단 오르기 운동](https://www.acmicpc.net/problem/13438)과 비슷하다. 차이점이라면 경우의 수가 아니라 최대 횟수인 점, 고려해야 하는 문자열이 $1$개가 아니라 여러개이기 때문에 KMP가 아니라 아호코라식을 이용한 점이다.
 
-dp 배열은 길이가 i인 문자열에서 현재 j번 트라이 노드까지 탐색되었을 때 최대값이다. 트라이 노드의 번호를 인덱스로 쓰기 위해서 동적 할당을 쓰지 않았다.
+dp 배열은 길이가 $i$인 문자열에서 현재 $j$번 트라이 노드까지 탐색되었을 때 최대값이다. 트라이 노드의 번호를 인덱스로 쓰기 위해서 동적 할당을 쓰지 않았다.
 
 또, 같은 자리에 여러개의 문자열이 동시에 나올 수 있으니 그 수를 헤아리기 위해서 아호코라식에서 output 변수를 boolean이 아닌 int형 변수로 선언하여 insert 및 fail build 시에 값을 계산해주었다.
 

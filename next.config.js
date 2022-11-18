@@ -3,9 +3,9 @@ const {
   PHASE_PRODUCTION_BUILD,
   PHASE_EXPORT,
   PHASE_PRODUCTION_SERVER,
-} = require("next/constants");
-const withImages = require("next-images");
-const { withContentlayer } = require("next-contentlayer");
+} = require('next/constants');
+const withImages = require('next-images');
+const { withContentlayer } = require('next-contentlayer');
 
 module.exports = (phase, { defaultConfig }) => {
   /**
@@ -13,13 +13,13 @@ module.exports = (phase, { defaultConfig }) => {
    */
   const nextConfig = {
     reactStrictMode: true,
-    basePath: "",
+    basePath: '',
     // can be accessed with 'process.env.customKey'
     env: {
-      test: "testtest",
+      test: 'testtest',
     },
     images: {
-      domains: ["blog.golang.org", "cfile3.uf.tistory.com", "i1.daumcdn.net"],
+      domains: ['blog.golang.org', 'cfile3.uf.tistory.com', 'i1.daumcdn.net'],
       // loader: 'custom',
     },
     async redirects() {

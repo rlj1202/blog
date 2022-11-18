@@ -17,20 +17,16 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
             rel="stylesheet"
           />
+          <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css"
+            integrity="sha384-Xi8rHCmBmhbuyyhbI88391ZKP2dmfnOl4rT9ZfRI7mLTdk1wblIUnrIq35nqwEvC"
+            crossOrigin="anonymous"
+          ></link>
         </Head>
         <body>
           <Main />
           <NextScript />
-          <Script src="/mathjax.js" strategy="beforeInteractive" defer />
-          {/* Polyfill is already included in nextjs.
-          <Script src="https://polyfill.io/v3/polyfill.min.js?features=es6" strategy="beforeInteractive" defer />
-          */}
-          <Script
-            id="MathJax-script"
-            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
-            strategy="beforeInteractive"
-            defer
-          />
         </body>
       </Html>
     );
