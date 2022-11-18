@@ -1,82 +1,147 @@
-import { GetStaticPaths, GetStaticProps, InferGetServerSidePropsType, InferGetStaticPropsType, NextPage } from 'next'
-import Head from 'next/head'
-import { ParsedUrlQuery } from 'querystring'
+import {
+  GetStaticPaths,
+  GetStaticProps,
+  InferGetStaticPropsType,
+  NextPage,
+} from 'next';
+import Head from 'next/head';
+import { ParsedUrlQuery } from 'querystring';
 
-import blogService, { Article } from '@/lib/blog'
+import { allArticles, Article } from 'contentlayer/generated';
 
-import ArticleList from '@/components/articlelist'
+import ArticleList from '@/components/articlelist';
 
-import Config from '@/config'
+import Config from '@/config';
 
 interface Props extends ParsedUrlQuery {
-  category: string
-  page: string
+  category: string;
+  page: string;
 }
 
-export const getStaticProps: GetStaticProps<{
-  category: string
-  page: number
-  articles: Article[]
-}, Props> = async (context) => {
-  let { category, page } = context.params || {}
+interface CategoryTree {
+  title: string;
+  articles: Article[];
+  children: Record<string, CategoryTree>;
+}
+
+function add(node: CategoryTree, article: Article, categories: string[]) {
+  if (categories.length === 0) {
+    node.articles.push(article);
+    return;
+  }
+
+  if (!node.children[categories[0]]) {
+    node.children[categories[0]] = {
+      title: categories[0],
+      articles: [],
+      children: {},
+    };
+  }
+
+  add(node.children[categories[0]], article, categories.slice(1));
+}
+
+function getPaths(
+  categories: string[],
+  node: CategoryTree,
+): { params: Props }[] {
+  const total = node.articles.length;
+  const pages = Math.ceil(total / Config.articles.perPage);
+
+  const paths: { params: Props }[] = [];
+
+  if (categories.length) {
+    paths.push(
+      ...[...Array.from(new Array(pages + 1).keys()).slice(1)].map((page) => ({
+        params: {
+          category: categories.join('-'),
+          page: `${page}`,
+        },
+      })),
+    );
+  }
+
+  Object.keys(node.children).forEach((child) => {
+    paths.push(...getPaths([...categories, child], node.children[child]));
+  });
+
+  return paths;
+}
+
+export const getStaticProps: GetStaticProps<
+  {
+    categories: string[];
+    page: number;
+    articles: Article[];
+  },
+  Props
+> = async (context) => {
+  const { category, page } = context.params || {};
 
   if (!category || !page) {
     return {
-      notFound: true
-    }
+      notFound: true,
+    };
   }
 
-  let allArticles = await blogService.getArticles()
-  let articles = allArticles.filter(article => article.categorySlug === category)
+  const categories = category.split('-');
+
+  const articles = allArticles.filter((article) => {
+    if (article.categories.length !== categories.length) {
+      return false;
+    }
+    return article.categories.every(
+      (value, index) => categories[index] == value,
+    );
+  });
 
   return {
     props: {
-      category,
+      categories,
       page: parseInt(page),
-      articles: articles
+      articles: articles,
     },
-  }
-}
+  };
+};
 
 export const getStaticPaths: GetStaticPaths<Props> = async () => {
-  let allArticles = await blogService.getArticles()
-  let categories = await blogService.getCategories()
+  const categoryTree: CategoryTree = {
+    title: 'Categories',
+    articles: [],
+    children: {},
+  };
 
-  let paths = categories.flatMap(category => {
-    let articles = allArticles.filter(article => article.categorySlug === category.slug)
-    let total = articles.length
-    let pages = Math.ceil(total / Config.articles.perPage)
+  allArticles.forEach((article) =>
+    add(categoryTree, article, article.categories),
+  );
 
-    return [...Array.from(new Array(pages + 1).keys()).slice(1)].map(page => ({
-      params: {
-        category: category.slug || '',
-        page: `${page}`,
-      }
-    }))
-  })
+  const paths = getPaths([], categoryTree);
 
   return {
-    paths: paths,
+    paths,
     fallback: false,
-  }
-}
+  };
+};
 
 const Page: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
-  category, page, articles
+  categories,
+  page,
+  articles,
 }) => {
   return (
     <>
       <Head>
-        <title>{`${category} - ${Config.title}`}</title>
+        <title>{`${categories.join('/')} - ${Config.title}`}</title>
       </Head>
 
       <ArticleList
-        title={category}
+        title={categories.join('/')}
         curPage={page}
-        pageUrl={page => `/categories/${category}/pages/${page}`}
-        articles={articles} />
+        pageUrl={(page) => `/categories/${categories.join('/')}/pages/${page}`}
+        articles={articles}
+      />
     </>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

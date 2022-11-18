@@ -1,5 +1,11 @@
-const { PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_BUILD, PHASE_EXPORT, PHASE_PRODUCTION_SERVER} = require('next/constants')
-const withImages = require('next-images')
+const {
+  PHASE_DEVELOPMENT_SERVER,
+  PHASE_PRODUCTION_BUILD,
+  PHASE_EXPORT,
+  PHASE_PRODUCTION_SERVER,
+} = require("next/constants");
+const withImages = require("next-images");
+const { withContentlayer } = require("next-contentlayer");
 
 module.exports = (phase, { defaultConfig }) => {
   /**
@@ -7,33 +13,28 @@ module.exports = (phase, { defaultConfig }) => {
    */
   const nextConfig = {
     reactStrictMode: true,
-    basePath: '',
+    basePath: "",
     // can be accessed with 'process.env.customKey'
     env: {
-      test: 'testtest',
+      test: "testtest",
     },
     images: {
-      domains: [
-        'blog.golang.org',
-        'cfile3.uf.tistory.com',
-        'i1.daumcdn.net',
-      ],
+      domains: ["blog.golang.org", "cfile3.uf.tistory.com", "i1.daumcdn.net"],
       // loader: 'custom',
     },
     async redirects() {
-      return [
-      ]
+      return [];
     },
 
     webpack(config, options) {
-      config.experiments = { topLevelAwait: true }
-      return config
-    }
-  }
+      config.experiments = { topLevelAwait: true };
+      return config;
+    },
+  };
 
   if (phase == PHASE_EXPORT) {
     // nextConfig.basePath = '/blog'
   }
 
-  return withImages(nextConfig)
-}
+  return withContentlayer(withImages(nextConfig));
+};

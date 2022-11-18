@@ -1,33 +1,35 @@
-import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next'
-import Head from 'next/head'
-import Link from 'next/link'
+import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next';
+import Head from 'next/head';
+import Link from 'next/link';
 
-import Config from '@/config'
-import { generateRssFeed } from '@/rssgen'
-import { generateSitemap } from '@/sitemapgen'
+import Config from '@/config';
+import { generateRssFeed } from '@/rssgen';
+import { generateSitemap } from '@/sitemapgen';
 
-import ArticleCard from '@/components/articlecard'
+import ArticleCard from '@/components/articlecard';
 
-import blogService, { Article } from '@/lib/blog'
+import { allArticles, Article } from 'contentlayer/generated';
 
 export const getStaticProps: GetStaticProps<{
-  articles: Article[],
+  articles: Article[];
 }> = async (context) => {
-  let allArticles = await blogService.getArticles()
+  generateRssFeed(allArticles);
+  generateSitemap(allArticles);
 
-  generateRssFeed(allArticles)
-  generateSitemap(allArticles)
-
-  let articles = allArticles.slice(0, 10)
+  const articles = allArticles
+    .sort((a, b) => Number(new Date(b.date)) - Number(new Date(a.date)))
+    .slice(0, 10);
 
   return {
     props: {
       articles,
-    }
-  }
-}
+    },
+  };
+};
 
-const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articles }) => {
+const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
+  articles,
+}) => {
   return (
     <>
       <Head>
@@ -39,13 +41,13 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articl
 
         <div className="article-cards">
           {articles.map((article, index) => (
-            <ArticleCard key={article.slug} article={article} />
+            <ArticleCard key={article._id} article={article} />
           ))}
         </div>
 
         <div className="bottom">
           <div className="readmore">
-            <Link href='/pages/1'>
+            <Link href="/pages/1">
               <a>
                 All posts
                 <i className="fas fa-chevron-right arrow"></i>
@@ -81,7 +83,7 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articl
         }
       `}</style>
     </>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

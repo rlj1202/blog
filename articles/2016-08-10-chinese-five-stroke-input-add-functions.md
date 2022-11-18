@@ -1,9 +1,9 @@
 ---
-layout:     post
-title:      한자 오필 입력기 기능 추가
+layout: post
+title: 한자 오필 입력기 기능 추가
 categories: programming
-tags:       한자오필입력기
-date:       2016-08-10 21:50:00 +0900
+tags: [한자오필입력기]
+date: 2016-08-10 21:50:00 +0900
 published: true
 ---
 

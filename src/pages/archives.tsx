@@ -1,29 +1,31 @@
-import { Fragment } from 'react'
-import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next'
-import Head from 'next/head'
+import { Fragment } from 'react';
+import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next';
+import Head from 'next/head';
 
-import ArticleLink from '@/components/articlelink'
+import ArticleLink from '@/components/articlelink';
 
-import blogService, { Article } from '@/lib/blog'
+import { allArticles, Article } from 'contentlayer/generated';
 
-import Config from '@/config'
+import Config from '@/config';
 
 interface Props {
-  articles: Article[]
+  articles: Article[];
 }
 
 export const getStaticProps: GetStaticProps<Props> = async (context) => {
-  let articles = await blogService.getArticles()
-
   return {
     props: {
-      articles
-    }
-  }
-}
+      articles: allArticles,
+    },
+  };
+};
 
-const Archives: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articles }) => {
-  const years = Array.from(new Set(articles.map(article => article.createdAt?.getFullYear())))
+const Archives: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
+  articles,
+}) => {
+  const years = Array.from(
+    new Set(articles.map((article) => new Date(article.date).getFullYear())),
+  );
 
   return (
     <>
@@ -34,19 +36,21 @@ const Archives: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ ar
       <div>
         <h1>Archives</h1>
 
-        { years.map(year => (
+        {years.map((year) => (
           <Fragment key={year}>
             <h2>{year}</h2>
 
-            { articles.filter(article => article.createdAt?.getFullYear() == year).map(article => (
-              <div className="post" key={article.slug}>
-                <ArticleLink article={article}>
-                  <a>{article.title}</a>
-                </ArticleLink>
-              </div>
-            )) }
+            {articles
+              .filter((article) => new Date(article.date).getFullYear() == year)
+              .map((article) => (
+                <div className="post" key={article.slug}>
+                  <ArticleLink article={article}>
+                    <a>{article.title}</a>
+                  </ArticleLink>
+                </div>
+              ))}
           </Fragment>
-        )) }
+        ))}
       </div>
 
       <style jsx>{`
@@ -55,7 +59,7 @@ const Archives: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ ar
         }
       `}</style>
     </>
-  )
-}
+  );
+};
 
-export default Archives
+export default Archives;

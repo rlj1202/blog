@@ -2,7 +2,7 @@
 layout: post
 title: 유로 트럭 시뮬레이터 DIY 컨트롤러 일지 1
 categories:
-tags: 유로트럭시뮬레이터
+tags: [유로트럭시뮬레이터]
 date: 2016-12-28 11:10:00 +0900
 published: true
 ---
@@ -20,7 +20,7 @@ vJoy feeder를 작성해서 가짜로 조이스틱의 값을 만들어 주면, �
 
 그런데 vJoy 인터페이스는 C언어로 작성되어 dll 로 제공되어 있어서 JNI를 이용해서 자바에서 접근할 수 있었다.
 그냥 C로 개발하면 되지만 그냥 자바로 하고싶었다.
-그래서 [JvJoyInterface 라이브러리][JvJoyInterface-github]를 직접 만들었다. vJoy와 관련된 내용은 [공식 홈페이지][vJoy-site]를 참조.
+그래서 [JvJoyInterface 라이브러리][jvjoyinterface-github]를 직접 만들었다. vJoy와 관련된 내용은 [공식 홈페이지][vjoy-site]를 참조.
 
 <!-- more -->
 
@@ -59,5 +59,5 @@ vJoy feeder를 작성해서 가짜로 조이스틱의 값을 만들어 주면, �
 
 가변저항 핀에 전선을 땜질하였다.
 
-[JvJoyInterface-github]:          https://github.com/rlj1202/JvJoyInterface
-[vJoy-site]:                      https://vjoystick.sourceforge.net/site/
+[jvjoyinterface-github]: https://github.com/rlj1202/JvJoyInterface
+[vjoy-site]: https://vjoystick.sourceforge.net/site/

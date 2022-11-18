@@ -1,41 +1,52 @@
-import { NextPage, GetStaticProps, GetStaticPaths, InferGetStaticPropsType } from 'next'
-import Head from 'next/head'
-import { ParsedUrlQuery } from 'querystring'
+import {
+  NextPage,
+  GetStaticProps,
+  GetStaticPaths,
+  InferGetStaticPropsType,
+} from 'next';
+import Head from 'next/head';
+import { ParsedUrlQuery } from 'querystring';
 
-import Config from '@/config'
+import Config from '@/config';
 
-import ArticleList from '@/components/articlelist'
+import ArticleList from '@/components/articlelist';
 
-import blogService, { Article } from '@/lib/blog'
+import { allArticles, Article } from 'contentlayer/generated';
 
 interface Props extends ParsedUrlQuery {
-  page: string
+  page: string;
 }
 
-export const getStaticProps: GetStaticProps<{ page: number, articles: Article[] }, Props> = async (context) => {
-  let page = parseInt(context.params?.page || '1')
+export const getStaticProps: GetStaticProps<
+  { page: number; articles: Article[] },
+  Props
+> = async (context) => {
+  const page = parseInt(context.params?.page || '1');
 
   return {
     props: {
       page,
-      articles: await blogService.getArticles(),
-    }
-  }
-}
+      articles: allArticles,
+    },
+  };
+};
 
 export const getStaticPaths: GetStaticPaths<Props> = async (context) => {
-  let articleList = await blogService.getArticles()
-
-  let total = articleList.length
-  let pages = Math.ceil(total / Config.articles.perPage)
+  const total = allArticles.length;
+  const pages = Math.ceil(total / Config.articles.perPage);
 
   return {
-    paths: [...Array.from(new Array(pages + 1).keys()).slice(1)].map(i => ({ params: { page: `${i}` } })),
-    fallback: false
-  }
-}
+    paths: [...Array.from(new Array(pages + 1).keys()).slice(1)].map((i) => ({
+      params: { page: `${i}` },
+    })),
+    fallback: false,
+  };
+};
 
-const Page: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ page, articles }) => {
+const Page: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
+  page,
+  articles,
+}) => {
   return (
     <>
       <Head>
@@ -46,12 +57,12 @@ const Page: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ page, 
         title={`Page ${page}`}
         curPage={page}
         articles={articles}
-        pageUrl={page => `/pages/${page}`} />
+        pageUrl={(page) => `/pages/${page}`}
+      />
 
-      <style jsx>{`
-      `}</style>
+      <style jsx>{``}</style>
     </>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

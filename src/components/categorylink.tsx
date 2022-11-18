@@ -1,13 +1,14 @@
-import Link from 'next/link'
+import Link from 'next/link';
 
-import { Category } from '@/lib/blog'
-
-const CategoryLink: React.FC<{ category: Category }> = ({ category, children }) => {
+const CategoryLink: React.FC<{ categories: string[] }> = ({
+  categories,
+  children,
+}) => {
   return (
-    <Link href={`/categories/${category.slug}/pages/1`} passHref>
+    <Link href={`/categories/${categories.join('-')}/pages/1`} passHref>
       {children}
     </Link>
-  )
-}
+  );
+};
 
-export default CategoryLink
+export default CategoryLink;

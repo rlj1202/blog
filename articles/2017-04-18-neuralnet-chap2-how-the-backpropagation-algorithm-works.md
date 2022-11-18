@@ -1,9 +1,9 @@
 ---
-layout:     post
-title:      제 2장 - 역전파 알고리즘이 어떻게 작동하는가
-date:       2017-04-18 18:55:08 +0900
-categories: 
-tags:       NeuralNetworksAndDeepLearning
+layout: post
+title: 제 2장 - 역전파 알고리즘이 어떻게 작동하는가
+date: 2017-04-18 18:55:08 +0900
+categories:
+tags: [NeuralNetworksAndDeepLearning]
 ---
 
 전 장에서 우리는 어떻게 뉴런 네트워크가 기울기 하강 알고리즘을 사용해서 가중치와 $bias$를 학습하는지에 대해 보았습니다. 그러나 여기에서 우리의 설명에는 큰 구멍이 하나 있었습니다: 우리는 어떻게 비용함수의 기울기를 계산하는지 이야기 하지 않았습니다. 정말 큰 구멍입니다! 이 장에서 저는 역전파 라고 알려진 그런 기울기를 계산하는 빠른 알고리즘에 대해서 설명할 것 입니다.

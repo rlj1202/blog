@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from 'next/link';
 
 const Tag: React.FC<{ tag: string }> = ({ tag, children }) => {
   return (
@@ -17,7 +17,7 @@ const Tag: React.FC<{ tag: string }> = ({ tag, children }) => {
         }
       `}</style>
     </span>
-  )
-}
+  );
+};
 
-export default Tag
+export default Tag;

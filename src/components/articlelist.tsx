@@ -1,30 +1,41 @@
-import Paginator from './paginator'
-import ArticleCard from './articlecard'
+import Paginator from './paginator';
+import ArticleCard from './articlecard';
 
-import { Article } from '@/lib/blog'
+import { Article } from 'contentlayer/generated';
 
-import Config from '@/config'
+import Config from '@/config';
 
 const ArticleList: React.FC<{
-  title?: string,
-  curPage?: number,
-  perPage?: number,
-  pageUrl: (page: number) => string,
-  articles: Article[],
-}> = ({ title, curPage = 1, perPage = Config.articles.perPage, pageUrl, articles }) => {
-  var start = (curPage - 1) * perPage
+  title?: string;
+  curPage?: number;
+  perPage?: number;
+  pageUrl: (page: number) => string;
+  articles: Article[];
+}> = ({
+  title,
+  curPage = 1,
+  perPage = Config.articles.perPage,
+  pageUrl,
+  articles,
+}) => {
+  var start = (curPage - 1) * perPage;
 
   return (
     <div className="main">
       <h1 className="title">{title}</h1>
 
       <div className="articles">
-        {articles.slice(start, start + perPage).map(article => (
-          <ArticleCard key={article.slug} article={article} />
+        {articles.slice(start, start + perPage).map((article) => (
+          <ArticleCard key={article._id} article={article} />
         ))}
       </div>
 
-      <Paginator curPage={curPage} total={articles.length} perPage={perPage} pageUrl={pageUrl} />
+      <Paginator
+        curPage={curPage}
+        total={articles.length}
+        perPage={perPage}
+        pageUrl={pageUrl}
+      />
 
       <style jsx>{`
         .articles {
@@ -36,7 +47,7 @@ const ArticleList: React.FC<{
         }
       `}</style>
     </div>
-  )
-}
+  );
+};
 
-export default ArticleList
+export default ArticleList;

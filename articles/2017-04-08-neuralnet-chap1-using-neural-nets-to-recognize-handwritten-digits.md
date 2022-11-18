@@ -1,9 +1,9 @@
 ---
-layout:     post
-title:      제 1장 - 손으로 쓴 숫자를 인식하는 뉴런 네트워크 사용하기
-date:       2017-04-08 21:35:00 +0900
-categories: 
-tags:       NeuralNetworksAndDeepLearning
+layout: post
+title: 제 1장 - 손으로 쓴 숫자를 인식하는 뉴런 네트워크 사용하기
+date: 2017-04-08 21:35:00 +0900
+categories:
+tags: [NeuralNetworksAndDeepLearning]
 ---
 
 인간의 시각 체계는 세계에서 불가사의한 것들 중 하나입니다. 다음과 같은 손으로 쓴 숫자들을 한번 보세요.

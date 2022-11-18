@@ -1,53 +1,62 @@
-import Image from 'next/image'
+import Image from 'next/image';
 
-import dateFormat from 'dateformat'
+import dateFormat from 'dateformat';
 
-import Tag from './tag'
+import Tag from './tag';
 
-import ArticleLink from '@/components/articlelink'
-import CategoryLink from '@/components/categorylink'
+import ArticleLink from '@/components/articlelink';
+import CategoryLink from '@/components/categorylink';
 
-import { Article } from '@/lib/blog'
+import { Article } from 'contentlayer/generated';
 
 const ArticleCard: React.FC<{ article: Article }> = ({ article }) => {
   return (
     <div className="postcard">
       <ArticleLink article={article}>
-        <a><div className="postcard-preview-box">
-          {article.coverImgUrl ? (
-            <div className="postcard-img">
-              <Image src={article.coverImgUrl.toString() || ''} layout="fill" objectFit="cover" alt={''} />
-            </div>
-          ) : (
-            <div className="postcard-excerpt">
-              {article.slug}
-            </div>
-          )}
-        </div></a>
+        <a>
+          <div className="postcard-preview-box">
+            {article.coverImgUrl ? (
+              <div className="postcard-img">
+                <Image
+                  src={article.coverImgUrl.toString() || ''}
+                  layout="fill"
+                  objectFit="cover"
+                  alt={''}
+                />
+              </div>
+            ) : (
+              <div className="postcard-excerpt">
+                {article.body.raw.slice(0, 300)}
+              </div>
+            )}
+          </div>
+        </a>
       </ArticleLink>
       <header className="postcard-header">
-        { article.category && (
-          <CategoryLink category={article.category}>
-            <a><div className="postcard-categories">
-              { article.category.name }
-            </div></a>
+        {article.categories.length > 0 && (
+          <CategoryLink categories={article.categories}>
+            <a>
+              <div className="postcard-categories">
+                {article.categories.join('/')}
+              </div>
+            </a>
           </CategoryLink>
-        ) }
+        )}
         <h1 className="postcard-title">
           <ArticleLink article={article}>
-            <a>{article.title || article.slug}</a>
+            <a>{article.title || article._id}</a>
           </ArticleLink>
         </h1>
-        <h2 className="postcard-subtitle">
-          {article.subtitle}
-        </h2>
+        <h2 className="postcard-subtitle">{article.subtitle}</h2>
         <h2 className="postcard-date">
-          {dateFormat(article.createdAt, 'yyyy-mm-dd')}
+          {dateFormat(article.date, 'yyyy-mm-dd')}
         </h2>
         {article.tags && article.tags.length > 0 && (
           <div className="postcard-tags">
-            {article.tags?.map(tag => (
-              <Tag tag={tag} key={tag}>{tag}</Tag>
+            {article.tags?.map((tag) => (
+              <Tag tag={tag} key={tag}>
+                {tag}
+              </Tag>
             ))}
           </div>
         )}
@@ -73,11 +82,13 @@ const ArticleCard: React.FC<{ article: Article }> = ({ article }) => {
           width: 100%;
           height: 100%;
         }
-        .postcard-img, .postcard-excerpt {
+        .postcard-img,
+        .postcard-excerpt {
           transform: scale(100%, 100%);
           transition: transform 0.25s ease-in-out;
         }
-        .postcard-img:hover, .postcard-excerpt:hover {
+        .postcard-img:hover,
+        .postcard-excerpt:hover {
           transform: scale(120%, 120%);
         }
         .postcard-excerpt {
@@ -92,7 +103,7 @@ const ArticleCard: React.FC<{ article: Article }> = ({ article }) => {
         .postcard-excerpt::before {
           display: block;
           position: absolute;
-          content: "";
+          content: '';
           left: 0;
           top: 0;
           width: 100%;
@@ -142,7 +153,7 @@ const ArticleCard: React.FC<{ article: Article }> = ({ article }) => {
         }
       `}</style>
     </div>
-  )
-}
+  );
+};
 
-export default ArticleCard
+export default ArticleCard;

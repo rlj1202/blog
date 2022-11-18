@@ -2,7 +2,7 @@
 layout: post
 title: 유로 트럭 시뮬레이터 DIY 컨트롤러 일지 5
 categories:
-tags: 유로트럭시뮬레이터
+tags: [유로트럭시뮬레이터]
 date: 2017-02-01 20:50:00 +0900
 published: true
 ---

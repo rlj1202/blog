@@ -2,7 +2,7 @@
 layout: post
 title: 유로 트럭 시뮬레이터 DIY 컨트롤러 일지 4
 categories:
-tags: 유로트럭시뮬레이터
+tags: [유로트럭시뮬레이터]
 date: 2017-01-30 23:53:00 +0900
 published: true
 ---
@@ -30,4 +30,3 @@ published: true
 사진 출처 - https://www.diystompboxes.com/smfforum/index.php?topic=114228.0
 
 저 구멍에는 납땜을 하지 말란다. 납땜위치가 잘못된것이었다. 사진을 구한 쓰레드에서는 그냥 포텐션미터에 데미지를 줄 수 있으니 하지 말라고만 이야기 하고 있다.
-

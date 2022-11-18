@@ -1,79 +1,129 @@
-import { Fragment } from 'react'
-import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next'
-import Head from 'next/head'
+import { Fragment } from 'react';
+import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next';
+import Head from 'next/head';
 
-import ArticleLink from '@/components/articlelink'
-import CategoryLink from '@/components/categorylink'
+import ArticleLink from '@/components/articlelink';
+import CategoryLink from '@/components/categorylink';
 
-import blogService, { Article, Category, CategoryTree } from '@/lib/blog'
+import { allArticles, Article } from 'contentlayer/generated';
 
-import Config from '@/config'
+import Config from '@/config';
 
 interface Props {
-  articles: Article[]
-  categoryTree: Array<CategoryTree>
+  categoryTree: CategoryTree;
+}
+
+interface CategoryTree {
+  title: string;
+  articles: Article[];
+  children: Record<string, CategoryTree>;
+}
+
+function add(node: CategoryTree, article: Article, categories: string[]) {
+  if (categories.length === 0) {
+    node.articles.push(article);
+    return;
+  }
+
+  if (!node.children[categories[0]]) {
+    node.children[categories[0]] = {
+      title: categories[0],
+      articles: [],
+      children: {},
+    };
+  }
+
+  add(node.children[categories[0]], article, categories.slice(1));
 }
 
 export const getStaticProps: GetStaticProps<Props> = async (context) => {
-  let articles = await blogService.getArticles()
-  let categoryTree = await blogService.getCategoryTree()
+  const categoryTree: CategoryTree = {
+    title: 'Categories',
+    articles: [],
+    children: {},
+  };
+
+  allArticles.forEach((article) => {
+    add(categoryTree, article, article.categories);
+  });
 
   return {
     props: {
-      articles,
       categoryTree,
-    }
-  }
-}
+    },
+  };
+};
 
 const CategoryList: React.FC<{
-  level: number,
-  treeNodes: CategoryTree[],
-  articles: Article[],
-}> = ({ level, treeNodes, articles }) => {
-  const CustomTag = `h${level}` as keyof JSX.IntrinsicElements
+  level: number;
+  treeNode: CategoryTree;
+}> = ({ level, treeNode }) => {
+  const CustomTag = `h${level}` as keyof JSX.IntrinsicElements;
 
   return (
-    <>
-      {
-        treeNodes.map(node => {
+    <div>
+      <CustomTag>{treeNode.title}</CustomTag>
+      <ul>
+        {treeNode.articles.map((article) => {
           return (
-            <Fragment key={node.category.slug}>
-              <CustomTag><CategoryLink category={node.category}><a>{ node.category.name }</a></CategoryLink></CustomTag>
-              { articles.filter(article => article.categorySlug === node.category.slug).map(article => {
+            <ArticleLink key={article._id} article={article}>
+              <a>
+                <li key={article._id}>{article.title || article.slug}</li>
+              </a>
+            </ArticleLink>
+          );
+        })}
+      </ul>
+      {Object.values(treeNode.children).map((child) => {
+        return (
+          <CategoryList key={child.title} level={level + 1} treeNode={child} />
+        );
+      })}
+      {/* {treeNodes.map((node) => {
+        return (
+          <Fragment key={node.category.slug}>
+            <CustomTag>
+              <CategoryLink category={node.category}>
+                <a>{node.category.name}</a>
+              </CategoryLink>
+            </CustomTag>
+            {articles
+              .filter((article) => article.categorySlug === node.category.slug)
+              .map((article) => {
                 return (
                   <ArticleLink article={article} key={article.slug}>
-                    <a>{ article.title || article.slug }</a>
+                    <a>{article.title || article.slug}</a>
                   </ArticleLink>
-                )
-              }) }
-              { node.children &&
-                <CategoryList level={level + 1} treeNodes={node.children} articles={articles} />
-              }
-            </Fragment>
-          )
-        })
-      }
-    </>
-  )
-}
+                );
+              })}
+            {node.children && (
+              <CategoryList
+                level={level + 1}
+                treeNodes={node.children}
+                articles={articles}
+              />
+            )}
+          </Fragment>
+        );
+      })} */}
+    </div>
+  );
+};
 
-const Categories: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articles, categoryTree }) => {
+const Categories: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
+  categoryTree,
+}) => {
   return (
     <>
       <Head>
         <title>{`Categories - ${Config.title}`}</title>
       </Head>
 
-      <div>
-        <h1>Categories</h1>
-        <CategoryList level={2} treeNodes={categoryTree} articles={articles} />
-      </div>
+      <CategoryList level={1} treeNode={categoryTree} />
 
-      <style jsx>{`
-      `}</style>
+      <style jsx>{``}</style>
     </>
-  )
-}
+  );
+};
 
-export default Categories
+export default Categories;

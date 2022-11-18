@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 게임 개발 일지 - 1.메인 메뉴와 맵 렌더링
-tags: PutOutAFire
+tags: [PutOutAFire]
 date: 2014-06-27 20:09:00 +0900
 published: true
 ---

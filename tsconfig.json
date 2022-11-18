@@ -18,8 +18,15 @@
     "paths": {
       "@/*": ["src/*"],
       "@public/*": ["public/*"],
-    },
+      "contentlayer/generated": ["./.contentlayer/generated"]
+    }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "additional.d.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "additional.d.ts",
+    ".contentlayer/generated"
+  ],
   "exclude": ["node_modules"]
 }

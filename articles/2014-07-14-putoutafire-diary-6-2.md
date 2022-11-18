@@ -1,9 +1,9 @@
 ---
-layout:     post
-title:      게임 개발 일지 - 6-2.시야 가시 또는 빛 그림자 렌더링 (완성)
-date:       2014-07-14 17:46:00 +0900
-categories: 
-tags:       PutOutAFire
+layout: post
+title: 게임 개발 일지 - 6-2.시야 가시 또는 빛 그림자 렌더링 (완성)
+date: 2014-07-14 17:46:00 +0900
+categories:
+tags: [PutOutAFire]
 published: true
 ---
 

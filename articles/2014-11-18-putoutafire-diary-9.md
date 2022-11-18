@@ -1,17 +1,17 @@
 ---
-layout:     post
-title:      Put out a fire 제작 현황 - 2014/11/18
-date:       2014-11-18 18:04:00 +0900
-categories: 
-tags:       PutOutAFire
+layout: post
+title: Put out a fire 제작 현황 - 2014/11/18
+date: 2014-11-18 18:04:00 +0900
+categories:
+tags: [PutOutAFire]
 published: true
 ---
 
-*맵렌더링* 최적화
+_맵렌더링_ 최적화
 
-*글자 렌더링 코드* 작성
+_글자 렌더링 코드_ 작성
 
-들고있는 아이템 *표시*
+들고있는 아이템 _표시_
 
 *체력 수치값*도 표시
 

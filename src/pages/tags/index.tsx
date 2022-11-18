@@ -1,30 +1,39 @@
-import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next'
-import Head from 'next/head'
+import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next';
+import Head from 'next/head';
 
-import Tag from '@/components/tag'
+import Tag from '@/components/tag';
 
-import Config from '@/config'
+import Config from '@/config';
 
-import blogService, { Article } from '@/lib/blog'
+import { allArticles, Article } from 'contentlayer/generated';
 
 interface Props {
-  articles: Article[]
-  tags: string[]
+  articles: Article[];
+  tags: string[];
 }
 
 export const getStaticProps: GetStaticProps<Props> = async (context) => {
-  let articles = await blogService.getArticles()
-  let tags = await blogService.getTags()
+  const tags = Array.from(
+    new Set(
+      allArticles
+        .map((article) => article.tags)
+        .flat()
+        .filter((tag): tag is string => tag !== undefined),
+    ),
+  );
 
   return {
     props: {
-      articles,
+      articles: allArticles,
       tags,
-    }
-  }
-}
+    },
+  };
+};
 
-const Tags: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articles, tags }) => {
+const Tags: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
+  articles,
+  tags,
+}) => {
   return (
     <>
       <Head>
@@ -35,9 +44,11 @@ const Tags: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articl
         <h1>Tags</h1>
 
         <div className="tags">
-          {tags.map(tag => (
+          {tags.map((tag) => (
             <Tag key={tag} tag={tag}>
-              {`${tag} · ${articles.filter(article => article.tags?.includes(tag)).length}`}
+              {`${tag} · ${
+                articles.filter((article) => article.tags?.includes(tag)).length
+              }`}
             </Tag>
           ))}
         </div>
@@ -53,7 +64,7 @@ const Tags: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ articl
         }
       `}</style>
     </>
-  )
-}
+  );
+};
 
-export default Tags
+export default Tags;

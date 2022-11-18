@@ -1,9 +1,9 @@
 ---
-layout:     post
-title:      게임 개발 일지 - 7.움직이는 이미지와 렌더링 메소드 변경
-date:       2014-07-15 18:27:00 +0900
-categories: 
-tags:       PutOutAFire
+layout: post
+title: 게임 개발 일지 - 7.움직이는 이미지와 렌더링 메소드 변경
+date: 2014-07-15 18:27:00 +0900
+categories:
+tags: [PutOutAFire]
 published: true
 ---
 

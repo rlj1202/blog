@@ -2,7 +2,7 @@
 layout: post
 title: 유로 트럭 시뮬레이터 DIY 컨트롤러 일지 2 - 5:18 스퍼기어 출력
 categories:
-tags: 유로트럭시뮬레이터
+tags: [유로트럭시뮬레이터]
 date: 2017-01-04 00:50:00 +0900
 published: true
 ---
@@ -19,6 +19,7 @@ published: true
 <!-- more -->
 
 <a href="https://www.freecadweb.org/" target="_blank" class="tx-link">https://www.freecadweb.org/</a>
+
 <center><img src="/assets/photo/2017_01_03_23_50_04_901.png" width="400px"></center>
 
 백터 이미지를 불러온 뒤 2D 오브젝트를 늘려서 3D로 만들고 6mm 구멍을 낸 결과다.
