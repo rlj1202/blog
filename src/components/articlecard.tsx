@@ -15,7 +15,7 @@ const ArticleCard: React.FC<{ article: Article }> = ({ article }) => {
       <ArticleLink article={article}>
         <a>
           <div className="postcard-preview-box">
-            {article.coverImgUrl ? (
+            {/* {article.coverImgUrl ? (
               <div className="postcard-img">
                 <Image
                   src={article.coverImgUrl.toString() || ''}
@@ -28,7 +28,10 @@ const ArticleCard: React.FC<{ article: Article }> = ({ article }) => {
               <div className="postcard-excerpt">
                 {article.body.raw.slice(0, 300)}
               </div>
-            )}
+            )} */}
+            <div className="postcard-excerpt">
+              {article.body.raw.slice(0, 300)}
+            </div>
           </div>
         </a>
       </ArticleLink>
