@@ -1,0 +1,125 @@
+.article {
+    h1 {
+        font-size: 2rem;
+    }
+    h2 {
+        font-size: 1.5rem;
+    }
+    h3 {
+        font-size: 1.17em;
+    }
+    h4 {
+        font-size: 1em;
+    }
+    h5 {
+        font-size: 0.83em;
+    }
+    h6 {
+        font-size: 0.67em;
+    }
+
+    ol, ul, p, hr,
+    blockquote,
+    .callout, .equation {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    li {
+        margin: 0.5rem 0;
+    }
+
+    p {
+        min-height: 1rem;
+    }
+
+    .callout {
+        padding: 1rem;
+        background-color: #eeeeee;
+
+        [data-theme="dark"] & {
+            background-color: var(--color-bg-secondary);
+        }
+    }
+
+    blockquote {
+        color: var(--color-text-secondary);
+        border-left: 0.2rem solid var(--color-text-secondary);
+        margin-left: 0;
+        margin-right: 0;
+        padding: 0.2rem 1rem 0.2rem 1rem;
+    }
+
+    a {
+        color: #6464ff;
+
+        [data-theme="dark"] & {
+            color: #64b7ff;
+        }
+    }
+
+    img,
+    iframe {
+        max-width: 100%;
+    }
+
+    // code general
+    code {
+        font-family: 'Consolas', monospace;
+    }
+    // code highlight
+    @import 'hljs';
+    [data-theme="dark"] & {
+        @import 'hljs-dark';
+    }
+    // inline code
+    code:not([class]) {
+        color: #FF4F4F;
+        background-color: #fff4f4;
+        padding: 2px 4px;
+
+        [data-theme="dark"] & {
+            color: #ff7575;
+            background-color: #343434;
+        }
+    }
+    // block code
+    pre.hljs code, pre code.hljs {
+        padding: 1rem;
+        background-color: #eeeeee;
+        overflow-x: auto;
+        width: 100%;
+        display: block;
+
+        [data-theme="dark"] & {
+            background-color: var(--color-bg-secondary);
+        }
+    }
+
+    table {
+        border: solid 1px #dddddd;
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 0.9rem;
+    }
+    th {
+        background-color: #eeeeee;
+        text-align: center;
+
+        [data-theme="dark"] & {
+            background-color: #818181;
+        }
+    }
+    th, td {
+        border: solid 1px #dddddd;
+        padding: 0.3rem 0.6rem;
+
+        [data-theme="dark"] & {
+            border: solid 1px #5f5f5f;
+        }
+    }
+
+    figcaption {
+        color: var(--color-text-secondary);
+    }
+}

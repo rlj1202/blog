@@ -1,30 +1,39 @@
-import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next'
-import Head from 'next/head'
+import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next';
+import Head from 'next/head';
 
-import Tag from '../../components/tag'
+import Tag from '@/components/tag';
 
-import Config from '../../config'
+import Config from '@/config';
 
-import { Post, getPosts, getTags } from '../../utils/postUtils'
+import { allArticles, Article } from 'contentlayer/generated';
 
 interface Props {
-  posts: Post[]
-  tags: string[]
+  articles: Article[];
+  tags: string[];
 }
 
 export const getStaticProps: GetStaticProps<Props> = async (context) => {
-  let { posts } = await getPosts()
-  let tags = await getTags()
+  const tags = Array.from(
+    new Set(
+      allArticles
+        .map((article) => article.tags)
+        .flat()
+        .filter((tag): tag is string => tag !== undefined),
+    ),
+  );
 
   return {
     props: {
-      posts,
-      tags
-    }
-  }
-}
+      articles: allArticles,
+      tags,
+    },
+  };
+};
 
-const Tags: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts, tags }) => {
+const Tags: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
+  articles,
+  tags,
+}) => {
   return (
     <>
       <Head>
@@ -35,8 +44,12 @@ const Tags: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts,
         <h1>Tags</h1>
 
         <div className="tags">
-          {tags.map(tag => (
-            <Tag key={tag} tag={tag}>{`${tag} · ${posts.filter(post => post.metadata.tags?.includes(tag)).length}`}</Tag>
+          {tags.map((tag) => (
+            <Tag key={tag} tag={tag}>
+              {`${tag} · ${
+                articles.filter((article) => article.tags?.includes(tag)).length
+              }`}
+            </Tag>
           ))}
         </div>
       </div>
@@ -51,7 +64,7 @@ const Tags: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts,
         }
       `}</style>
     </>
-  )
-}
+  );
+};
 
-export default Tags
+export default Tags;

@@ -1,29 +1,35 @@
-import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next'
-import Head from 'next/head'
-import Link from 'next/link'
+import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next';
+import Head from 'next/head';
+import Link from 'next/link';
 
-import Config from '../config'
-import { generateRssFeed } from '../rssgen'
-import { generateSitemap } from '../sitemapgen'
+import Config from '@/config';
+import { generateRssFeed } from '@/rssgen';
+import { generateSitemap } from '@/sitemapgen';
 
-import PostCard from '../components/postcard'
+import ArticleCard from '@/components/articlecard';
 
-import { Post, getPosts } from '../utils/postUtils'
+import { allArticles, Article } from 'contentlayer/generated';
 
-export const getStaticProps: GetStaticProps<{ posts: Post[] }> = async (context) => {
-  var { posts } = await getPosts({ limit: 10 })
+export const getStaticProps: GetStaticProps<{
+  articles: Article[];
+}> = async (context) => {
+  generateRssFeed(allArticles);
+  generateSitemap(allArticles);
 
-  generateRssFeed()
-  generateSitemap()
+  const articles = allArticles
+    .sort((a, b) => Number(new Date(b.date)) - Number(new Date(a.date)))
+    .slice(0, 10);
 
   return {
     props: {
-      posts
-    }
-  }
-}
+      articles,
+    },
+  };
+};
 
-const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts }) => {
+const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
+  articles,
+}) => {
   return (
     <>
       <Head>
@@ -33,15 +39,15 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts 
       <main>
         <h1>Latest</h1>
 
-        <div className="postcards">
-          {posts.map(post => (
-            <PostCard key={post.postPath.join('/')} post={post} />
+        <div className="article-cards">
+          {articles.map((article, index) => (
+            <ArticleCard key={article._id} article={article} />
           ))}
         </div>
 
         <div className="bottom">
           <div className="readmore">
-            <Link href='/pages/1'>
+            <Link href="/pages/1">
               <a>
                 All posts
                 <i className="fas fa-chevron-right arrow"></i>
@@ -52,7 +58,7 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts 
       </main>
 
       <style jsx>{`
-        .postcards {
+        .article-cards {
           display: flex;
           flex-direction: row;
           flex-wrap: wrap;
@@ -77,7 +83,7 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts 
         }
       `}</style>
     </>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

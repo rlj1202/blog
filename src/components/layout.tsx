@@ -1,20 +1,21 @@
-import Head from 'next/head'
-import Script from 'next/script'
+import Head from 'next/head';
+import Script from 'next/script';
 
-import Config from '../config'
-import Topbar from '../components/topbar'
-import Footer from './footer'
+import { DefaultSeo } from 'next-seo';
+
+import Config from '@/config';
+import Topbar from '@/components/topbar';
+import Footer from './footer';
 
 const Layout: React.FC = ({ children }) => {
   return (
     <div>
-      <Script src="https://kit.fontawesome.com/1dddf9384f.js" crossOrigin="anonymous" />
+      <Script
+        src="https://kit.fontawesome.com/1dddf9384f.js"
+        crossOrigin="anonymous"
+      />
       <Head>
         <title>{Config.title}</title>
-
-        {/* SEO */}
-        <meta name="description" content={Config.description} />
-        <meta name="keywords" content={Config.keywords} />
 
         {/* Favicon */}
         <link rel="icon" href={Config.favicon} />
@@ -28,14 +29,38 @@ const Layout: React.FC = ({ children }) => {
 
         {/* Chrome, Firefox and Opera */}
         {/* will not be used in android device when the dark mode is enabled. */}
-        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FF4F4F" />
-        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#272727" />
+        <meta
+          name="theme-color"
+          media="(prefers-color-scheme: light)"
+          content="#FF4F4F"
+        />
+        <meta
+          name="theme-color"
+          media="(prefers-color-scheme: dark)"
+          content="#272727"
+        />
         {/* Windows Phone */}
         <meta name="msapplication-navbutton-color" content="#FF4F4F" />
         {/* iOS Safari */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="#black-translucent" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="#black-translucent"
+        />
       </Head>
+      <DefaultSeo
+        title={Config.title}
+        description={Config.description}
+        openGraph={{
+          type: 'website',
+          locale: 'ko_KR',
+          siteName: Config.title,
+        }}
+        twitter={{
+          handle: Config.author.twitter.handle,
+          cardType: 'summary_large_image',
+        }}
+      />
 
       <Topbar />
 
@@ -59,7 +84,7 @@ const Layout: React.FC = ({ children }) => {
         }
       `}</style>
     </div>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;

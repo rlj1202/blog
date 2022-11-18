@@ -1,4 +1,4 @@
-import Config from "../config"
+import Config from '@/config';
 
 const Footer: React.FC = () => {
   return (
@@ -14,7 +14,9 @@ const Footer: React.FC = () => {
         </span>
         <span>
           <i className="fas fa-envelope"></i>
-          <a href={`mailto:${Config.author.contacts.email}`}>{Config.author.contacts.email}</a>
+          <a href={`mailto:${Config.author.contacts.email}`}>
+            {Config.author.contacts.email}
+          </a>
         </span>
       </div>
       <div className="links">
@@ -31,9 +33,7 @@ const Footer: React.FC = () => {
           <a href={Config.rss.json1Path}>JSON 1.0</a>
         </span>
       </div>
-      <div>
-        {Config.copyright}
-      </div>
+      <div>{Config.copyright}</div>
 
       <style jsx>{`
         .footer {
@@ -59,7 +59,7 @@ const Footer: React.FC = () => {
         }
       `}</style>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

@@ -1,57 +1,68 @@
-import { NextPage, GetStaticProps, GetStaticPaths, InferGetStaticPropsType } from 'next'
-import Head from 'next/head'
+import {
+  NextPage,
+  GetStaticProps,
+  GetStaticPaths,
+  InferGetStaticPropsType,
+} from 'next';
+import Head from 'next/head';
+import { ParsedUrlQuery } from 'querystring';
 
-import Config from '../../config'
+import Config from '@/config';
 
-import PostList from '../../components/postlist'
+import ArticleList from '@/components/articlelist';
 
-import { Post, getPosts } from '../../utils/postUtils'
-import { ParsedUrlQuery } from 'querystring'
+import { allArticles, Article } from 'contentlayer/generated';
 
 interface Props extends ParsedUrlQuery {
-  page: string
+  page: string;
 }
 
-export const getStaticProps: GetStaticProps<{ page: number, posts: Post[] }, Props> = async (context) => {
-  let page = parseInt(context.params?.page || '1')
-
-  let { posts } = await getPosts()
+export const getStaticProps: GetStaticProps<
+  { page: number; articles: Article[] },
+  Props
+> = async (context) => {
+  const page = parseInt(context.params?.page || '1');
 
   return {
     props: {
       page,
-      posts
-    }
-  }
-}
+      articles: allArticles,
+    },
+  };
+};
 
 export const getStaticPaths: GetStaticPaths<Props> = async (context) => {
-  let { total } = await getPosts()
-  let pages = Math.ceil(total / Config.postsPerPage)
+  const total = allArticles.length;
+  const pages = Math.ceil(total / Config.articles.perPage);
 
   return {
-    paths: [...Array.from(new Array(pages + 1).keys()).slice(1)].map(i => ({ params: { page: `${i}` } })),
-    fallback: false
-  }
-}
+    paths: [...Array.from(new Array(pages + 1).keys()).slice(1)].map((i) => ({
+      params: { page: `${i}` },
+    })),
+    fallback: false,
+  };
+};
 
-const Page: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ page, posts }) => {
+const Page: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
+  page,
+  articles,
+}) => {
   return (
     <>
       <Head>
         <title>{`Page ${page} - ${Config.title}`}</title>
       </Head>
 
-      <PostList
+      <ArticleList
         title={`Page ${page}`}
         curPage={page}
-        posts={posts}
-        pageUrl={page => `/pages/${page}`} />
+        articles={articles}
+        pageUrl={(page) => `/pages/${page}`}
+      />
 
-      <style jsx>{`
-      `}</style>
+      <style jsx>{``}</style>
     </>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

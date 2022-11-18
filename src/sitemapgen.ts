@@ -1,42 +1,41 @@
-import fs from 'fs'
-import { SitemapStream, streamToPromise } from 'sitemap'
+import fs from 'fs';
+import { SitemapStream, streamToPromise } from 'sitemap';
 
-import Config from './config'
+import Config from '@/config';
 
-import { getPosts } from './utils/postUtils'
+import { Article } from 'contentlayer/generated';
 
-export const generateSitemap = async () => {
-    console.log('Generate sitemap...')
+export const generateSitemap = async (articles: Article[]) => {
+  const siteUrl = process.env.HOST || 'localhost';
 
-    const siteUrl = process.env.HOST
-    const { posts } = await getPosts()
+  console.log(`Generate sitemap... : host = ${siteUrl}`);
 
-    const stream = new SitemapStream({
-        hostname: siteUrl,
-    })
+  const stream = new SitemapStream({
+    hostname: siteUrl,
+  });
 
-    posts.map(post => {
-        stream.write({
-            url: post.url,
-            changefreq: 'monthly',
-            priority: 0.3,
-            // img: '',
-        })
-    })
+  articles.map((article) => {
+    stream.write({
+      url: `/articles/${article.slug}`,
+      changefreq: 'monthly',
+      priority: 0.3,
+      // img: '',
+    });
+  });
 
-    Config.menus.map(menu => {
-        stream.write({
-            url: menu.path,
-            changefreq: 'monthly',
-            priority: 0.3,
-        })
-    })
+  Config.menus.map((menu) => {
+    stream.write({
+      url: menu.path,
+      changefreq: 'monthly',
+      priority: 0.3,
+    });
+  });
 
-    stream.end()
+  stream.end();
 
-    return streamToPromise(stream).then(data => {
-        fs.writeFileSync(`./public${Config.sitemap.path}`, data.toString())
-    })
-}
+  return streamToPromise(stream).then((data) => {
+    fs.writeFileSync(`./public${Config.sitemap.path}`, data.toString());
+  });
+};
 
-export default generateSitemap
+export default generateSitemap;

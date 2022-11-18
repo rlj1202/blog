@@ -1,31 +1,26 @@
-import { useState } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 
-import Config from '../config'
+import Config from '@/config';
 
-import logo from '../../public/favicon.svg'
+import logo from '@public/favicon.svg';
 
 const Topbar: React.FC = () => {
-  var [ activeTheme, setTheme ] = useState('light')
-  var [ navShow, setNavShow ] = useState(false)
+  const [activeTheme, setTheme] = useState<string>('light');
+  const [navShow, setNavShow] = useState(false);
 
-  var toggleNav = () => {
-    setNavShow(status => {
+  useEffect(() => {
+    document.body.dataset.theme = activeTheme;
+  }, [activeTheme]);
 
-      return !status
-    })
-  }
+  const toggleNav = () => {
+    setNavShow((status) => !status);
+  };
 
-  var toggleTheme = () => {
-    setTheme(theme => {
-      theme = theme == 'light' ? 'dark' : 'light'
-
-      document.body.dataset.theme = theme
-
-      return theme
-    })
-  }
+  const toggleTheme = () => {
+    setTheme(activeTheme === 'light' ? 'dark' : 'light');
+  };
 
   return (
     <div className="topbar">
@@ -35,27 +30,36 @@ const Topbar: React.FC = () => {
             <a>
               <div className="topbar-title">
                 <div className="topbar-logo">
-                  <Image src={logo} width={'25'} height={'25'} layout="fixed" alt="Logo" />
+                  <Image
+                    src={logo}
+                    width={'25'}
+                    height={'25'}
+                    layout="fixed"
+                    alt="Logo"
+                  />
                 </div>
                 {Config.title}
               </div>
             </a>
           </Link>
           <div className="topbar-left-links">
-            {Config.menus.map(menu => (
+            {Config.menus.map((menu) => (
               <span className="topbar-link" key={menu.label}>
-                <Link href={menu.path}><a>{menu.label}</a></Link>
+                <Link href={menu.path}>
+                  <a>{menu.label}</a>
+                </Link>
               </span>
             ))}
           </div>
         </div>
         <div className="topbar-right">
-          <button className="topbar-button topbar-button-more" onClick={toggleNav}>
+          <button
+            className="topbar-button topbar-button-more"
+            onClick={toggleNav}
+          >
             <i className="fas fa-bars fa-lg"></i>
           </button>
-          <button
-            className="topbar-button"
-            onClick={toggleTheme}>
+          <button className="topbar-button" onClick={toggleTheme}>
             {activeTheme == 'light' ? (
               <i className="fas fa-moon fa-lg"></i>
             ) : (
@@ -66,9 +70,11 @@ const Topbar: React.FC = () => {
       </div>
       <div className={`topbar-nav ${navShow ? 'show' : ''}`}>
         <div className="topbar-nav-links">
-          {Config.menus.map(menu => (
+          {Config.menus.map((menu) => (
             <div key={menu.label}>
-              <Link href={menu.path}><a>{menu.label}</a></Link>
+              <Link href={menu.path}>
+                <a>{menu.label}</a>
+              </Link>
             </div>
           ))}
         </div>
@@ -85,7 +91,8 @@ const Topbar: React.FC = () => {
           justify-content: space-between;
           align-items: center;
         }
-        .topbar-content, .topbar-nav {
+        .topbar-content,
+        .topbar-nav {
           max-width: 800px;
           margin: 0 auto;
           box-sizing: content-box;
@@ -157,7 +164,7 @@ const Topbar: React.FC = () => {
         }
       `}</style>
     </div>
-  )
-}
+  );
+};
 
-export default Topbar
+export default Topbar;

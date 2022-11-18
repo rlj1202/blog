@@ -1,7 +1,7 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
+import type { NextPage } from 'next';
+import Head from 'next/head';
 
-import Config from '../config'
+import Config from '@/config';
 
 const About: NextPage = () => {
   return (
@@ -13,15 +13,12 @@ const About: NextPage = () => {
       <div>
         <h1>About</h1>
 
-        <p>
-          me
-        </p>
+        <p>me</p>
       </div>
 
-      <style jsx>{`
-      `}</style>
+      <style jsx>{``}</style>
     </>
-  )
-}
+  );
+};
 
-export default About
+export default About;
