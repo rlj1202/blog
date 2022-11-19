@@ -79,7 +79,7 @@ export default makeSource({
       .use(rehypeRaw)
       .use(rehypeHighlight)
       .use(rehypeSlug)
-      .use(rehypeAutolinkHeadings)
+      .use(rehypeAutolinkHeadings, { behavior: 'append' })
       .use(rehypeStringify);
   },
 });
