@@ -2,14 +2,15 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', Segoe UI,
+    Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+    sans-serif;
   overflow-wrap: break-word; /* same as word-wrap */
   word-break: normal;
 }
 
 body,
-body[data-theme="light"] {
+body[data-theme='light'] {
   --color-text-primary: black;
   --color-text-secondary: #666666;
   --color-bg-primary: white;
@@ -19,7 +20,7 @@ body[data-theme="light"] {
   --color-brand: #ff4f4f;
 }
 
-body[data-theme="dark"] {
+body[data-theme='dark'] {
   --color-text-primary: white;
   --color-text-secondary: #cfcfcf;
   --color-bg-primary: #272727;
@@ -53,16 +54,15 @@ hr {
 
 /* Heading Links */
 span.icon.icon-link {
-  position: relative;
+  display: inline-block;
+  font-family: 'Font Awesome\ 5 Free';
+  font-size: 0.75em;
+  padding: 0.25em;
+  vertical-align: text-bottom;
+  color: rgba(0, 0, 0, 0);
 }
 span.icon.icon-link::before {
-  display: block;
-  content: "\f0c1";
-  font-family: "Font Awesome\ 5 Free";
-  position: absolute;
-  right: 100%;
-  padding: 0 .5em;
-  color: rgba(0, 0, 0, 0);
+  content: '\f0c1';
 }
 h1:hover,
 h2:hover,
@@ -70,7 +70,7 @@ h3:hover,
 h4:hover,
 h5:hover,
 h6:hover {
-  span.icon.icon-link::before {
+  span.icon.icon-link {
     color: var(--color-brand);
-  }  
+  }
 }

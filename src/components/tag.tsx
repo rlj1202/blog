@@ -11,7 +11,9 @@ const Tag: React.FC<{ tag: string }> = ({ tag, children }) => {
         .tag {
           display: inline-block;
           background-color: var(--color-brand);
-          padding: 0.5em;
+          font-size: 0.75rem;
+          padding: 0.3rem;
+          border-radius: 0.3rem;
           color: white;
           line-height: 100%;
         }

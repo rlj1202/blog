@@ -21,9 +21,12 @@ const ToggleTheme: React.FC = () => {
 
       <style jsx>{`
         .button {
+          display: block;
           border: none;
           background: none;
           padding: 0;
+          margin: 0;
+          height: 1.4em;
         }
       `}</style>
     </button>

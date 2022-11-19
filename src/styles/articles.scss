@@ -1,125 +1,141 @@
 .article {
-    h1 {
-        font-size: 2rem;
-    }
-    h2 {
-        font-size: 1.5rem;
-    }
-    h3 {
-        font-size: 1.17em;
-    }
-    h4 {
-        font-size: 1em;
-    }
-    h5 {
-        font-size: 0.83em;
-    }
-    h6 {
-        font-size: 0.67em;
-    }
+  h1 {
+    font-size: 2rem;
+  }
+  h2 {
+    font-size: 1.5rem;
+  }
+  h3 {
+    font-size: 1.17em;
+  }
+  h4 {
+    font-size: 1em;
+  }
+  h5 {
+    font-size: 0.83em;
+  }
+  h6 {
+    font-size: 0.67em;
+  }
 
-    ol, ul, p, hr,
-    blockquote,
-    .callout, .equation {
-        margin-top: 1rem;
-        margin-bottom: 1rem;
-    }
+  ol,
+  ul,
+  p,
+  hr,
+  blockquote,
+  .callout,
+  .equation {
+    margin-block-start: 1.25rem;
+    margin-block-end: 1.25rem;
+  }
 
-    li {
-        margin: 0.5rem 0;
-    }
+  p {
+    line-height: 1.5rem;
+  }
 
-    p {
-        min-height: 1rem;
-    }
+  img {
+    display: block;
+  }
 
-    .callout {
-        padding: 1rem;
-        background-color: #eeeeee;
+  .math-display,
+  img {
+    margin-block-start: 2rem;
+    margin-block-end: 2rem;
+  }
 
-        [data-theme="dark"] & {
-            background-color: var(--color-bg-secondary);
-        }
-    }
+  li {
+    margin: 0.5rem 0;
+  }
 
-    blockquote {
-        color: var(--color-text-secondary);
-        border-left: 0.2rem solid var(--color-text-secondary);
-        margin-left: 0;
-        margin-right: 0;
-        padding: 0.2rem 1rem 0.2rem 1rem;
-    }
+  .callout {
+    padding: 1rem;
+    background-color: #eeeeee;
 
-    a {
-        color: #6464ff;
+    [data-theme='dark'] & {
+      background-color: var(--color-bg-secondary);
+    }
+  }
 
-        [data-theme="dark"] & {
-            color: #64b7ff;
-        }
-    }
+  blockquote {
+    color: var(--color-text-secondary);
+    border-left: 0.2rem solid var(--color-text-secondary);
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0.2rem 1rem 0.2rem 1rem;
+  }
 
-    img,
-    iframe {
-        max-width: 100%;
-    }
+  a {
+    color: #6464ff;
 
-    // code general
-    code {
-        font-family: 'Consolas', monospace;
+    [data-theme='dark'] & {
+      color: #64b7ff;
     }
-    // code highlight
-    @import 'hljs';
-    [data-theme="dark"] & {
-        @import 'hljs-dark';
-    }
-    // inline code
-    code:not([class]) {
-        color: #FF4F4F;
-        background-color: #fff4f4;
-        padding: 2px 4px;
+  }
 
-        [data-theme="dark"] & {
-            color: #ff7575;
-            background-color: #343434;
-        }
-    }
-    // block code
-    pre.hljs code, pre code.hljs {
-        padding: 1rem;
-        background-color: #eeeeee;
-        overflow-x: auto;
-        width: 100%;
-        display: block;
+  img,
+  iframe {
+    max-width: 100%;
+  }
 
-        [data-theme="dark"] & {
-            background-color: var(--color-bg-secondary);
-        }
-    }
+  // code general
+  code {
+    font-family: 'Consolas', monospace;
+  }
+  // code highlight
+  @import 'hljs';
+  [data-theme='dark'] & {
+    @import 'hljs-dark';
+  }
+  // inline code
+  code:not([class]) {
+    color: #ff4f4f;
+    background-color: #fff4f4;
+    padding: 2px 4px;
 
-    table {
-        border: solid 1px #dddddd;
-        border-collapse: collapse;
-        width: 100%;
-        font-size: 0.9rem;
+    [data-theme='dark'] & {
+      color: #ff7575;
+      background-color: #343434;
     }
-    th {
-        background-color: #eeeeee;
-        text-align: center;
+  }
+  // block code
+  pre.hljs code,
+  pre code.hljs {
+    padding: 1.5rem;
+    background-color: #eeeeee;
+    overflow-x: auto;
+    width: 100%;
+    display: block;
 
-        [data-theme="dark"] & {
-            background-color: #818181;
-        }
+    [data-theme='dark'] & {
+      background-color: var(--color-bg-secondary);
     }
-    th, td {
-        border: solid 1px #dddddd;
-        padding: 0.3rem 0.6rem;
+  }
 
-        [data-theme="dark"] & {
-            border: solid 1px #5f5f5f;
-        }
-    }
+  table {
+    border: solid 1px #dddddd;
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.9rem;
+  }
+  th {
+    background-color: #eeeeee;
+    text-align: center;
 
-    figcaption {
-        color: var(--color-text-secondary);
+    [data-theme='dark'] & {
+      background-color: #818181;
     }
+  }
+  th,
+  td {
+    border: solid 1px #dddddd;
+    padding: 0.3rem 0.6rem;
+
+    [data-theme='dark'] & {
+      border: solid 1px #5f5f5f;
+    }
+  }
+
+  figcaption {
+    color: var(--color-text-secondary);
+  }
 }

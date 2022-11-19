@@ -18,8 +18,8 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
       allArticles
         .map((article) => article.tags)
         .flat()
-        .filter((tag): tag is string => tag !== undefined),
-    ),
+        .filter((tag): tag is string => tag !== undefined)
+    )
   );
 
   return {
@@ -46,7 +46,7 @@ const Tags: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
         <div className="tags">
           {tags.map((tag) => (
             <Tag key={tag} tag={tag}>
-              {`${tag} · ${
+              {`#${tag} · ${
                 articles.filter((article) => article.tags?.includes(tag)).length
               }`}
             </Tag>

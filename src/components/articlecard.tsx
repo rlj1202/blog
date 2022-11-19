@@ -58,7 +58,7 @@ const ArticleCard: React.FC<{ article: Article }> = ({ article }) => {
           <div className="postcard-tags">
             {article.tags?.map((tag) => (
               <Tag tag={tag} key={tag}>
-                {tag}
+                {`#${tag}`}
               </Tag>
             ))}
           </div>

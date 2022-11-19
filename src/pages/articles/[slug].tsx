@@ -139,7 +139,7 @@ const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
           <div className="post-tags">
             {article.tags?.map?.((tag) => (
               <Tag key={tag} tag={tag}>
-                {tag}
+                {`#${tag}`}
               </Tag>
             ))}
           </div>
