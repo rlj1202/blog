@@ -1,25 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
 import Config from '@/config';
 
 import logo from '@public/favicon.svg';
+import ToggleTheme from '@/components/toggletheme';
 
 const Topbar: React.FC = () => {
-  const [activeTheme, setTheme] = useState<string>('light');
   const [navShow, setNavShow] = useState(false);
-
-  useEffect(() => {
-    document.body.dataset.theme = activeTheme;
-  }, [activeTheme]);
 
   const toggleNav = () => {
     setNavShow((status) => !status);
-  };
-
-  const toggleTheme = () => {
-    setTheme(activeTheme === 'light' ? 'dark' : 'light');
   };
 
   return (
@@ -59,13 +51,9 @@ const Topbar: React.FC = () => {
           >
             <i className="fas fa-bars fa-lg"></i>
           </button>
-          <button className="topbar-button" onClick={toggleTheme}>
-            {activeTheme == 'light' ? (
-              <i className="fas fa-moon fa-lg"></i>
-            ) : (
-              <i className="fas fa-sun fa-lg"></i>
-            )}
-          </button>
+          <div className="topbar-button">
+            <ToggleTheme />
+          </div>
         </div>
       </div>
       <div className={`topbar-nav ${navShow ? 'show' : ''}`}>
