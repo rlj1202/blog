@@ -7,6 +7,7 @@ import rehypeSlug from 'rehype-slug';
 import rehypeRaw from 'rehype-raw';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeHighlight from 'rehype-highlight';
+import rehypeCodeTitles from 'rehype-code-titles';
 import remarkGfm from 'remark-gfm';
 
 import path from 'path';
@@ -77,6 +78,7 @@ export default makeSource({
       // .use(rehypeMathJax)
       .use(rehypeKatex, { strict: false })
       .use(rehypeRaw)
+      .use(rehypeCodeTitles)
       .use(rehypeHighlight)
       .use(rehypeSlug)
       .use(rehypeAutolinkHeadings, { behavior: 'append' })

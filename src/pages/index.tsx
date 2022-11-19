@@ -62,13 +62,13 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
           display: flex;
           flex-direction: row;
           flex-wrap: wrap;
-          row-gap: 40px;
-          column-gap: 40px;
-          margin: 40px 0;
+          row-gap: 1.25rem;
+          column-gap: 1.25rem;
+          margin: 2rem 0;
         }
         .bottom {
           display: flex;
-          margin: 40px 0;
+          margin: 2rem 0;
           justify-content: right;
         }
         .arrow {

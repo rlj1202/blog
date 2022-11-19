@@ -163,16 +163,14 @@ const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
       </div>
 
       <style jsx>{`
-        .post-header,
-        .post-content,
-        .post-comments {
-          margin: 6rem 0;
+        .post-header {
+          margin: 2rem 0;
         }
         .post-category {
           color: #666666;
         }
         .post-title {
-          font-size: 3em;
+          font-size: 2.5em;
           margin: 0.3em 0;
           font-weight: bold;
           color: var(--color-text-primary);
@@ -200,12 +198,12 @@ const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
           display: flex;
           flex-direction: row;
           flex-wrap: wrap;
-          row-gap: 40px;
-          column-gap: 40px;
-          margin: 40px 0;
+          row-gap: 1.25rem;
+          column-gap: 1.25rem;
+          margin: 2rem 0;
         }
         hr {
-          margin: 40px 0;
+          margin: 2rem 0;
         }
       `}</style>
     </>

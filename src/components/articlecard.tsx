@@ -95,7 +95,7 @@ const ArticleCard: React.FC<{ article: Article }> = ({ article }) => {
           transform: scale(120%, 120%);
         }
         .postcard-excerpt {
-          padding: 1.5em;
+          padding: 1.25em;
           overflow: hidden;
           word-break: break-all;
           height: 100%;
@@ -115,7 +115,7 @@ const ArticleCard: React.FC<{ article: Article }> = ({ article }) => {
           background: linear-gradient(#00000000 50%, gray 95%);
         }
         .postcard-header {
-          padding: 1.5em;
+          padding: 1.25em;
           flex-grow: 1;
 
           display: flex;

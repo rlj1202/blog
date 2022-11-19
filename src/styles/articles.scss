@@ -78,7 +78,8 @@
   }
 
   // code general
-  code {
+  code,
+  .rehype-code-title {
     font-family: 'Consolas', monospace;
   }
   // code highlight
@@ -98,9 +99,18 @@
     }
   }
   // block code
+  .rehype-code-title {
+    padding: 1.25rem;
+    background-color: #eeeeee;
+    border-bottom: 1px solid var(--color-bg-primary);
+
+    [data-theme='dark'] & {
+      background-color: var(--color-bg-secondary);
+    }
+  }
   pre.hljs code,
   pre code.hljs {
-    padding: 1.5rem;
+    padding: 1.25rem;
     background-color: #eeeeee;
     overflow-x: auto;
     width: 100%;
@@ -109,6 +119,9 @@
     [data-theme='dark'] & {
       background-color: var(--color-bg-secondary);
     }
+  }
+  .rehype-code-title + pre {
+    margin-top: 0;
   }
 
   table {

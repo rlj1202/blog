@@ -74,13 +74,13 @@ const Layout: React.FC = ({ children }) => {
 
       <style jsx>{`
         .main {
-          margin: 40px auto;
-          max-width: 800px;
-          padding: 0 40px;
-          box-sizing: content-box;
+          margin-left: auto;
+          margin-right: auto;
+          max-width: 50rem;
+          padding: 0 1.25rem;
         }
         hr {
-          margin: 40px 0;
+          margin: 2rem 0;
         }
       `}</style>
     </div>

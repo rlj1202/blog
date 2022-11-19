@@ -81,10 +81,9 @@ const Topbar: React.FC = () => {
         }
         .topbar-content,
         .topbar-nav {
-          max-width: 800px;
+          max-width: 50rem;
           margin: 0 auto;
-          box-sizing: content-box;
-          padding: 0 40px;
+          padding: 0 1.25rem;
         }
         .topbar-nav {
           max-height: 0;
