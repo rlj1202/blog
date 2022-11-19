@@ -64,7 +64,7 @@ export const Article = defineDocumentType(() => ({
 
 export default makeSource({
   contentDirPath: 'articles',
-  contentDirExclude: ['drafts'],
+  contentDirExclude: ['drafts', 'templates'],
   documentTypes: [Article],
   fieldOptions: {},
   markdown: (builder) => {
