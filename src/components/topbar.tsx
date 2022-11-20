@@ -12,8 +12,8 @@ const Topbar: React.FC = () => {
   const [navShow, setNavShow] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
 
-  const topbarRef = useRef<HTMLDivElement>(null);
-  const navRef = useRef<HTMLDivElement>(null);
+  const topbarRef = useRef<HTMLDivElement | null>(null);
+  const navRef = useRef<HTMLDivElement | null>(null);
 
   const toggleNav = () => {
     setNavShow((status) => !status);
@@ -99,7 +99,7 @@ const Topbar: React.FC = () => {
           overflow: hidden;
           background-color: var(--color-bg-secondary);
           position: relative;
-          top: ${topbarShow ? 0 : `-${topbarRef.current?.clientHeight}px`};
+          top: ${topbarShow ? 0 : `-${topbarRef?.current?.clientHeight}px`};
           transition: top 0.25s ease;
         }
         .topbar-content {
@@ -163,7 +163,7 @@ const Topbar: React.FC = () => {
           padding: 0;
         }
         .show {
-          max-height: ${`${navRef.current?.clientHeight}px`};
+          max-height: ${`${navRef?.current?.clientHeight}px`};
           transition: max-height 0.25s ease;
         }
         @media (min-width: 800px) {
