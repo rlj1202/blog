@@ -62,7 +62,9 @@ const Layout: React.FC = ({ children }) => {
         }}
       />
 
-      <Topbar />
+      <div className="topbar">
+        <Topbar />
+      </div>
 
       <div className="main">
         {children}
@@ -81,6 +83,11 @@ const Layout: React.FC = ({ children }) => {
         }
         hr {
           margin: 2rem 0;
+        }
+        .topbar {
+          position: sticky;
+          top: 0;
+          z-index: 10;
         }
       `}</style>
     </div>

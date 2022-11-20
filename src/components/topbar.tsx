@@ -78,12 +78,15 @@ const Topbar: React.FC = () => {
           display: flex;
           justify-content: space-between;
           align-items: center;
+          padding-top: 1.25rem;
+          padding-bottom: 1.25rem;
         }
         .topbar-content,
         .topbar-nav {
           max-width: 50rem;
           margin: 0 auto;
-          padding: 0 1.25rem;
+          padding-left: 1.25rem;
+          padding-right: 1.25rem;
         }
         .topbar-nav {
           max-height: 0;
@@ -92,8 +95,8 @@ const Topbar: React.FC = () => {
         .topbar-nav-links {
           display: flex;
           flex-direction: column;
-          row-gap: 20px;
-          padding-bottom: 40px;
+          row-gap: 1.25rem;
+          padding-bottom: 1.25rem;
         }
         .topbar-left {
           display: flex;
@@ -113,7 +116,6 @@ const Topbar: React.FC = () => {
           font-weight: 400;
         }
         .topbar-title {
-          padding: 1.7rem 0;
           font-weight: 600;
           font-size: 1.2em;
           line-height: 100%;
@@ -133,7 +135,7 @@ const Topbar: React.FC = () => {
           padding: 0;
         }
         .show {
-          max-height: ${Config.menus.length * 4}em;
+          max-height: ${Config.menus.length * 4}rem;
           transition: max-height 0.25s ease-in;
         }
         @media (min-width: 800px) {
