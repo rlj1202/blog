@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -12,32 +12,45 @@ const Topbar: React.FC = () => {
   const [navShow, setNavShow] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
 
-  const topbarRef = useRef<HTMLDivElement | null>(null);
-  const navRef = useRef<HTMLDivElement | null>(null);
+  const [topbarHeight, setTopbarHeight] = useState(0);
+  const [navHeight, setNavHeight] = useState(0);
+
+  const topbarRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLDivElement>(null);
 
   const toggleNav = () => {
     setNavShow((status) => !status);
   };
 
-  const handleScroll = (event: Event) => {
-    const curScrollY = Math.max(window.scrollY, 0);
+  const handleScroll = useCallback(
+    (event: Event) => {
+      const curScrollY = Math.max(window.scrollY, 0);
 
-    if (curScrollY > lastScrollY) {
-      setTopbarShow(false);
-    } else {
-      setTopbarShow(true);
-    }
+      if (curScrollY > lastScrollY) {
+        setTopbarShow(false);
+      } else {
+        setTopbarShow(true);
+      }
 
-    setLastScrollY(curScrollY);
-  };
+      setLastScrollY(curScrollY);
+    },
+    [lastScrollY]
+  );
 
   useEffect(() => {
+    if (topbarRef.current) {
+      setTopbarHeight(topbarRef.current.clientHeight);
+    }
+    if (navRef.current) {
+      setNavHeight(navRef.current.clientHeight);
+    }
+
     window.addEventListener('scroll', handleScroll);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  });
+  }, [handleScroll]);
 
   return (
     <div className="topbar" ref={topbarRef}>
@@ -99,7 +112,7 @@ const Topbar: React.FC = () => {
           overflow: hidden;
           background-color: var(--color-bg-secondary);
           position: relative;
-          top: ${topbarShow ? 0 : `-${topbarRef?.current?.clientHeight}px`};
+          top: ${topbarShow ? 0 : `-${topbarHeight}px`};
           transition: top 0.25s ease;
         }
         .topbar-content {
@@ -163,7 +176,7 @@ const Topbar: React.FC = () => {
           padding: 0;
         }
         .show {
-          max-height: ${`${navRef?.current?.clientHeight}px`};
+          max-height: ${`${navHeight}px`};
           transition: max-height 0.25s ease;
         }
         @media (min-width: 800px) {
