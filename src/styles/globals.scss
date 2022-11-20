@@ -47,6 +47,10 @@ button {
   color: inherit;
 }
 
+pre {
+  font-family: unset;
+}
+
 hr {
   border: none;
   border-top: solid 1px var(--color-hr);

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -8,14 +8,39 @@ import logo from '@public/favicon.svg';
 import ToggleTheme from '@/components/toggletheme';
 
 const Topbar: React.FC = () => {
+  const [topbarShow, setTopbarShow] = useState(true);
   const [navShow, setNavShow] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  const topbarRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLDivElement>(null);
 
   const toggleNav = () => {
     setNavShow((status) => !status);
   };
 
+  const handleScroll = (event: Event) => {
+    const curScrollY = Math.max(window.scrollY, 0);
+
+    if (curScrollY > lastScrollY) {
+      setTopbarShow(false);
+    } else {
+      setTopbarShow(true);
+    }
+
+    setLastScrollY(curScrollY);
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  });
+
   return (
-    <div className="topbar">
+    <div className="topbar" ref={topbarRef}>
       <div className="topbar-content">
         <div className="topbar-left">
           <Link href="/">
@@ -57,7 +82,7 @@ const Topbar: React.FC = () => {
         </div>
       </div>
       <div className={`topbar-nav ${navShow ? 'show' : ''}`}>
-        <div className="topbar-nav-links">
+        <div ref={navRef} className="topbar-nav-links">
           {Config.menus.map((menu) => (
             <div key={menu.label}>
               <Link href={menu.path}>
@@ -73,6 +98,9 @@ const Topbar: React.FC = () => {
           box-shadow: rgba(0, 0, 0, 0.05) 0 0 20px 5px;
           overflow: hidden;
           background-color: var(--color-bg-secondary);
+          position: relative;
+          top: ${topbarShow ? 0 : `-${topbarRef.current?.clientHeight}px`};
+          transition: top 0.25s ease;
         }
         .topbar-content {
           display: flex;
@@ -135,8 +163,8 @@ const Topbar: React.FC = () => {
           padding: 0;
         }
         .show {
-          max-height: ${Config.menus.length * 4}rem;
-          transition: max-height 0.25s ease-in;
+          max-height: ${`${navRef.current?.clientHeight}px`};
+          transition: max-height 0.25s ease;
         }
         @media (min-width: 800px) {
           .topbar-button-more {
