@@ -4,7 +4,6 @@ import Link from 'next/link';
 
 import Config from '@/config';
 import { generateRssFeed } from '@/rssgen';
-import { generateSitemap } from '@/sitemapgen';
 
 import ArticleCard from '@/components/articlecard';
 
@@ -14,7 +13,6 @@ export const getStaticProps: GetStaticProps<{
   articles: Article[];
 }> = async (context) => {
   generateRssFeed(allArticles);
-  generateSitemap(allArticles);
 
   const articles = allArticles
     .sort((a, b) => Number(new Date(b.date)) - Number(new Date(a.date)))

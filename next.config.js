@@ -20,7 +20,8 @@ module.exports = (phase, { defaultConfig }) => {
     },
     images: {
       domains: ['blog.golang.org', 'cfile3.uf.tistory.com', 'i1.daumcdn.net'],
-      // loader: 'custom',
+      // path: '',
+      // loader: 'akamai',
     },
     async redirects() {
       return [];
