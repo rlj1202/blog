@@ -170,29 +170,30 @@ const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
           color: #666666;
         }
         .post-title {
-          font-size: 2.5em;
-          margin: 0.3em 0;
-          font-weight: bold;
+          font-size: 2rem;
+          margin-bottom: 0.3rem;
+          font-weight: 700;
           color: var(--color-text-primary);
         }
         .post-subtitle {
-          font-size: 1.3em;
-          margin: 10px 0;
+          font-size: 1.3rem;
+          margin-bottom: 0.3rem;
           font-weight: normal;
           color: var(--color-text-secondary);
         }
         .post-date {
           font-weight: normal;
-          font-size: 1em;
-          margin: 10px 0;
+          font-size: 1rem;
+          margin-bottom: 0.3rem;
           color: var(--color-text-secondary);
         }
         .post-tags {
-          margin: 10px 0;
+          margin-top: 1rem;
+          margin-bottom: 0.3rem;
           display: flex;
           flex-wrap: wrap;
-          row-gap: 6px;
-          column-gap: 6px;
+          row-gap: 0.3rem;
+          column-gap: 0.3rem;
         }
         .post-suggestions {
           display: flex;
@@ -200,10 +201,12 @@ const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
           flex-wrap: wrap;
           row-gap: 1.25rem;
           column-gap: 1.25rem;
-          margin: 2rem 0;
+          margin-top: 2rem;
+          margin-bottom: 2rem;
         }
         hr {
-          margin: 2rem 0;
+          margin-top: 2rem;
+          margin-bottom: 2rem;
         }
       `}</style>
     </>
