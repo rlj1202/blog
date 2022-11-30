@@ -62,7 +62,7 @@ const CategoryList: React.FC<{
 
   return (
     <div>
-      <CustomTag>{treeNode.title}</CustomTag>
+      <CustomTag className="title">{treeNode.title}</CustomTag>
       <ul>
         {treeNode.articles.map((article) => {
           return (
@@ -79,33 +79,17 @@ const CategoryList: React.FC<{
           <CategoryList key={child.title} level={level + 1} treeNode={child} />
         );
       })}
-      {/* {treeNodes.map((node) => {
-        return (
-          <Fragment key={node.category.slug}>
-            <CustomTag>
-              <CategoryLink category={node.category}>
-                <a>{node.category.name}</a>
-              </CategoryLink>
-            </CustomTag>
-            {articles
-              .filter((article) => article.categorySlug === node.category.slug)
-              .map((article) => {
-                return (
-                  <ArticleLink article={article} key={article.slug}>
-                    <a>{article.title || article.slug}</a>
-                  </ArticleLink>
-                );
-              })}
-            {node.children && (
-              <CategoryList
-                level={level + 1}
-                treeNodes={node.children}
-                articles={articles}
-              />
-            )}
-          </Fragment>
-        );
-      })} */}
+
+      <style jsx>{`
+        .title {
+          ${level === 1
+            ? `
+          margin-top: 2rem;
+          margin-bottom: 2rem;
+          `
+            : ''}
+        }
+      `}</style>
     </div>
   );
 };

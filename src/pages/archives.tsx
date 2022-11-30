@@ -24,7 +24,7 @@ const Archives: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   articles,
 }) => {
   const years = Array.from(
-    new Set(articles.map((article) => new Date(article.date).getFullYear())),
+    new Set(articles.map((article) => new Date(article.date).getFullYear()))
   );
 
   return (
@@ -34,7 +34,7 @@ const Archives: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
       </Head>
 
       <div>
-        <h1>Archives</h1>
+        <h1 className="title">Archives</h1>
 
         {years.map((year) => (
           <Fragment key={year}>
@@ -54,6 +54,10 @@ const Archives: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
       </div>
 
       <style jsx>{`
+        .title {
+          margin-top: 2rem;
+          margin-bottom: 2rem;
+        }
         .post {
           margin: 20px 0;
         }

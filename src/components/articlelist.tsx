@@ -38,6 +38,10 @@ const ArticleList: React.FC<{
       />
 
       <style jsx>{`
+        .title {
+          margin-top: 2rem;
+          margin-bottom: 2rem;
+        }
         .articles {
           display: flex;
           flex-wrap: wrap;

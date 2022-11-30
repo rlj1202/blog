@@ -41,7 +41,7 @@ const Tags: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
       </Head>
 
       <div>
-        <h1>Tags</h1>
+        <h1 className="title">Tags</h1>
 
         <div className="tags">
           {tags.map((tag) => (
@@ -55,6 +55,10 @@ const Tags: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
       </div>
 
       <style jsx>{`
+        .title {
+          margin-top: 2rem;
+          margin-bottom: 2rem;
+        }
         .tags {
           display: flex;
           flex-wrap: wrap;

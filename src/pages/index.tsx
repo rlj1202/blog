@@ -35,7 +35,7 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
       </Head>
 
       <main>
-        <h1>Latest</h1>
+        <h1 className="title">Latest</h1>
 
         <div className="article-cards">
           {articles.map((article, index) => (
@@ -56,6 +56,10 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
       </main>
 
       <style jsx>{`
+        .title {
+          margin-top: 2rem;
+          margin-bottom: 2rem;
+        }
         .article-cards {
           display: flex;
           flex-direction: row;
