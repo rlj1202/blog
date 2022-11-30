@@ -43,8 +43,14 @@
     margin-block-end: 2rem;
   }
 
-  li {
-    margin: 0.5rem 0;
+  li,
+  li > ul {
+    margin: 1rem 0;
+  }
+
+  li > p {
+    margin: unset;
+    line-height: unset;
   }
 
   .callout {

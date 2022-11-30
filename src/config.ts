@@ -7,7 +7,7 @@ const Config = {
   favicon: '/favicon.svg',
 
   tableOfContents: {
-    label: 'Table of contents',
+    label: 'Table of Contents',
   },
 
   rss: {

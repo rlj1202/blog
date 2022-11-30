@@ -48,6 +48,7 @@
     "remark-math": "^5.1.1",
     "remark-parse": "^10.0.0",
     "remark-rehype": "^10.0.0",
+    "remark-toc": "^8.0.1",
     "sass": "^1.43.4",
     "slugify": "^1.6.5",
     "unified": "^10.1.0",

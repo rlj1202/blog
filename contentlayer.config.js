@@ -1,19 +1,22 @@
 import { defineDocumentType, makeSource } from 'contentlayer/source-files';
-import rehypeStringify from 'rehype-stringify';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import remarkFrontmatter from 'remark-frontmatter';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import remarkToc from 'remark-toc';
+import rehypeStringify from 'rehype-stringify';
+import rehypeKatex from 'rehype-katex';
+// import rehypeMathJax from 'rehype-mathjax';
 import rehypeSlug from 'rehype-slug';
 import rehypeRaw from 'rehype-raw';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeCodeTitles from 'rehype-code-titles';
-import remarkGfm from 'remark-gfm';
 
 import path from 'path';
-import remarkMath from 'remark-math';
-// import rehypeMathJax from 'rehype-mathjax';
-import rehypeKatex from 'rehype-katex';
+
+import Config from './src/config';
 
 export const Article = defineDocumentType(() => ({
   name: 'Article',
@@ -74,6 +77,7 @@ export default makeSource({
       .use(remarkParse)
       .use(remarkGfm)
       .use(remarkMath)
+      .use(remarkToc, { heading: Config.tableOfContents.label })
       .use(remarkRehype, { allowDangerousHtml: true })
       // .use(rehypeMathJax)
       .use(rehypeKatex, { strict: false })
