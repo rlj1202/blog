@@ -52,6 +52,10 @@
     margin-bottom: 1rem;
   }
 
+  .math-display {
+    overflow-x: auto;
+  }
+
   .math-display .hangul_fallback {
     font-family: 'Noto Serif KR';
   }
