@@ -24,6 +24,7 @@ const Config = {
     repo: 'rlj1202/blog',
     issueTerm: 'pathname',
     theme: 'github-light',
+    label: 'blog-comment',
   },
 
   menus: [
