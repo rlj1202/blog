@@ -6,6 +6,7 @@ tags:
   - KMP
   - baekjoon
   - PS
+published: true
 ---
 ## 문제
 
@@ -39,7 +40,7 @@ $$
 
 이미 주어진 문자열이 모두 일치하는 경우에는 뒤에 어떤 문자를 붙여도 되므로 `U` 혹은 `D`를 붙였을 때 $K$의 값이 변화함만 신경써 주면 되겠다.
 
-```cpp
+```cpp:main.cpp
 #include <bits/stdc++.h>
 
 using namespace std;

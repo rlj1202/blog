@@ -7,6 +7,7 @@ tags:
   - DAG
   - topological-sort
   - aho-corasick
+published: true
 ---
 [5699번: 문자열 농장](https://www.acmicpc.net/problem/5699)
 
