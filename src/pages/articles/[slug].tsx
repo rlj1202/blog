@@ -126,7 +126,7 @@ const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
 
       <article>
         <header className="post-header">
-          <span className="post-category">{article.categories.join('/')}</span>
+          <div className="post-category">{article.categories.join('/')}</div>
           <h1 className="post-title">
             <ArticleLink article={article}>
               <a>{article.title}</a>
@@ -144,9 +144,10 @@ const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
             ))}
           </div>
         </header>
-        <main className="article">
-          <div dangerouslySetInnerHTML={{ __html: article.body.html || '' }} />
-        </main>
+        <main
+          className="article"
+          dangerouslySetInnerHTML={{ __html: article.body.html || '' }}
+        />
       </article>
 
       <hr />
@@ -164,19 +165,24 @@ const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
 
       <style jsx>{`
         .post-header {
-          margin: 2rem 0;
+          margin-top: 2rem;
+          margin-bottom: 2rem;
         }
         .post-category {
           color: #666666;
+          margin-top: 0.3rem;
+          margin-bottom: 0.3rem;
         }
         .post-title {
           font-size: 2rem;
+          margin-top: 0.3rem;
           margin-bottom: 0.3rem;
           font-weight: 700;
           color: var(--color-text-primary);
         }
         .post-subtitle {
           font-size: 1.3rem;
+          margin-top: 0.3rem;
           margin-bottom: 0.3rem;
           font-weight: normal;
           color: var(--color-text-secondary);
@@ -184,6 +190,7 @@ const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
         .post-date {
           font-weight: normal;
           font-size: 1rem;
+          margin-top: 0.3rem;
           margin-bottom: 0.3rem;
           color: var(--color-text-secondary);
         }
