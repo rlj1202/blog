@@ -7,7 +7,8 @@ import {
 import Head from 'next/head';
 import { ParsedUrlQuery } from 'querystring';
 
-import { allArticles, Article } from 'contentlayer/generated';
+import { Article } from 'contentlayer/generated';
+import { getArticles } from '@/utils';
 
 import ArticleList from '@/components/articlelist';
 
@@ -43,7 +44,7 @@ function add(node: CategoryTree, article: Article, categories: string[]) {
 
 function getPaths(
   categories: string[],
-  node: CategoryTree,
+  node: CategoryTree
 ): { params: Props }[] {
   const total = node.articles.length;
   const pages = Math.ceil(total / Config.articles.perPage);
@@ -57,7 +58,7 @@ function getPaths(
           category: categories.join('-'),
           page: `${page}`,
         },
-      })),
+      }))
     );
   }
 
@@ -86,12 +87,12 @@ export const getStaticProps: GetStaticProps<
 
   const categories = category.split('-');
 
-  const articles = allArticles.filter((article) => {
+  const articles = getArticles().filter((article) => {
     if (article.categories.length !== categories.length) {
       return false;
     }
     return article.categories.every(
-      (value, index) => categories[index] == value,
+      (value, index) => categories[index] == value
     );
   });
 
@@ -111,8 +112,8 @@ export const getStaticPaths: GetStaticPaths<Props> = async () => {
     children: {},
   };
 
-  allArticles.forEach((article) =>
-    add(categoryTree, article, article.categories),
+  getArticles().forEach((article) =>
+    add(categoryTree, article, article.categories)
   );
 
   const paths = getPaths([], categoryTree);

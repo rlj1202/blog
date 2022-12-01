@@ -4,7 +4,8 @@ import Head from 'next/head';
 
 import ArticleLink from '@/components/articlelink';
 
-import { allArticles, Article } from 'contentlayer/generated';
+import { Article } from 'contentlayer/generated';
+import { getArticles } from '@/utils';
 
 import Config from '@/config';
 
@@ -15,7 +16,7 @@ interface Props {
 export const getStaticProps: GetStaticProps<Props> = async (context) => {
   return {
     props: {
-      articles: allArticles,
+      articles: getArticles(),
     },
   };
 };

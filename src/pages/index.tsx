@@ -7,16 +7,15 @@ import { generateRssFeed } from '@/rssgen';
 
 import ArticleCard from '@/components/articlecard';
 
-import { allArticles, Article } from 'contentlayer/generated';
+import { Article } from 'contentlayer/generated';
+import { getArticles } from '@/utils';
 
 export const getStaticProps: GetStaticProps<{
   articles: Article[];
 }> = async (context) => {
-  generateRssFeed(allArticles);
+  generateRssFeed(getArticles());
 
-  const articles = allArticles
-    .sort((a, b) => Number(new Date(b.date)) - Number(new Date(a.date)))
-    .slice(0, 10);
+  const articles = getArticles().slice(0, 10);
 
   return {
     props: {

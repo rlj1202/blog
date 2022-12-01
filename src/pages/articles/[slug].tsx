@@ -11,7 +11,8 @@ import dateFormat from 'dateformat';
 
 import { NextSeo } from 'next-seo';
 
-import { allArticles, Article } from 'contentlayer/generated';
+import { Article } from 'contentlayer/generated';
+import { getArticles } from '@/utils';
 
 import Config from '@/config';
 
@@ -34,7 +35,7 @@ export const getStaticProps: GetStaticProps<Props, Routes> = async (
   context
 ) => {
   let slug = context.params?.slug;
-  const article = allArticles.find((article) => article.slug === slug);
+  const article = getArticles().find((article) => article.slug === slug);
 
   if (!slug || !article) {
     return {
@@ -42,7 +43,7 @@ export const getStaticProps: GetStaticProps<Props, Routes> = async (
     };
   }
 
-  const suggestedArticles = allArticles.slice(0, 2);
+  const suggestedArticles = getArticles().slice(0, 2);
 
   return {
     props: {
@@ -55,7 +56,7 @@ export const getStaticProps: GetStaticProps<Props, Routes> = async (
 export const getStaticPaths: GetStaticPaths<ParsedUrlQuery> = async (
   context
 ) => {
-  const paths = allArticles.map((article) => article.url);
+  const paths = getArticles().map((article) => article.url);
 
   return {
     paths,

@@ -11,7 +11,8 @@ import Config from '@/config';
 
 import ArticleList from '@/components/articlelist';
 
-import { allArticles, Article } from 'contentlayer/generated';
+import { Article } from 'contentlayer/generated';
+import { getArticles } from '@/utils';
 
 interface Props extends ParsedUrlQuery {
   page: string;
@@ -26,13 +27,13 @@ export const getStaticProps: GetStaticProps<
   return {
     props: {
       page,
-      articles: allArticles,
+      articles: getArticles(),
     },
   };
 };
 
 export const getStaticPaths: GetStaticPaths<Props> = async (context) => {
-  const total = allArticles.length;
+  const total = getArticles().length;
   const pages = Math.ceil(total / Config.articles.perPage);
 
   return {

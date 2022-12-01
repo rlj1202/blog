@@ -1,11 +1,11 @@
-import { Fragment } from 'react';
 import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
 
 import ArticleLink from '@/components/articlelink';
 import CategoryLink from '@/components/categorylink';
 
-import { allArticles, Article } from 'contentlayer/generated';
+import { Article } from 'contentlayer/generated';
+import { getArticles } from '@/utils';
 
 import Config from '@/config';
 
@@ -43,7 +43,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     children: {},
   };
 
-  allArticles.forEach((article) => {
+  getArticles().forEach((article) => {
     add(categoryTree, article, article.categories);
   });
 

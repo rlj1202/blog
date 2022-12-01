@@ -10,7 +10,8 @@ import { ParsedUrlQuery } from 'querystring';
 import ArticleList from '@/components/articlelist';
 import Config from '@/config';
 
-import { allArticles, Article } from 'contentlayer/generated';
+import { Article } from 'contentlayer/generated';
+import { getArticles } from '@/utils';
 
 interface Props extends ParsedUrlQuery {
   tag: string;
@@ -31,8 +32,8 @@ export const getStaticProps: GetStaticProps<
 
   const tag = context.params.tag;
   const curPage = parseInt(context.params.page);
-  const filteredArticles = allArticles.filter((article) =>
-    article.tags?.includes(tag),
+  const filteredArticles = getArticles().filter((article) =>
+    article.tags?.includes(tag)
   );
 
   return {
@@ -47,17 +48,17 @@ export const getStaticProps: GetStaticProps<
 export const getStaticPaths: GetStaticPaths<Props> = async () => {
   const tags = Array.from(
     new Set(
-      allArticles
+      getArticles()
         .map((article) => article.tags)
         .flat()
-        .filter((tag): tag is string => tag !== undefined),
-    ),
+        .filter((tag): tag is string => tag !== undefined)
+    )
   );
 
   const paths = await Promise.all(
     tags.map(async (tag) => {
-      let total = allArticles.filter((article) =>
-        article.tags?.includes(tag),
+      let total = getArticles().filter((article) =>
+        article.tags?.includes(tag)
       ).length;
       let pages = Math.ceil(total / Config.articles.perPage);
 
@@ -67,9 +68,9 @@ export const getStaticPaths: GetStaticPaths<Props> = async () => {
             tag,
             page: `${page}`,
           },
-        }),
+        })
       );
-    }),
+    })
   );
 
   return {

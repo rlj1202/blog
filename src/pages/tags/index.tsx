@@ -5,7 +5,8 @@ import Tag from '@/components/tag';
 
 import Config from '@/config';
 
-import { allArticles, Article } from 'contentlayer/generated';
+import { Article } from 'contentlayer/generated';
+import { getArticles } from '@/utils';
 
 interface Props {
   articles: Article[];
@@ -15,7 +16,7 @@ interface Props {
 export const getStaticProps: GetStaticProps<Props> = async (context) => {
   const tags = Array.from(
     new Set(
-      allArticles
+      getArticles()
         .map((article) => article.tags)
         .flat()
         .filter((tag): tag is string => tag !== undefined)
@@ -24,7 +25,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
 
   return {
     props: {
-      articles: allArticles,
+      articles: getArticles(),
       tags,
     },
   };
