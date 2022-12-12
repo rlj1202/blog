@@ -19,7 +19,7 @@ import Config from '@/config';
 import ArticleLink from '@/components/articlelink';
 import ArticleCard from '@/components/articlecard';
 
-import Utterances from '@/components/utterances';
+import Giscus from '@giscus/react';
 import Tag from '@/components/tag';
 
 interface Props {
@@ -153,7 +153,22 @@ const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
 
       <hr />
 
-      <Utterances />
+      <Giscus
+        id="comments"
+        repo="rlj1202/blog"
+        repoId="MDEwOlJlcG9zaXRvcnkyMjg3OTc4MTY="
+        category="Announcements"
+        categoryId="DIC_kwDODaMteM4CS6FK"
+        mapping="pathname"
+        // strict="0"
+        term="Welcome to @giscus/react component!"
+        reactionsEnabled="1"
+        emitMetadata="0"
+        inputPosition="bottom"
+        theme="light"
+        lang="ko"
+        loading="lazy"
+      />
 
       <hr />
 

@@ -13,6 +13,7 @@
     "deploy": "next build && next export && touch out/.nojekyll && git add out/ && git commit -m 'Deploy to gh-pages' && git subtree push --prefix out origin gh-pages"
   },
   "dependencies": {
+    "@giscus/react": "^2.2.4",
     "@notionhq/client": "^1.0.4",
     "@types/jsdom": "^16.2.13",
     "babel-plugin-superjson-next": "^0.4.2",
@@ -52,6 +53,9 @@
     "sass": "^1.43.4",
     "slugify": "^1.6.5",
     "unified": "^10.1.0",
+    "unist-util-modify-children": "^3.1.0",
+    "unist-util-remove": "^3.1.0",
+    "unist-util-select": "^4.0.1",
     "unist-util-visit": "^4.1.0"
   },
   "devDependencies": {
