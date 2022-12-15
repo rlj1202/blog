@@ -7,7 +7,7 @@ import {
 import Head from 'next/head';
 import { ParsedUrlQuery } from 'querystring';
 
-import ArticleList from '@/components/articlelist';
+import ArticleList from '@/components/ArticleList';
 import Config from '@/config';
 
 import { Article } from 'contentlayer/generated';

@@ -16,11 +16,11 @@ import { getArticles } from '@/utils';
 
 import Config from '@/config';
 
-import ArticleLink from '@/components/articlelink';
-import ArticleCard from '@/components/articlecard';
+import ArticleLink from '@/components/ArticleLink';
+import ArticleCard from '@/components/ArticleCard';
 
 import Giscus from '@giscus/react';
-import Tag from '@/components/tag';
+import Tag from '@/components/Tag';
 
 interface Props {
   article: Article;

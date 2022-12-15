@@ -5,7 +5,8 @@ import Image from 'next/image';
 import Config from '@/config';
 
 import logo from '@public/favicon.svg';
-import ToggleTheme from '@/components/toggletheme';
+import ToggleTheme from '@/components/ToggleTheme';
+import Container from '@/components/Container';
 
 const Topbar: React.FC = () => {
   const [topbarShow, setTopbarShow] = useState(true);
@@ -54,57 +55,59 @@ const Topbar: React.FC = () => {
 
   return (
     <div className="topbar" ref={topbarRef}>
-      <div className="topbar-content">
-        <div className="topbar-left">
-          <Link href="/">
-            <a>
-              <div className="topbar-title">
-                <div className="topbar-logo">
-                  <Image
-                    src={logo}
-                    width={'25'}
-                    height={'25'}
-                    layout="fixed"
-                    alt="Logo"
-                  />
+      <Container>
+        <div className="topbar-content">
+          <div className="topbar-left">
+            <Link href="/">
+              <a>
+                <div className="topbar-title">
+                  <div className="topbar-logo">
+                    <Image
+                      src={logo}
+                      width={'25'}
+                      height={'25'}
+                      layout="fixed"
+                      alt="Logo"
+                    />
+                  </div>
+                  {Config.title}
                 </div>
-                {Config.title}
-              </div>
-            </a>
-          </Link>
-          <div className="topbar-left-links">
+              </a>
+            </Link>
+            <div className="topbar-left-links">
+              {Config.menus.map((menu) => (
+                <span className="topbar-link" key={menu.label}>
+                  <Link href={menu.path}>
+                    <a>{menu.label}</a>
+                  </Link>
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="topbar-right">
+            <button
+              className="topbar-button topbar-button-more"
+              onClick={toggleNav}
+            >
+              <i className="fas fa-bars fa-lg"></i>
+            </button>
+            <div className="topbar-button">
+              <ToggleTheme />
+            </div>
+          </div>
+        </div>
+        <div className={`topbar-nav ${navShow ? 'show' : ''}`}>
+          <div ref={navRef} className="topbar-nav-links">
             {Config.menus.map((menu) => (
-              <span className="topbar-link" key={menu.label}>
+              <div key={menu.label}>
                 <Link href={menu.path}>
                   <a>{menu.label}</a>
                 </Link>
-              </span>
+              </div>
             ))}
           </div>
         </div>
-        <div className="topbar-right">
-          <button
-            className="topbar-button topbar-button-more"
-            onClick={toggleNav}
-          >
-            <i className="fas fa-bars fa-lg"></i>
-          </button>
-          <div className="topbar-button">
-            <ToggleTheme />
-          </div>
-        </div>
-      </div>
-      <div className={`topbar-nav ${navShow ? 'show' : ''}`}>
-        <div ref={navRef} className="topbar-nav-links">
-          {Config.menus.map((menu) => (
-            <div key={menu.label}>
-              <Link href={menu.path}>
-                <a>{menu.label}</a>
-              </Link>
-            </div>
-          ))}
-        </div>
-      </div>
+      </Container>
 
       <style jsx>{`
         .topbar {
@@ -121,13 +124,6 @@ const Topbar: React.FC = () => {
           align-items: center;
           padding-top: 1.25rem;
           padding-bottom: 1.25rem;
-        }
-        .topbar-content,
-        .topbar-nav {
-          max-width: 50rem;
-          margin: 0 auto;
-          padding-left: 1.25rem;
-          padding-right: 1.25rem;
         }
         .topbar-nav {
           max-height: 0;

@@ -9,7 +9,7 @@ import { ParsedUrlQuery } from 'querystring';
 
 import Config from '@/config';
 
-import ArticleList from '@/components/articlelist';
+import ArticleList from '@/components/ArticleList';
 
 import { Article } from 'contentlayer/generated';
 import { getArticles } from '@/utils';

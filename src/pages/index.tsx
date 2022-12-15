@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Config from '@/config';
 import { generateRssFeed } from '@/rssgen';
 
-import ArticleCard from '@/components/articlecard';
+import ArticleCard from '@/components/ArticleCard';
 
 import { Article } from 'contentlayer/generated';
 import { getArticles } from '@/utils';

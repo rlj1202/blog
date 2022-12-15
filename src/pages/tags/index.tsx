@@ -1,7 +1,7 @@
 import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
 
-import Tag from '@/components/tag';
+import Tag from '@/components/Tag';
 
 import Config from '@/config';
 

@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
 
-import ArticleLink from '@/components/articlelink';
+import ArticleLink from '@/components/ArticleLink';
 
 import { Article } from 'contentlayer/generated';
 import { getArticles } from '@/utils';

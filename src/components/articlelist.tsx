@@ -1,5 +1,5 @@
-import Paginator from './paginator';
-import ArticleCard from './articlecard';
+import Paginator from '@/components/Paginator';
+import ArticleCard from '@/components/ArticleCard';
 
 import { Article } from 'contentlayer/generated';
 

@@ -4,8 +4,9 @@ import Script from 'next/script';
 import { DefaultSeo } from 'next-seo';
 
 import Config from '@/config';
-import Topbar from '@/components/topbar';
-import Footer from './footer';
+import Topbar from '@/components/Topbar';
+import Footer from '@/components/Footer';
+import Container from '@/components/Container';
 
 const Layout: React.FC = ({ children }) => {
   return (
@@ -66,21 +67,15 @@ const Layout: React.FC = ({ children }) => {
         <Topbar />
       </div>
 
-      <div className="main">
+      <Container>
         {children}
 
         <hr />
 
         <Footer />
-      </div>
+      </Container>
 
       <style jsx>{`
-        .main {
-          margin-left: auto;
-          margin-right: auto;
-          max-width: 50rem;
-          padding: 0 1.25rem;
-        }
         hr {
           margin: 2rem 0;
         }

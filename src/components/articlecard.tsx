@@ -2,10 +2,10 @@ import Image from 'next/image';
 
 import dateFormat from 'dateformat';
 
-import Tag from './tag';
+import Tag from '@/components/Tag';
 
-import ArticleLink from '@/components/articlelink';
-import CategoryLink from '@/components/categorylink';
+import ArticleLink from '@/components/ArticleLink';
+import CategoryLink from '@/components/CategoryLink';
 
 import { Article } from 'contentlayer/generated';
 

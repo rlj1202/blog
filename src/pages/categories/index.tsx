@@ -1,8 +1,8 @@
 import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
 
-import ArticleLink from '@/components/articlelink';
-import CategoryLink from '@/components/categorylink';
+import ArticleLink from '@/components/ArticleLink';
+import CategoryLink from '@/components/CategoryLink';
 
 import { Article } from 'contentlayer/generated';
 import { getArticles } from '@/utils';
