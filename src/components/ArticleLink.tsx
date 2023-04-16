@@ -4,7 +4,7 @@ import { Article } from 'contentlayer/generated';
 
 const ArticleLink: React.FC<{ article: Article }> = ({ article, children }) => {
   return (
-    <Link href={article.url} passHref>
+    <Link href={article.url} passHref legacyBehavior>
       {children}
     </Link>
   );

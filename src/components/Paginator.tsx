@@ -20,7 +20,7 @@ const Paginator: React.FC<{
     <div className="pagination-wrapper">
       <div className="pagination">
         <div className="pagination-button">
-          <Link href={pageUrl(Math.max(curPage - 1, 1))}>
+          <Link href={pageUrl(Math.max(curPage - 1, 1))} legacyBehavior>
             <a>
               <i className="fas fa-chevron-left"></i>
             </a>
@@ -33,13 +33,13 @@ const Paginator: React.FC<{
               i == curPage ? 'pagination-button-selected' : ''
             }`}
           >
-            <Link href={pageUrl(i)}>
+            <Link href={pageUrl(i)} legacyBehavior>
               <a>{i}</a>
             </Link>
           </div>
         ))}
         <div className="pagination-button">
-          <Link href={pageUrl(Math.min(curPage + 1, maxPage))}>
+          <Link href={pageUrl(Math.min(curPage + 1, maxPage))} legacyBehavior>
             <a>
               <i className="fas fa-chevron-right"></i>
             </a>

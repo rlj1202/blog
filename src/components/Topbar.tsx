@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 
 import Config from '@/config';
 
@@ -58,7 +58,7 @@ const Topbar: React.FC = () => {
       <Container>
         <div className="topbar-content">
           <div className="topbar-left">
-            <Link href="/">
+            <Link href="/" legacyBehavior>
               <a>
                 <div className="topbar-title">
                   <div className="topbar-logo">
@@ -77,7 +77,7 @@ const Topbar: React.FC = () => {
             <div className="topbar-left-links">
               {Config.menus.map((menu) => (
                 <span className="topbar-link" key={menu.label}>
-                  <Link href={menu.path}>
+                  <Link href={menu.path} legacyBehavior>
                     <a>{menu.label}</a>
                   </Link>
                 </span>
@@ -100,7 +100,7 @@ const Topbar: React.FC = () => {
           <div ref={navRef} className="topbar-nav-links">
             {Config.menus.map((menu) => (
               <div key={menu.label}>
-                <Link href={menu.path}>
+                <Link href={menu.path} legacyBehavior>
                   <a>{menu.label}</a>
                 </Link>
               </div>

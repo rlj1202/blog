@@ -44,7 +44,7 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
 
         <div className="bottom">
           <div className="readmore">
-            <Link href="/pages/1">
+            <Link href="/pages/1" legacyBehavior>
               <a>
                 All posts
                 <i className="fas fa-chevron-right arrow"></i>

@@ -5,7 +5,10 @@ const CategoryLink: React.FC<{ categories: string[] }> = ({
   children,
 }) => {
   return (
-    <Link href={`/categories/${categories.join('-')}/pages/1`} passHref>
+    <Link
+      href={`/categories/${categories.join('-')}/pages/1`}
+      passHref
+      legacyBehavior>
       {children}
     </Link>
   );

@@ -3,7 +3,7 @@ import Link from 'next/link';
 const Tag: React.FC<{ tag: string }> = ({ tag, children }) => {
   return (
     <span className="tag">
-      <Link href={`/tags/${tag}/pages/1`}>
+      <Link href={`/tags/${tag}/pages/1`} legacyBehavior>
         <a>{children}</a>
       </Link>
 
