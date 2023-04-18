@@ -49,11 +49,12 @@ const Tags: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
 
       <div className="flex flex-row flex-wrap gap-1">
         {tags.map((tag) => (
-          <Tag key={tag} tag={tag}>
-            {`#${tag} · ${
-              articles.filter((article) => article.tags?.includes(tag)).length
-            }`}
-          </Tag>
+          <Tag key={tag} tag={tag} />
+          // <Tag key={tag} tag={tag}>
+          //   {`#${tag} · ${
+          //     articles.filter((article) => article.tags?.includes(tag)).length
+          //   }`}
+          // </Tag>
         ))}
       </div>
     </DefaultLayout>
