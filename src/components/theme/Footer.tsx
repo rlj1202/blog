@@ -91,7 +91,7 @@ const Footer: FC = () => {
             <Link href={Config.rss.json1Path}>JSON 1.0</Link>
           </span>
         </div>
-        <div>Copyright (c) 2023, Jisu Sim. All rights reserved.</div>
+        <div>{Config.copyright}</div>
       </div>
     </div>
   );
