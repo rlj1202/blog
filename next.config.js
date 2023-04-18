@@ -16,6 +16,9 @@ module.exports = (phase, { defaultConfig }) => {
     basePath: '',
     env: {},
     images: {},
+    sassOptions: {
+      fiber: false,
+    },
     async redirects() {
       return [];
     },
