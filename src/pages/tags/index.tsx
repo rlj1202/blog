@@ -1,12 +1,13 @@
 import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
 
-import Tag from '@/components/Tag';
-
-import Config from '@/config';
-
 import { Article } from 'contentlayer/generated';
 import { getArticles } from '@/utils';
+
+import DefaultLayout from '@/components/theme/DefaultLayout';
+
+import Config from '@/config';
+import Tag from '@/components/theme/Tag';
 
 interface Props {
   articles: Article[];
@@ -36,39 +37,26 @@ const Tags: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   tags,
 }) => {
   return (
-    <>
+    <DefaultLayout>
       <Head>
         <title>{`Tags - ${Config.title}`}</title>
       </Head>
 
-      <div>
-        <h1 className="title">Tags</h1>
-
-        <div className="tags">
-          {tags.map((tag) => (
-            <Tag key={tag} tag={tag}>
-              {`#${tag} · ${
-                articles.filter((article) => article.tags?.includes(tag)).length
-              }`}
-            </Tag>
-          ))}
-        </div>
+      <h1 className="text-6xl font-extrabold mb-16 text-gray-900 dark:text-gray-50">
+        <span className="relative after:absolute after:left-0 after:bottom-0 after:-z-10 after:w-full after:content-[''] after:h-7 after:bg-red-500/60 after:dark:bg-red-500/80">
+          Tags
+        </span>
+      </h1>
+      <div className="flex flex-row flex-wrap gap-1">
+        {tags.map((tag) => (
+          <Tag key={tag} tag={tag}>
+            {`#${tag} · ${
+              articles.filter((article) => article.tags?.includes(tag)).length
+            }`}
+          </Tag>
+        ))}
       </div>
-
-      <style jsx>{`
-        .title {
-          margin-top: 2rem;
-          margin-bottom: 2rem;
-        }
-        .tags {
-          display: flex;
-          flex-wrap: wrap;
-          row-gap: 6px;
-          column-gap: 6px;
-          margin: 40px 0;
-        }
-      `}</style>
-    </>
+    </DefaultLayout>
   );
 };
 

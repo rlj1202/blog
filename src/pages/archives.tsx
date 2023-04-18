@@ -1,13 +1,14 @@
 import { Fragment } from 'react';
 import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
-
-import ArticleLink from '@/components/ArticleLink';
+import Link from 'next/link';
 
 import { Article } from 'contentlayer/generated';
 import { getArticles } from '@/utils';
 
 import Config from '@/config';
+
+import DefaultLayout from '@/components/theme/DefaultLayout';
 
 interface Props {
   articles: Article[];
@@ -29,14 +30,18 @@ const Archives: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   );
 
   return (
-    <>
+    <DefaultLayout>
       <Head>
         <title>{`Archives - ${Config.title}`}</title>
       </Head>
 
-      <div>
-        <h1 className="title">Archives</h1>
+      <h1 className="text-6xl font-extrabold mb-16 text-gray-900 dark:text-gray-50">
+        <span className="relative after:absolute after:left-0 after:bottom-0 after:-z-10 after:w-full after:content-[''] after:h-7 after:bg-red-500/60 after:dark:bg-red-500/80">
+          Archives
+        </span>
+      </h1>
 
+      <div className="prose dark:prose-invert">
         {years.map((year) => (
           <Fragment key={year}>
             <h2>{year}</h2>
@@ -44,26 +49,14 @@ const Archives: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
             {articles
               .filter((article) => new Date(article.date).getFullYear() == year)
               .map((article) => (
-                <div className="post" key={article.slug}>
-                  <ArticleLink article={article}>
-                    <a>{article.title}</a>
-                  </ArticleLink>
+                <div className="" key={article.slug}>
+                  <Link href={article.url}>{article.title}</Link>
                 </div>
               ))}
           </Fragment>
         ))}
       </div>
-
-      <style jsx>{`
-        .title {
-          margin-top: 2rem;
-          margin-bottom: 2rem;
-        }
-        .post {
-          margin: 20px 0;
-        }
-      `}</style>
-    </>
+    </DefaultLayout>
   );
 };
 

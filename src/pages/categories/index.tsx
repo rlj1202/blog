@@ -1,11 +1,11 @@
 import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
-
-import ArticleLink from '@/components/ArticleLink';
-import CategoryLink from '@/components/CategoryLink';
+import Link from 'next/link';
 
 import { Article } from 'contentlayer/generated';
 import { getArticles } from '@/utils';
+
+import DefaultLayout from '@/components/theme/DefaultLayout';
 
 import Config from '@/config';
 
@@ -14,7 +14,7 @@ interface Props {
 }
 
 interface CategoryTree {
-  title: string;
+  title?: string;
   articles: Article[];
   children: Record<string, CategoryTree>;
 }
@@ -38,7 +38,7 @@ function add(node: CategoryTree, article: Article, categories: string[]) {
 
 export const getStaticProps: GetStaticProps<Props> = async (context) => {
   const categoryTree: CategoryTree = {
-    title: 'Categories',
+    // title: 'Categories',
     articles: [],
     children: {},
   };
@@ -62,15 +62,13 @@ const CategoryList: React.FC<{
 
   return (
     <div>
-      <CustomTag className="title">{treeNode.title}</CustomTag>
+      {treeNode.title && <CustomTag>{treeNode.title}</CustomTag>}
       <ul>
         {treeNode.articles.map((article) => {
           return (
-            <ArticleLink key={article._id} article={article}>
-              <a>
-                <li key={article._id}>{article.title || article.slug}</li>
-              </a>
-            </ArticleLink>
+            <Link href={article.url} key={article._id}>
+              <li key={article._id}>{article.title || article.slug}</li>
+            </Link>
           );
         })}
       </ul>
@@ -79,17 +77,6 @@ const CategoryList: React.FC<{
           <CategoryList key={child.title} level={level + 1} treeNode={child} />
         );
       })}
-
-      <style jsx>{`
-        .title {
-          ${level === 1
-            ? `
-          margin-top: 2rem;
-          margin-bottom: 2rem;
-          `
-            : ''}
-        }
-      `}</style>
     </div>
   );
 };
@@ -98,15 +85,21 @@ const Categories: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   categoryTree,
 }) => {
   return (
-    <>
+    <DefaultLayout>
       <Head>
         <title>{`Categories - ${Config.title}`}</title>
       </Head>
 
-      <CategoryList level={1} treeNode={categoryTree} />
+      <h1 className="text-6xl font-extrabold mb-16 text-gray-900 dark:text-gray-50">
+        <span className="relative after:absolute after:left-0 after:bottom-0 after:-z-10 after:w-full after:content-[''] after:h-7 after:bg-red-500/60 after:dark:bg-red-500/80">
+          Categories
+        </span>
+      </h1>
 
-      <style jsx>{``}</style>
-    </>
+      <div className="prose dark:prose-invert">
+        <CategoryList level={1} treeNode={categoryTree} />
+      </div>
+    </DefaultLayout>
   );
 };
 

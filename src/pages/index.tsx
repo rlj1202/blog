@@ -1,14 +1,16 @@
-import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next';
-import Head from 'next/head';
-import Link from 'next/link';
+import { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next';
 
 import Config from '@/config';
-import { generateRssFeed } from '@/rssgen';
-
-import ArticleCard from '@/components/ArticleCard';
+import Head from 'next/head';
 
 import { Article } from 'contentlayer/generated';
 import { getArticles } from '@/utils';
+
+import Articles from '@/components/theme/Articles';
+import SeeMore from '@/components/theme/SeeMore';
+import DefaultLayout from '@/components/theme/DefaultLayout';
+
+import generateRssFeed from '@/rssgen';
 
 export const getStaticProps: GetStaticProps<{
   articles: Article[];
@@ -24,67 +26,30 @@ export const getStaticProps: GetStaticProps<{
   };
 };
 
-const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
+const Page: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   articles,
 }) => {
   return (
-    <>
+    <DefaultLayout>
       <Head>
         <title>{`Home - ${Config.title}`}</title>
       </Head>
 
-      <main>
-        <h1 className="title">Latest</h1>
+      <h1 className="text-6xl font-extrabold mb-16 text-gray-900 dark:text-gray-50">
+        <span className="relative after:absolute after:left-0 after:bottom-0 after:-z-10 after:w-full after:content-[''] after:h-7 after:bg-red-500/60 after:dark:bg-red-500/80">
+          Latest
+        </span>
+      </h1>
 
-        <div className="article-cards">
-          {articles.map((article, index) => (
-            <ArticleCard key={article._id} article={article} />
-          ))}
-        </div>
+      <div className="mb-16">
+        <Articles articles={articles} />
+      </div>
 
-        <div className="bottom">
-          <div className="readmore">
-            <Link href="/pages/1" legacyBehavior>
-              <a>
-                All posts
-                <i className="fas fa-chevron-right arrow"></i>
-              </a>
-            </Link>
-          </div>
-        </div>
-      </main>
-
-      <style jsx>{`
-        .title {
-          margin-top: 2rem;
-          margin-bottom: 2rem;
-        }
-        .article-cards {
-          display: flex;
-          flex-direction: row;
-          flex-wrap: wrap;
-          row-gap: 1.25rem;
-          column-gap: 1.25rem;
-          margin: 2rem 0;
-        }
-        .bottom {
-          display: flex;
-          margin: 2rem 0;
-          justify-content: right;
-        }
-        .arrow {
-          margin-left: 0.5em;
-        }
-        .readmore {
-          box-shadow: rgba(0, 0, 0, 0.05) 0 0 20px 5px;
-          padding: 1em;
-          background-color: var(--color-brand);
-          color: white;
-          font-size: 0.9em;
-        }
-      `}</style>
-    </>
+      <div className="flex flex-row justify-end">
+        <SeeMore />
+      </div>
+    </DefaultLayout>
   );
 };
 
-export default Home;
+export default Page;
