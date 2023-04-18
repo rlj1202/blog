@@ -35,7 +35,7 @@ const ArticleCard: FC<{ article: Article }> = ({ article }) => {
           </p>
         </div>
         <div className="basis-1/5 flex flex-col gap-2">
-          <div className="flex flex-row lg:flex-col gap-2">
+          <div className="flex flex-row lg:flex-col gap-2 flex-wrap">
             {article.date && <ArticleDate date={new Date(article.date)} />}
             {article.categories && article.categories.length > 0 && (
               <ArticleCategory categories={article.categories} />
