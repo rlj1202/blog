@@ -18,6 +18,7 @@ import Tag from '@/components/theme/Tag';
 import DefaultLayout from '@/components/theme/DefaultLayout';
 
 import Config from '@/config';
+import { useTheme } from 'next-themes';
 
 interface Props {
   article: Article;
@@ -65,6 +66,8 @@ const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   article,
   suggestedArticles,
 }) => {
+  const { theme } = useTheme();
+
   return (
     <DefaultLayout>
       <Head>
@@ -169,8 +172,7 @@ const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
         reactionsEnabled="1"
         emitMetadata="0"
         inputPosition="bottom"
-        // TODO:
-        theme={'dark'}
+        theme={theme}
         lang="ko"
         loading="lazy"
       />
