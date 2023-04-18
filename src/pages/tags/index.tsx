@@ -5,9 +5,10 @@ import { Article } from 'contentlayer/generated';
 import { getArticles } from '@/utils';
 
 import DefaultLayout from '@/components/theme/DefaultLayout';
+import Tag from '@/components/theme/Tag';
+import Heading from '@/components/theme/Heading';
 
 import Config from '@/config';
-import Tag from '@/components/theme/Tag';
 
 interface Props {
   articles: Article[];
@@ -42,11 +43,10 @@ const Tags: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
         <title>{`Tags - ${Config.title}`}</title>
       </Head>
 
-      <h1 className="text-6xl font-extrabold mb-16 text-gray-900 dark:text-gray-50">
-        <span className="relative after:absolute after:left-0 after:bottom-0 after:-z-10 after:w-full after:content-[''] after:h-7 after:bg-red-500/60 after:dark:bg-red-500/80">
-          Tags
-        </span>
-      </h1>
+      <div className="mb-16">
+        <Heading>Tags</Heading>
+      </div>
+
       <div className="flex flex-row flex-wrap gap-1">
         {tags.map((tag) => (
           <Tag key={tag} tag={tag}>

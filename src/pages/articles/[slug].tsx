@@ -19,6 +19,7 @@ import DefaultLayout from '@/components/theme/DefaultLayout';
 
 import Config from '@/config';
 import { useTheme } from 'next-themes';
+import Heading from '@/components/theme/Heading';
 
 interface Props {
   article: Article;
@@ -90,13 +91,11 @@ const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
       />
 
       <article className="mb-16">
-        <header className="mb-16">
-          <h1 className="text-6xl font-extrabold mb-6 text-gray-900 dark:text-gray-50">
-            <span className="relative after:absolute after:left-0 after:bottom-0 after:-z-10 after:w-full after:content-[''] after:h-7 after:bg-red-500/60 after:dark:bg-red-500/80">
-              <Link href={article.url}>{article.title}</Link>
-            </span>
-          </h1>
-          <h2 className="mb-4 text-xl text-gray-800 dark:text-gray-300">
+        <header className="mb-16 space-y-4">
+          <Heading>
+            <Link href={article.url}>{article.title}</Link>
+          </Heading>
+          <h2 className="text-xl text-gray-800 dark:text-gray-300">
             {article.subtitle}
           </h2>
           <div className="flex flex-row flex-wrap gap-4 text-xs text-gray-500 dark:text-gray-400">

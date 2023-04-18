@@ -11,10 +11,11 @@ import { Article } from 'contentlayer/generated';
 import { getArticles } from '@/utils';
 
 import DefaultLayout from '@/components/theme/DefaultLayout';
-
-import Config from '@/config';
 import Articles from '@/components/theme/Articles';
 import Paginator from '@/components/theme/Paginator';
+import Heading from '@/components/theme/Heading';
+
+import Config from '@/config';
 
 interface Props extends ParsedUrlQuery {
   tag: string;
@@ -93,11 +94,9 @@ const Page: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
         <title>{`${tag} - ${Config.title}`}</title>
       </Head>
 
-      <h1 className="text-6xl font-extrabold mb-16 text-gray-900 dark:text-gray-50">
-        <span className="relative after:absolute after:left-0 after:bottom-0 after:-z-10 after:w-full after:content-[''] after:h-7 after:bg-red-500/60 after:dark:bg-red-500/80">
-          {tag}
-        </span>
-      </h1>
+      <div className="mb-16">
+        <Heading>{tag}</Heading>
+      </div>
 
       <div className="mb-16">
         <Articles

@@ -9,6 +9,7 @@ import { getArticles } from '@/utils';
 import Config from '@/config';
 
 import DefaultLayout from '@/components/theme/DefaultLayout';
+import Heading from '@/components/theme/Heading';
 
 interface Props {
   articles: Article[];
@@ -35,11 +36,9 @@ const Archives: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
         <title>{`Archives - ${Config.title}`}</title>
       </Head>
 
-      <h1 className="text-6xl font-extrabold mb-16 text-gray-900 dark:text-gray-50">
-        <span className="relative after:absolute after:left-0 after:bottom-0 after:-z-10 after:w-full after:content-[''] after:h-7 after:bg-red-500/60 after:dark:bg-red-500/80">
-          Archives
-        </span>
-      </h1>
+      <div className="mb-16">
+        <Heading>Archives</Heading>
+      </div>
 
       <div className="prose dark:prose-invert">
         {years.map((year) => (
