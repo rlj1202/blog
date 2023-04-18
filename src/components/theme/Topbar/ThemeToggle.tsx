@@ -1,36 +1,15 @@
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
+
+import { useTheme } from 'next-themes';
 
 const ThemeToggle: FC = () => {
-  const [activeTheme, setTheme] = useState<string>('light');
-
-  useEffect(() => {
-    // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-    if (
-      localStorage.theme === 'dark' ||
-      (!('theme' in localStorage) &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches)
-    ) {
-      localStorage.theme = 'dark';
-      setTheme('dark');
-      document.documentElement.classList.add('dark');
-    } else {
-      localStorage.theme = 'light';
-      setTheme('light');
-      document.documentElement.classList.remove('dark');
-    }
-  }, [activeTheme]);
+  const { theme, setTheme } = useTheme();
 
   const toggleTheme = () => {
-    if (localStorage.theme === 'light') {
-      localStorage.theme = 'dark';
+    if (theme === 'light') {
       setTheme('dark');
-      document.documentElement.classList.add('dark');
-      document.documentElement.classList.remove('light');
     } else {
-      localStorage.theme = 'light';
       setTheme('light');
-      document.documentElement.classList.add('light');
-      document.documentElement.classList.remove('dark');
     }
   };
 
@@ -38,7 +17,7 @@ const ThemeToggle: FC = () => {
     <div className="border border-black dark:border-gray-50 rounded w-8 h-8 bg-gray-200 dark:bg-gray-700 text-black dark:text-gray-50">
       <div className="w-full h-full flex flex-row justify-center items-center">
         <button onClick={toggleTheme}>
-          {activeTheme === 'light' ? (
+          {theme === 'light' ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
