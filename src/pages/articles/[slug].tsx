@@ -129,7 +129,7 @@ const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
         <div className="flex flex-row gap-5">
           <main
             ref={contentRef}
-            className="prose dark:prose-invert max-w-none basis-0 grow"
+            className="prose dark:prose-invert max-w-full basis-0 grow"
             dangerouslySetInnerHTML={{ __html: article.body.html || '' }}
           />
           <div className="hidden xl:block basis-1/5">
