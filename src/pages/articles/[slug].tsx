@@ -1,3 +1,4 @@
+import { useRef, useEffect, useState } from 'react';
 import type {
   NextPage,
   GetStaticProps,
@@ -23,6 +24,7 @@ import ArticleDate from '@/components/theme/ArticleDate';
 import ArticleCategory from '@/components/theme/ArticleCategory';
 import ArticleTags from '@/components/theme/ArticleTags';
 import GoUp from '@/components/theme/GoUp';
+import Toc from '@/components/theme/Toc';
 
 import Config from '@/config';
 
@@ -58,7 +60,7 @@ export const getStaticProps: GetStaticProps<Props, Routes> = async (
 };
 
 export const getStaticPaths: GetStaticPaths<ParsedUrlQuery> = async (
-  context
+  _context
 ) => {
   const paths = getArticles().map((article) => article.url);
 
@@ -73,6 +75,17 @@ const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   suggestedArticles,
 }) => {
   const { theme } = useTheme();
+
+  const contentRef = useRef<HTMLElement>(null);
+  const [headingElements, setHeadingElements] = useState<Element[]>([]);
+
+  useEffect(() => {
+    if (!contentRef.current) return;
+
+    const queryResult = contentRef.current.querySelectorAll('h2, h3');
+
+    setHeadingElements(Array.from(queryResult));
+  }, [contentRef]);
 
   return (
     <DefaultLayout>
@@ -113,10 +126,18 @@ const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
             )}
           </div>
         </header>
-        <main
-          className="prose dark:prose-invert max-w-none"
-          dangerouslySetInnerHTML={{ __html: article.body.html || '' }}
-        />
+        <div className="flex flex-row gap-5">
+          <main
+            ref={contentRef}
+            className="prose dark:prose-invert max-w-none basis-0 grow"
+            dangerouslySetInnerHTML={{ __html: article.body.html || '' }}
+          />
+          <div className="hidden xl:block basis-1/5">
+            <div className="sticky top-10">
+              <Toc headingElements={headingElements} />
+            </div>
+          </div>
+        </div>
       </article>
 
       <div className="mb-16">
