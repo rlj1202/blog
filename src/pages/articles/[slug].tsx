@@ -153,7 +153,7 @@ const ArticlePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
           reactionsEnabled="1"
           emitMetadata="0"
           inputPosition="bottom"
-          theme={theme}
+          theme={theme === 'system' ? 'preferred_color_scheme' : theme}
           lang="ko"
           loading="lazy"
         />
