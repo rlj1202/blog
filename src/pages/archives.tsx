@@ -45,13 +45,17 @@ const Archives: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
           <Fragment key={year}>
             <h2>{year}</h2>
 
-            {articles
-              .filter((article) => new Date(article.date).getFullYear() == year)
-              .map((article) => (
-                <div className="" key={article.slug}>
-                  <Link href={article.url}>{article.title}</Link>
-                </div>
-              ))}
+            <ul>
+              {articles
+                .filter(
+                  (article) => new Date(article.date).getFullYear() == year
+                )
+                .map((article) => (
+                  <li className="" key={article.slug}>
+                    <Link href={article.url}>{article.title}</Link>
+                  </li>
+                ))}
+            </ul>
           </Fragment>
         ))}
       </div>
