@@ -67,9 +67,9 @@ const CategoryList: React.FC<{
       <ul>
         {treeNode.articles.map((article) => {
           return (
-            <Link href={article.url} key={article._id}>
-              <li key={article._id}>{article.title || article.slug}</li>
-            </Link>
+            <li key={article._id}>
+              <Link href={article.url}>{article.title || article.slug}</Link>
+            </li>
           );
         })}
       </ul>
