@@ -48,6 +48,10 @@ const Config = {
       label: 'Archives',
       path: '/archives',
     },
+    {
+      label: 'Projects',
+      path: '/projects',
+    },
   ],
 
   googleAnalyticsId: '',
