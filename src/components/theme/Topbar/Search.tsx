@@ -1,5 +1,8 @@
 import { FC, useState } from 'react';
+
 import Container from '../Container';
+import CommandIcon from '@/components/icons/CommandIcon';
+import SearchIcon from '@/components/icons/SearchIcon';
 
 const Search: FC = () => {
   const [searchShow, setSearchShow] = useState(false);
@@ -15,29 +18,11 @@ const Search: FC = () => {
           <span className="pr-24 text-gray-500 dark:text-gray-400">
             Search...
           </span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            viewBox="0 0 16 16"
-            className="w-4 h-4"
-          >
-            <path d="M3.5 2A1.5 1.5 0 0 1 5 3.5V5H3.5a1.5 1.5 0 1 1 0-3zM6 5V3.5A2.5 2.5 0 1 0 3.5 6H5v4H3.5A2.5 2.5 0 1 0 6 12.5V11h4v1.5a2.5 2.5 0 1 0 2.5-2.5H11V6h1.5A2.5 2.5 0 1 0 10 3.5V5H6zm4 1v4H6V6h4zm1-1V3.5A1.5 1.5 0 1 1 12.5 5H11zm0 6h1.5a1.5 1.5 0 1 1-1.5 1.5V11zm-6 0v1.5A1.5 1.5 0 1 1 3.5 11H5z" />
-          </svg>
+          <CommandIcon className="w-4 h-4" />
         </div>
 
         <div className="flex flex-row justify-center items-center lg:hidden border border-black dark:border-gray-50 rounded h-8 w-8 bg-gray-200 dark:bg-gray-700 text-black dark:text-gray-50">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            viewBox="0 0 16 16"
-            className="w-4 h-4"
-          >
-            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-          </svg>
+          <SearchIcon className="w-4 h-4" />
         </div>
       </button>
 
@@ -48,7 +33,13 @@ const Search: FC = () => {
         onClick={toggleSearchModal}
       >
         <Container>
-          <div className="py-12">Not Implemented :D</div>
+          <div className="py-12 space-y-4">
+            <input
+              className="w-full rounded p-2 border border-black"
+              onClick={(e) => e.stopPropagation()}
+            />
+            <div>Not Implemented :D</div>
+          </div>
         </Container>
       </div>
     </div>
