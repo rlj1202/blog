@@ -12,6 +12,10 @@
   @apply overflow-auto;
 }
 
+.rehype-code-title {
+  @apply font-mono text-sm px-4 py-2 -mb-5 rounded-md bg-[var(--tw-prose-pre-bg)] w-fit text-[var(--tw-prose-pre-code)];
+}
+
 h2:hover .icon-link,
 h3:hover .icon-link,
 h4:hover .icon-link,
