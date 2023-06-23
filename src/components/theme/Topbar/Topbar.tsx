@@ -19,9 +19,9 @@ const Topbar: FC = () => {
       </div>
       <div className="hidden lg:flex flex-row gap-x-2 items-center">
         {Config.menus.map((menu) => (
-          <TopbarMenu key={menu.label}>
-            <Link href={menu.path}>{menu.label}</Link>
-          </TopbarMenu>
+          <Link key={menu.label} href={menu.path}>
+            <TopbarMenu>{menu.label}</TopbarMenu>
+          </Link>
         ))}
       </div>
       <div className="flex flex-row gap-x-2 items-center">
