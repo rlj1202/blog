@@ -1,5 +1,5 @@
 const Config = {
-  title: 'rlj1202',
+  title: 'ryuollojy',
   description: 'rlj1202의 개발 블로그',
   keywords: '',
   copyright: `Copyright (c) ${new Date().getFullYear()}, Jisu Sim. All rights reserved.`,
