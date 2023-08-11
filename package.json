@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "contentlayer dev & next dev",
+    "prebuild": "contentlayer build",
     "build": "next build",
     "postbuild": "next-sitemap",
     "start": "next start",
