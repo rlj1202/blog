@@ -29,6 +29,10 @@ const Config = {
 
   menus: [
     {
+      label: 'Home',
+      path: '/',
+    },
+    {
       label: 'About',
       path: '/about',
     },
@@ -43,6 +47,10 @@ const Config = {
     {
       label: 'Archives',
       path: '/archives',
+    },
+    {
+      label: 'Projects',
+      path: '/projects',
     },
   ],
 

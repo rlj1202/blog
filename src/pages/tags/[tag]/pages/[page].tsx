@@ -7,11 +7,15 @@ import {
 import Head from 'next/head';
 import { ParsedUrlQuery } from 'querystring';
 
-import ArticleList from '@/components/ArticleList';
-import Config from '@/config';
-
 import { Article } from 'contentlayer/generated';
 import { getArticles } from '@/utils';
+
+import DefaultLayout from '@/components/theme/DefaultLayout';
+import Articles from '@/components/theme/Articles';
+import Paginator from '@/components/theme/Paginator';
+import Heading from '@/components/theme/Heading';
+
+import Config from '@/config';
 
 interface Props extends ParsedUrlQuery {
   tag: string;
@@ -85,20 +89,30 @@ const Page: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   articles,
 }) => {
   return (
-    <>
+    <DefaultLayout>
       <Head>
         <title>{`${tag} - ${Config.title}`}</title>
       </Head>
 
-      <ArticleList
-        title={tag}
-        curPage={curPage}
-        pageUrl={(page) => `/tags/${tag}/pages/${page}`}
-        articles={articles}
-      />
+      <div className="mb-16">
+        <Heading>{tag}</Heading>
+      </div>
 
-      <style jsx>{``}</style>
-    </>
+      <div className="mb-16">
+        <Articles
+          articles={articles.slice(
+            Config.articles.perPage * (curPage - 1),
+            Config.articles.perPage * curPage
+          )}
+        />
+      </div>
+
+      <Paginator
+        curPage={curPage}
+        pages={Math.ceil(articles.length / Config.articles.perPage)}
+        pageUrl={(page) => `/tags/${tag}/pages/${page}`}
+      />
+    </DefaultLayout>
   );
 };
 

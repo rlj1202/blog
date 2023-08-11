@@ -1,11 +1,12 @@
 import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
-
-import ArticleLink from '@/components/ArticleLink';
-import CategoryLink from '@/components/CategoryLink';
+import Link from 'next/link';
 
 import { Article } from 'contentlayer/generated';
 import { getArticles } from '@/utils';
+
+import DefaultLayout from '@/components/theme/DefaultLayout';
+import Heading from '@/components/theme/Heading';
 
 import Config from '@/config';
 
@@ -14,7 +15,7 @@ interface Props {
 }
 
 interface CategoryTree {
-  title: string;
+  title?: string;
   articles: Article[];
   children: Record<string, CategoryTree>;
 }
@@ -38,7 +39,7 @@ function add(node: CategoryTree, article: Article, categories: string[]) {
 
 export const getStaticProps: GetStaticProps<Props> = async (context) => {
   const categoryTree: CategoryTree = {
-    title: 'Categories',
+    // title: 'Categories',
     articles: [],
     children: {},
   };
@@ -62,15 +63,13 @@ const CategoryList: React.FC<{
 
   return (
     <div>
-      <CustomTag className="title">{treeNode.title}</CustomTag>
+      {treeNode.title && <CustomTag>{treeNode.title}</CustomTag>}
       <ul>
         {treeNode.articles.map((article) => {
           return (
-            <ArticleLink key={article._id} article={article}>
-              <a>
-                <li key={article._id}>{article.title || article.slug}</li>
-              </a>
-            </ArticleLink>
+            <li key={article._id}>
+              <Link href={article.url}>{article.title || article.slug}</Link>
+            </li>
           );
         })}
       </ul>
@@ -79,17 +78,6 @@ const CategoryList: React.FC<{
           <CategoryList key={child.title} level={level + 1} treeNode={child} />
         );
       })}
-
-      <style jsx>{`
-        .title {
-          ${level === 1
-            ? `
-          margin-top: 2rem;
-          margin-bottom: 2rem;
-          `
-            : ''}
-        }
-      `}</style>
     </div>
   );
 };
@@ -98,15 +86,19 @@ const Categories: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   categoryTree,
 }) => {
   return (
-    <>
+    <DefaultLayout>
       <Head>
         <title>{`Categories - ${Config.title}`}</title>
       </Head>
 
-      <CategoryList level={1} treeNode={categoryTree} />
+      <div className="mb-16">
+        <Heading>Categories</Heading>
+      </div>
 
-      <style jsx>{``}</style>
-    </>
+      <div className="prose dark:prose-invert">
+        <CategoryList level={1} treeNode={categoryTree} />
+      </div>
+    </DefaultLayout>
   );
 };
 

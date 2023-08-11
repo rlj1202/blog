@@ -10,7 +10,10 @@ import { ParsedUrlQuery } from 'querystring';
 import { Article } from 'contentlayer/generated';
 import { getArticles } from '@/utils';
 
-import ArticleList from '@/components/ArticleList';
+import DefaultLayout from '@/components/theme/DefaultLayout';
+import Articles from '@/components/theme/Articles';
+import Paginator from '@/components/theme/Paginator';
+import Heading from '@/components/theme/Heading';
 
 import Config from '@/config';
 
@@ -130,18 +133,30 @@ const Page: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   articles,
 }) => {
   return (
-    <>
+    <DefaultLayout>
       <Head>
         <title>{`${categories.join('/')} - ${Config.title}`}</title>
       </Head>
 
-      <ArticleList
-        title={categories.join('/')}
+      <div className="mb-16">
+        <Heading>{categories.join('/')}</Heading>
+      </div>
+
+      <div className="mb-16">
+        <Articles
+          articles={articles.slice(
+            Config.articles.perPage * (page - 1),
+            Config.articles.perPage * page
+          )}
+        />
+      </div>
+
+      <Paginator
         curPage={page}
+        pages={Math.ceil(articles.length / Config.articles.perPage)}
         pageUrl={(page) => `/categories/${categories.join('/')}/pages/${page}`}
-        articles={articles}
       />
-    </>
+    </DefaultLayout>
   );
 };
 

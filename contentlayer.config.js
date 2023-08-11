@@ -78,7 +78,11 @@ export default makeSource({
       .use(remarkGfm)
       .use(remarkMath)
       .use(remarkToc, { heading: Config.tableOfContents.label })
-      .use(remarkRehype, { allowDangerousHtml: true })
+      .use(remarkRehype, {
+        allowDangerousHtml: true,
+        footnoteLabel: '각주',
+        footnoteBackLabel: '본문으로 돌아가기',
+      })
       // .use(rehypeMathJax)
       .use(rehypeKatex, { strict: false })
       .use(rehypeRaw)

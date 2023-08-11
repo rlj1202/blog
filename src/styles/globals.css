@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+
+@import './hljs-dark.css';
+/* @import './hljs.css'; */
+
+.hljs {
+  @apply bg-transparent;
+}
+
+.math-display {
+  @apply overflow-auto;
+}
+
+.rehype-code-title {
+  @apply font-mono text-sm px-4 py-2 -mb-5 rounded-md bg-[var(--tw-prose-pre-bg)] w-fit text-[var(--tw-prose-pre-code)];
+}
+
+h2:hover .icon-link,
+h3:hover .icon-link,
+h4:hover .icon-link,
+h5:hover .icon-link,
+h6:hover .icon-link {
+  @apply w-4 h-4 inline-block ml-2 content-[""] bg-current;
+  mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16"><path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/><path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/></svg>');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center left;
+}
+
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-white dark:bg-gray-900;
+  }
+}

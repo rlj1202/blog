@@ -14,21 +14,16 @@ module.exports = (phase, { defaultConfig }) => {
   const nextConfig = {
     reactStrictMode: true,
     basePath: '',
-    // can be accessed with 'process.env.customKey'
-    env: {
-      test: 'testtest',
-    },
-    images: {
-      domains: ['blog.golang.org', 'cfile3.uf.tistory.com', 'i1.daumcdn.net'],
-      // path: '',
-      // loader: 'akamai',
+    env: {},
+    images: {},
+    sassOptions: {
+      fiber: false,
     },
     async redirects() {
       return [];
     },
 
     webpack(config, options) {
-      config.experiments = { topLevelAwait: true };
       return config;
     },
   };
