@@ -1,5 +1,5 @@
 {
-  "name": "newblog",
+  "name": "@rlj1202/blog",
   "private": true,
   "scripts": {
     "dev": "contentlayer dev & next dev",
@@ -14,7 +14,7 @@
     "deploy": "next build && next export && touch out/.nojekyll && git add out/ && git commit -m 'Deploy to gh-pages' && git subtree push --prefix out origin gh-pages"
   },
   "engines": {
-    "node": ">=18.17.1"
+    "node": ">=18.16.1"
   },
   "dependencies": {
     "@giscus/react": "^2.2.4",
