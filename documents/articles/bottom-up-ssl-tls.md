@@ -1,14 +1,15 @@
 ---
-title: "Bottom-up으로 알아보는 SSL/TLS"
-subtitle: ""
-date: "2023-07-08 00:04"
+title: 'Bottom-up으로 알아보는 SSL/TLS'
+subtitle: ''
+date: '2023-07-08 00:04'
 tags:
   - SSL
   - TSL
-published: false
+published: true
 ---
 
 ## SSL/TLS은 무엇인가요?
+
 SSL은 **Secure Sockets Layer**의 약자로, 컴퓨터 네트워크에 통신 보안을 위해 설계된 암호 규약입니다. [https](https://ko.wikipedia.org/wiki/HTTPS) 프로토콜에 사용됩니다. 이 글에서는 실제 hand-shaking과정 또는 메세지 포맷 등 구체적인 작동 절차에 대한 내용은 포함하지 않습니다. 이러한 절차가 어떠한 필요로 인해 생겼는지, 어떻게 해서 실제로 네트워크 상에서 양단의 두 사용자가 안전하게 정보를 주고받을 수 있었는지 등의 내용을 공부하면서 정리해본 글입니다.
 
 ## 비밀 편지를 주고받고 싶어요
@@ -62,7 +63,6 @@ SSL은 **Secure Sockets Layer**의 약자로, 컴퓨터 네트워크에 통신 �
 [^ssl-korean-article-2]: https://rat2.tistory.com/5
 [^ssl-korean-article-3]: https://goodgid.github.io/TLS-SSL/
 [^ssl-korean-article-4]: https://juliecho.tistory.com/2
-
 [^ssl-english-article-1]: https://www.thesslstore.com/blog/explaining-ssl-handshake/
 [^ssl-english-article-2]: https://crypto.stackexchange.com/questions/27131/differences-between-the-terms-pre-master-secret-master-secret-private-key
 [^ssl-english-article-3]: http://www.moserware.com/2009/06/first-few-milliseconds-of-https.html
