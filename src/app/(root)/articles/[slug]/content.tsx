@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import Link from 'next/link';
 
 import { Article } from 'contentlayer/generated';
@@ -13,15 +13,14 @@ import Toc from '@/components/theme/Toc';
 
 export default function Content({ article }: { article: Article }) {
   const contentRef = useRef<HTMLElement>(null);
-  const [headingElements, setHeadingElements] = useState<Element[]>([]);
 
-  useEffect(() => {
-    if (!contentRef.current) return;
+  const getHeadings = (): Element[] => {
+    if (!contentRef.current) return [];
 
     const queryResult = contentRef.current.querySelectorAll('h2, h3');
 
-    setHeadingElements(Array.from(queryResult));
-  }, [contentRef]);
+    return Array.from(queryResult);
+  };
 
   return (
     <>
@@ -50,7 +49,7 @@ export default function Content({ article }: { article: Article }) {
         />
         <div className="hidden xl:block basis-1/5">
           <div className="sticky top-10">
-            <Toc headingElements={headingElements} />
+            <Toc getHeadings={getHeadings} />
           </div>
         </div>
       </div>

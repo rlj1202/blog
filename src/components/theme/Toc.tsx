@@ -3,10 +3,14 @@
 import Link from 'next/link';
 import { FC, useEffect, useState } from 'react';
 
-const Toc: FC<{ headingElements: Element[] }> = ({ headingElements }) => {
+const Toc: FC<{ getHeadings: () => Element[] }> = ({ getHeadings }) => {
   const [currentId, setCurrentId] = useState<string>();
+  const [headingElements, setHeadingElements] = useState<Element[]>([]);
 
   useEffect(() => {
+    const headingElements = getHeadings();
+    setHeadingElements(headingElements);
+
     const observer = new IntersectionObserver(
       (_entries) => {
         console.log('test', _entries);
@@ -37,7 +41,7 @@ const Toc: FC<{ headingElements: Element[] }> = ({ headingElements }) => {
     return () => {
       observer.disconnect();
     };
-  }, [headingElements]);
+  }, [getHeadings]);
 
   return (
     <div className="space-y-3 text-sm text-gray-700 dark:text-gray-400">
