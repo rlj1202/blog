@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { FC, useEffect, useState } from 'react';
 
@@ -7,6 +9,8 @@ const Toc: FC<{ headingElements: Element[] }> = ({ headingElements }) => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (_entries) => {
+        console.log('test', _entries);
+
         let index;
         for (index = 0; index < headingElements.length; index++) {
           const cur = headingElements[index];
@@ -20,6 +24,7 @@ const Toc: FC<{ headingElements: Element[] }> = ({ headingElements }) => {
         setCurrentId(element?.id);
       },
       {
+        root: null,
         threshold: 1.0,
         rootMargin: '-128px 0px 0px 0px',
       }

@@ -57,7 +57,7 @@ export const Article = defineDocumentType(() => ({
     categories: {
       type: 'string[]',
       resolve: (article) =>
-        article._raw.flattenedPath.split(path.sep).slice(0, -1),
+        article._raw.flattenedPath.split(path.sep).slice(1, -1),
     },
     slug: {
       type: 'string',
