@@ -20,7 +20,7 @@ import Config from './src/config';
 
 export const Article = defineDocumentType(() => ({
   name: 'Article',
-  filePathPattern: '**/*.md',
+  filePathPattern: 'articles/**/*.md',
   contentType: 'markdown',
   fields: {
     title: {
@@ -66,10 +66,33 @@ export const Article = defineDocumentType(() => ({
   },
 }));
 
+export const Project = defineDocumentType(() => ({
+  name: 'Project',
+  filePathPattern: 'projects/**/*.md',
+  contentType: 'markdown',
+  fields: {
+    title: {
+      type: 'string',
+      required: true,
+    },
+    date: {
+      type: 'date',
+      required: true,
+    },
+    tags: {
+      type: 'list',
+      of: { type: 'string' },
+    },
+    published: {
+      type: 'boolean',
+    },
+  },
+}));
+
 export default makeSource({
-  contentDirPath: 'articles',
-  contentDirExclude: ['drafts', 'templates'],
-  documentTypes: [Article],
+  contentDirPath: 'documents',
+  contentDirExclude: ['*/drafts', '*/templates'],
+  documentTypes: [Article, Project],
   fieldOptions: {},
   markdown: (builder) => {
     builder
