@@ -13,8 +13,6 @@ const Toc: FC<{ getHeadings: () => Element[] }> = ({ getHeadings }) => {
 
     const observer = new IntersectionObserver(
       (_entries) => {
-        console.log('test', _entries);
-
         let index;
         for (index = 0; index < headingElements.length; index++) {
           const cur = headingElements[index];
