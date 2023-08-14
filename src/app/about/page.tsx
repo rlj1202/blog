@@ -1,5 +1,4 @@
-import type { NextPage } from 'next';
-import Head from 'next/head';
+import { Metadata } from 'next';
 
 import Config from '@/config';
 
@@ -8,13 +7,13 @@ import Container from '@/components/theme/Container';
 import Footer from '@/components/theme/Footer';
 import Topbar from '@/components/theme/Topbar';
 
-const About: NextPage = () => {
+export const metadata: Metadata = {
+  title: `About - ${Config.title}`,
+};
+
+export default function Page() {
   return (
     <>
-      <Head>
-        <title>{`About - ${Config.title}`}</title>
-      </Head>
-
       <div className="relative">
         <div className="absolute left-0 top-0 w-full">
           <Container>
@@ -68,6 +67,4 @@ const About: NextPage = () => {
       </div>
     </>
   );
-};
-
-export default About;
+}

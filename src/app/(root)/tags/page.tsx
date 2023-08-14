@@ -1,21 +1,18 @@
-import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next';
-import Head from 'next/head';
+import { Metadata } from 'next';
 
-import { Article } from 'contentlayer/generated';
-import { getArticles } from '@/utils';
-
-import DefaultLayout from '@/components/theme/DefaultLayout';
 import Tag from '@/components/theme/Tag';
 import Heading from '@/components/theme/Heading';
 
 import Config from '@/config';
 
-interface Props {
-  articles: Article[];
-  tags: string[];
-}
+import { getArticles } from '@/utils';
 
-export const getStaticProps: GetStaticProps<Props> = async (context) => {
+export const metadata: Metadata = {
+  title: `Tags - ${Config.title}`,
+};
+
+export default function Page() {
+  const articles = getArticles();
   const tags = Array.from(
     new Set(
       getArticles()
@@ -25,24 +22,8 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     )
   );
 
-  return {
-    props: {
-      articles: getArticles(),
-      tags,
-    },
-  };
-};
-
-const Tags: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
-  articles,
-  tags,
-}) => {
   return (
-    <DefaultLayout>
-      <Head>
-        <title>{`Tags - ${Config.title}`}</title>
-      </Head>
-
+    <>
       <div className="mb-16">
         <Heading>Tags</Heading>
       </div>
@@ -57,8 +38,6 @@ const Tags: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
           // </Tag>
         ))}
       </div>
-    </DefaultLayout>
+    </>
   );
-};
-
-export default Tags;
+}

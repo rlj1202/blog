@@ -1,26 +1,13 @@
-import {
-  GetStaticPaths,
-  GetStaticProps,
-  InferGetStaticPropsType,
-  NextPage,
-} from 'next';
-import Head from 'next/head';
-import { ParsedUrlQuery } from 'querystring';
-
 import { Article } from 'contentlayer/generated';
-import { getArticles } from '@/utils';
 
-import DefaultLayout from '@/components/theme/DefaultLayout';
 import Articles from '@/components/theme/Articles';
 import Paginator from '@/components/theme/Paginator';
 import Heading from '@/components/theme/Heading';
 
 import Config from '@/config';
 
-interface Props extends ParsedUrlQuery {
-  category: string;
-  page: string;
-}
+import { getArticles } from '@/utils';
+import { Metadata } from 'next';
 
 interface CategoryTree {
   title: string;
@@ -48,19 +35,17 @@ function add(node: CategoryTree, article: Article, categories: string[]) {
 function getPaths(
   categories: string[],
   node: CategoryTree
-): { params: Props }[] {
+): { category: string; page: string }[] {
   const total = node.articles.length;
   const pages = Math.ceil(total / Config.articles.perPage);
 
-  const paths: { params: Props }[] = [];
+  const paths: { category: string; page: string }[] = [];
 
   if (categories.length) {
     paths.push(
       ...[...Array.from(new Array(pages + 1).keys()).slice(1)].map((page) => ({
-        params: {
-          category: categories.join('-'),
-          page: `${page}`,
-        },
+        category: categories.join('-'),
+        page: `${page}`,
       }))
     );
   }
@@ -72,43 +57,7 @@ function getPaths(
   return paths;
 }
 
-export const getStaticProps: GetStaticProps<
-  {
-    categories: string[];
-    page: number;
-    articles: Article[];
-  },
-  Props
-> = async (context) => {
-  const { category, page } = context.params || {};
-
-  if (!category || !page) {
-    return {
-      notFound: true,
-    };
-  }
-
-  const categories = category.split('-');
-
-  const articles = getArticles().filter((article) => {
-    if (article.categories.length !== categories.length) {
-      return false;
-    }
-    return article.categories.every(
-      (value, index) => categories[index] == value
-    );
-  });
-
-  return {
-    props: {
-      categories,
-      page: parseInt(page),
-      articles: articles,
-    },
-  };
-};
-
-export const getStaticPaths: GetStaticPaths<Props> = async () => {
+export async function generateStaticParams() {
   const categoryTree: CategoryTree = {
     title: 'Categories',
     articles: [],
@@ -121,23 +70,40 @@ export const getStaticPaths: GetStaticPaths<Props> = async () => {
 
   const paths = getPaths([], categoryTree);
 
+  return paths;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { category: string; page: string };
+}): Promise<Metadata> {
+  const categories = params.category.split('-');
+
   return {
-    paths,
-    fallback: false,
+    title: `${categories.join('/')} - ${Config.title}`,
   };
-};
+}
 
-const Page: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
-  categories,
-  page,
-  articles,
-}) => {
+export default function Page({
+  params,
+}: {
+  params: { category: string; page: string };
+}) {
+  const categories = params.category.split('-');
+  const page = parseInt(params.page);
+
+  const articles = getArticles().filter((article) => {
+    if (article.categories.length !== categories.length) {
+      return false;
+    }
+    return article.categories.every(
+      (value, index) => categories[index] == value
+    );
+  });
+
   return (
-    <DefaultLayout>
-      <Head>
-        <title>{`${categories.join('/')} - ${Config.title}`}</title>
-      </Head>
-
+    <>
       <div className="mb-16">
         <Heading>{categories.join('/')}</Heading>
       </div>
@@ -156,8 +122,6 @@ const Page: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
         pages={Math.ceil(articles.length / Config.articles.perPage)}
         pageUrl={(page) => `/categories/${categories.join('/')}/pages/${page}`}
       />
-    </DefaultLayout>
+    </>
   );
-};
-
-export default Page;
+}

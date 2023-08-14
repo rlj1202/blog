@@ -1,41 +1,26 @@
 import { Fragment } from 'react';
-import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next';
-import Head from 'next/head';
+import { Metadata } from 'next';
 import Link from 'next/link';
 
-import { Article } from 'contentlayer/generated';
-import { getArticles } from '@/utils';
+import Heading from '@/components/theme/Heading';
 
 import Config from '@/config';
 
-import DefaultLayout from '@/components/theme/DefaultLayout';
-import Heading from '@/components/theme/Heading';
+import { getArticles } from '@/utils';
 
-interface Props {
-  articles: Article[];
-}
-
-export const getStaticProps: GetStaticProps<Props> = async (context) => {
-  return {
-    props: {
-      articles: getArticles(),
-    },
-  };
+export const metadata: Metadata = {
+  title: `Archives - ${Config.title}`,
 };
 
-const Archives: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
-  articles,
-}) => {
+export default function Page() {
+  const articles = getArticles();
+
   const years = Array.from(
     new Set(articles.map((article) => new Date(article.date).getFullYear()))
   );
 
   return (
-    <DefaultLayout>
-      <Head>
-        <title>{`Archives - ${Config.title}`}</title>
-      </Head>
-
+    <>
       <div className="mb-16">
         <Heading>Archives</Heading>
       </div>
@@ -59,8 +44,6 @@ const Archives: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
           </Fragment>
         ))}
       </div>
-    </DefaultLayout>
+    </>
   );
-};
-
-export default Archives;
+}

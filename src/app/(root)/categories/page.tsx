@@ -1,18 +1,12 @@
-import { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next';
-import Head from 'next/head';
+import { Metadata } from 'next';
 import Link from 'next/link';
 
 import { Article } from 'contentlayer/generated';
 import { getArticles } from '@/utils';
 
-import DefaultLayout from '@/components/theme/DefaultLayout';
 import Heading from '@/components/theme/Heading';
 
 import Config from '@/config';
-
-interface Props {
-  categoryTree: CategoryTree;
-}
 
 interface CategoryTree {
   title?: string;
@@ -36,24 +30,6 @@ function add(node: CategoryTree, article: Article, categories: string[]) {
 
   add(node.children[categories[0]], article, categories.slice(1));
 }
-
-export const getStaticProps: GetStaticProps<Props> = async (context) => {
-  const categoryTree: CategoryTree = {
-    // title: 'Categories',
-    articles: [],
-    children: {},
-  };
-
-  getArticles().forEach((article) => {
-    add(categoryTree, article, article.categories);
-  });
-
-  return {
-    props: {
-      categoryTree,
-    },
-  };
-};
 
 const CategoryList: React.FC<{
   level: number;
@@ -82,15 +58,23 @@ const CategoryList: React.FC<{
   );
 };
 
-const Categories: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
-  categoryTree,
-}) => {
-  return (
-    <DefaultLayout>
-      <Head>
-        <title>{`Categories - ${Config.title}`}</title>
-      </Head>
+export const metadata: Metadata = {
+  title: `Categories - ${Config.title}`,
+};
 
+export default function Page() {
+  const categoryTree: CategoryTree = {
+    // title: 'Categories',
+    articles: [],
+    children: {},
+  };
+
+  getArticles().forEach((article) => {
+    add(categoryTree, article, article.categories);
+  });
+
+  return (
+    <>
       <div className="mb-16">
         <Heading>Categories</Heading>
       </div>
@@ -98,8 +82,6 @@ const Categories: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
       <div className="prose dark:prose-invert">
         <CategoryList level={1} treeNode={categoryTree} />
       </div>
-    </DefaultLayout>
+    </>
   );
-};
-
-export default Categories;
+}
