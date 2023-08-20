@@ -1,13 +1,12 @@
 import { Metadata } from 'next';
 
 import GoUp from '@/components/theme/GoUp';
+import Comments from '@/components/theme/Comments';
+import Content from './content';
 
 import Config from '@/config';
 
 import { getArticles } from '@/utils';
-
-import Comments from './comments';
-import Content from './content';
 
 export async function generateStaticParams() {
   return getArticles().map((article) => ({ slug: article.slug }));

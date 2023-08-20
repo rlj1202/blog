@@ -29,10 +29,6 @@ const Config = {
 
   menus: [
     {
-      label: 'Home',
-      path: '/',
-    },
-    {
       label: 'About',
       path: '/about',
     },
@@ -51,6 +47,10 @@ const Config = {
     {
       label: 'Projects',
       path: '/projects',
+    },
+    {
+      label: 'Guestbook',
+      path: '/guestbook',
     },
   ],
 
