@@ -83,6 +83,12 @@ export const Project = defineDocumentType(() => ({
       type: 'list',
       of: { type: 'string' },
     },
+    url: {
+      type: 'string',
+    },
+    image: {
+      type: 'string',
+    },
     published: {
       type: 'boolean',
     },
@@ -91,7 +97,7 @@ export const Project = defineDocumentType(() => ({
 
 export default makeSource({
   contentDirPath: 'documents',
-  contentDirExclude: ['*/drafts', '*/templates'],
+  contentDirExclude: ['*/drafts', 'templates', '.obsidian'],
   documentTypes: [Article, Project],
   fieldOptions: {},
   markdown: (builder) => {
