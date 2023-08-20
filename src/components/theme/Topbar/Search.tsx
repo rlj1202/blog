@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import Container from '../Container';
 import CommandIcon from '@/components/icons/CommandIcon';
@@ -13,14 +13,28 @@ const Search: FC = () => {
     setSearchShow((value) => !value);
   };
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+        toggleSearchModal();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  });
+
   return (
     <div>
       <button onClick={toggleSearchModal}>
         <div className="hidden lg:flex border border-black dark:border-gray-50 rounded h-8 px-2 text-sm bg-gray-200 dark:bg-gray-700 flex-row items-center text-black dark:text-gray-50">
-          <span className="pr-24 text-gray-500 dark:text-gray-400">
+          <span className="pr-20 text-gray-500 dark:text-gray-400">
             Search...
           </span>
-          <CommandIcon className="w-4 h-4" />
+          <CommandIcon className="w-4 h-4" /> K
         </div>
 
         <div className="flex flex-row justify-center items-center lg:hidden border border-black dark:border-gray-50 rounded h-8 w-8 bg-gray-200 dark:bg-gray-700 text-black dark:text-gray-50">
