@@ -14,9 +14,12 @@ const ArticleCard: FC<{ article: Article }> = ({ article }) => {
     <div className="relative mb-20 last:mb-0">
       <div className="flex flex-col-reverse lg:flex-row gap-5 mr-5">
         <div className="basis-0 grow">
-          <h2 className="text-3xl font-bold mb-4 text-gray-800 dark:text-gray-100">
+          <h2 className="text-3xl font-bold mb-2 text-gray-800 dark:text-gray-100">
             <Link href={article.url}>{article.title}</Link>
           </h2>
+          <h3 className="text-lg mb-4 text-gray-700 dark:text-gray-200">
+            {article.subtitle}
+          </h3>
           <p className="text-justify break-all text-gray-700 dark:text-gray-300">
             {convert(article.body.html, {
               limits: { maxChildNodes: 10 },
