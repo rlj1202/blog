@@ -97,7 +97,7 @@ export const Project = defineDocumentType(() => ({
 
 export default makeSource({
   contentDirPath: 'documents',
-  contentDirExclude: ['*/drafts', 'templates', '.obsidian'],
+  contentDirExclude: ['*/drafts', 'templates', '.obsidian', '.gitignore'],
   documentTypes: [Article, Project],
   fieldOptions: {},
   markdown: (builder) => {
