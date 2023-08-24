@@ -1,11 +1,11 @@
 ---
-title: "KafkaJS의 heartbeatInterval값은 heartbeat의 동작 주기를 보장하지 않는다"
-subtitle: ""
-date: "2023-08-24 11:46"
+title: 'KafkaJS의 heartbeatInterval값은 heartbeat의 동작 주기를 보장하지 않는다'
+subtitle: ''
+date: '2023-08-24 11:46'
 tags:
   - kafka
   - kafkajs
-published: false
+published: true
 ---
 
 ## 요약
@@ -14,7 +14,7 @@ KafkaJS의 `heartbeatInterval`은 consumer가 group coordinator에게 보내는 
 
 ## 발생하는 문제
 
-해당 시험에 사용된 라이브러리와 Kafka의 버전은 다음과 같다.
+해당 시험에 사용된 라이브러리와 Kafka의 버전은 다음과 같다.
 
 - **[KafkaJS](https://kafka.js.org/)**: 2.2.4
 - **Kafka**: [confluentinc/cp-kafka:7.4.1.arm64](https://hub.docker.com/layers/confluentinc/cp-kafka/7.4.1.arm64/images/sha256-f6364cb703a723c586f303dcbfc36d09e6320c1711b4f6c8d29ad2ff659b16b8?context=explore) Docker Image
@@ -22,15 +22,15 @@ KafkaJS의 `heartbeatInterval`은 consumer가 group coordinator에게 보내는 
 KafkaJS에서 consumer를 만들 때 다음과 같이 `heartbeatInterval` 옵션을 지정해 줄 수 있다.
 
 ```javascript
-const { Kafka } = require("kafkajs");
+const { Kafka } = require('kafkajs');
 
 const kafka = new Kafka({
-  clientId: "test-app",
-  brokers: ["localhost:9092", "localhost:9093", "localhost:9094"],
+  clientId: 'test-app',
+  brokers: ['localhost:9092', 'localhost:9093', 'localhost:9094'],
 });
 
 const consumer = kafka.consumer({
-  groupId: "test-group",
+  groupId: 'test-group',
   heartbeatInterval: 3000,
 });
 ```
@@ -45,7 +45,7 @@ https://kafka.js.org/docs/consuming#a-name-options-a-options
 
 ```javascript
 const consumer = kafka.consumer({
-  groupId: "test-group",
+  groupId: 'test-group',
   sessionTimeout: 1000, // broker의 group.min.session.timeout.ms도 1000으로 낮춰주었다
   heartbeatInterval: 333,
 });
@@ -104,7 +104,7 @@ KafkaJS에서는 fetch 요청을 보낼 때 같이 heartbeat를 보내는 식으
         await this.heartbeat()
         return
       }
-      
+
       // ...
 
       await this.autoCommitOffsets()
@@ -126,16 +126,16 @@ KafkaJS에서는 fetch 요청을 보낼 때 같이 heartbeat를 보내는 식으
 즉, 아무것도 하지 않는 상태에서 연결만 한다면 heartbeat는 기본값인 3000ms가 아닌 5000ms 주기로 보내진다.
 
 ```javascript
-const { Kafka, logLevel } = require("kafkajs");
+const { Kafka, logLevel } = require('kafkajs');
 
 const kafka = new Kafka({
-  clientId: "test-app",
-  brokers: ["localhost:9092", "localhost:9093", "localhost:9094"],
+  clientId: 'test-app',
+  brokers: ['localhost:9092', 'localhost:9093', 'localhost:9094'],
   logLevel: logLevel.DEBUG,
 });
 
 const consumer = kafka.consumer({
-  groupId: "test-group",
+  groupId: 'test-group',
 });
 
 async function main() {
@@ -155,7 +155,7 @@ log level을 `DEBUG`로 변경하고 연결만 한 상태에서 로그를 확인
 
 ```javascript
 const consumer = kafka.consumer({
-  groupId: "test-group",
+  groupId: 'test-group',
   maxWaitTimeInMs: 100,
 });
 ```
@@ -166,7 +166,7 @@ const consumer = kafka.consumer({
 
 ```javascript
 const consumer = kafka.consumer({
-  groupId: "test-group",
+  groupId: 'test-group',
   maxWaitTimeInMs: 100,
   heartbeatInterval: 500,
 });
@@ -179,11 +179,11 @@ const consumer = kafka.consumer({
 Node.js 생태계에서 Kafka Client의 다른 구현체를 찾으면 KafkaJS외에 다음 두 가지가 있다.
 
 1. [node-rdkafka](https://www.npmjs.com/package/node-rdkafka)
-	- 블리자드에서 만든 패키지
-	- `librdkafka`의 nodejs wrapper 버전이라고 한다
-		- [librdkafka](https://github.com/confluentinc/librdkafka)는 Confluent에서 만든 것으로 보인다.
-	- Confluent 홈페이지에서 Node.js에서 설명할 때 이 패키지를 사용하는 것 같다.
-		- https://developer.confluent.io/get-started/nodejs/
+   - 블리자드에서 만든 패키지
+   - `librdkafka`의 nodejs wrapper 버전이라고 한다
+     - [librdkafka](https://github.com/confluentinc/librdkafka)는 Confluent에서 만든 것으로 보인다.
+   - Confluent 홈페이지에서 Node.js에서 설명할 때 이 패키지를 사용하는 것 같다.
+     - https://developer.confluent.io/get-started/nodejs/
 2. [kafka-node](https://www.npmjs.com/package/kafka-node)
 
 글 작성 시점 기준으로 kafka-node는 마지막으로 업데이트 된지 몇 년 되었고 KafkaJS도 6개월이 지났는데 node-rdkafka는 1개월 전에도 업데이트 이력이 있다.
@@ -193,15 +193,15 @@ https://npmtrends.com/kafka-node-vs-kafkajs-vs-node-rdkafka
 그래서 node-rdkafka를 사용해보기로 한다. 해당 라이브러리를 설치하여 비슷한 설정 값을 넣고 테스트를 해보았다.
 
 ```javascript
-const Kafka = require("node-rdkafka");
+const Kafka = require('node-rdkafka');
 
 const consumer = new Kafka.KafkaConsumer(
   {
-    "session.timeout.ms": 1000,
-    "heartbeat.interval.ms": 333,
-    "group.id": "rdkafka",
-    "metadata.broker.list": "localhost:9092,localhost:9093,localhost:9094",
-    debug: "consumer,topic,fetch,cgrp",
+    'session.timeout.ms': 1000,
+    'heartbeat.interval.ms': 333,
+    'group.id': 'rdkafka',
+    'metadata.broker.list': 'localhost:9092,localhost:9093,localhost:9094',
+    debug: 'consumer,topic,fetch,cgrp',
   },
   {}
 );
@@ -209,14 +209,14 @@ const consumer = new Kafka.KafkaConsumer(
 consumer.connect();
 
 consumer
-  .on("ready", () => {
-    consumer.subscribe(["test-topic"]);
+  .on('ready', () => {
+    consumer.subscribe(['test-topic']);
     consumer.consume();
   })
-  .on("data", (data) => {
+  .on('data', (data) => {
     console.log(data);
   })
-  .on("event.log", (event) => {
+  .on('event.log', (event) => {
     console.log(event.fac, new Date().toISOString());
   });
 ```
