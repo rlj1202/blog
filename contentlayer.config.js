@@ -5,6 +5,7 @@ import remarkFrontmatter from 'remark-frontmatter';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import remarkToc from 'remark-toc';
+import remarkFigureCaption from '@microflash/remark-figure-caption';
 import rehypeStringify from 'rehype-stringify';
 import rehypeKatex from 'rehype-katex';
 // import rehypeMathJax from 'rehype-mathjax';
@@ -105,6 +106,7 @@ export default makeSource({
       .use(remarkFrontmatter)
       .use(remarkParse)
       .use(remarkGfm)
+      .use(remarkFigureCaption)
       .use(remarkMath)
       .use(remarkToc, { heading: Config.tableOfContents.label })
       .use(remarkRehype, {
