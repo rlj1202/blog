@@ -53,7 +53,7 @@ const consumer = kafka.consumer({
 
 이렇게 옵션을 설정한다면 기대하기로는 session time-out 시간인 1초 내에 333ms마다 heartbeat를 보내기 때문에 아무런 이상이 없을 것 같다. 하지만 이렇게만 설정하면 계속해서 rebalancing이 일어남을 알 수 있다.
 
-![](/assets/kafkajs-heartbeat-interval/image-20230824122743556.png)
+!['Consumer has joined the group' 문구가 지속적으로 보인다](/assets/kafkajs-heartbeat-interval/image-20230824122743556.png)
 
 ## 어째서?
 
@@ -149,7 +149,7 @@ async function main() {
 main();
 ```
 
-![](/assets/kafkajs-heartbeat-interval/image-20230824121525479.png)
+![Request Heartbeat의 실행 시간을 잘 보면 5초 간격임을 알 수 있다](/assets/kafkajs-heartbeat-interval/image-20230824121525479.png)
 
 log level을 `DEBUG`로 변경하고 연결만 한 상태에서 로그를 확인해 보면 5초 주기로 heartbeat를 보내고 있음을 확인할 수 있다. 여기서 `maxWaitTimeInMs`를 100ms로 변경하고 다시 실행시키면 주기가 3초로 짧아짐을 볼 수 있다.
 
@@ -160,7 +160,7 @@ const consumer = kafka.consumer({
 });
 ```
 
-![](/assets/kafkajs-heartbeat-interval/image-20230824122037564.png)
+![Request Heartbeat의 실행 주기가 3초로 짧아짐을 볼 수 있다](/assets/kafkajs-heartbeat-interval/image-20230824122037564.png)
 
 이 상태에서는 heartbeat 주기를 더 빠르게 변경할 수 있다.
 
@@ -172,7 +172,7 @@ const consumer = kafka.consumer({
 });
 ```
 
-![](/assets/kafkajs-heartbeat-interval/image-20230824122206193.png)
+![Request Heartbeat의 실행 주기가 0.5초로 짧아짐을 볼 수 있다](/assets/kafkajs-heartbeat-interval/image-20230824122206193.png)
 
 ## 다른 Node.js Kafka Client들
 
@@ -221,6 +221,6 @@ consumer
   });
 ```
 
-![](/assets/kafkajs-heartbeat-interval/image-20230824143138595.png)
+![입력한 333ms보다는 느리지만 session timeout 되지 않고 잘 작동한다](/assets/kafkajs-heartbeat-interval/image-20230824143138595.png)
 
-기대하는 대로 동작한다!
+기대하는 대로 동작한다! 몇 가지 다른 값을 넣어서 테스트해보았는데, 대체로 입력한 값보다 약간 느리게 작동하지만 의도한 대로 작동함을 알 수 있었다.
